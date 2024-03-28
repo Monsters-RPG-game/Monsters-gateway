@@ -13,7 +13,7 @@ class App {
       const { stack, message } = err as IFullError;
       Log.error('Server', 'Err while initializing app');
       Log.error('Server', message, stack);
-      Log.error('Server', err);
+      Log.error('Server', JSON.stringify(err));
 
       return State.kill().catch((error) =>
         Log.error('Server', "Couldn't kill server", (error as Error).message, (error as Error).stack),

@@ -26,6 +26,7 @@ export interface IConfigInterface {
     password: string;
     host: string;
     db: string;
+    port: number;
   };
   session: {
     secret: string;

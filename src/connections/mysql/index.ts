@@ -22,6 +22,7 @@ export default class Mysql {
         user: getConfig().mysql.user,
         password: getConfig().mysql.password,
         database: getConfig().mysql.db,
+        port: getConfig().mysql.port,
       },
       pool: {
         min: 10,
