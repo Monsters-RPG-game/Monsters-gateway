@@ -54,6 +54,7 @@ class DbInit {
         user: getConfig().mysql.user,
         password: getConfig().mysql.password,
         database: 'information_schema',
+        port: getConfig().mysql.port,
       },
       pool: {
         min: 10,
