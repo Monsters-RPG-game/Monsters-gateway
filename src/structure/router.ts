@@ -37,13 +37,13 @@ export default class AppRouter {
   initSecuredRoutes(provider: Provider): void {
     this.router.use(Middleware.userValidation);
 
-    initRemoveAccountRoutes(this.router, provider);
     initLogsRoutes(this.router);
     initBugReportRoutes(this.router);
 
     this.router.use(Middleware.initUserProfile);
 
     initProfileRoutes(this.router);
+    initRemoveAccountRoutes(this.router, provider);
 
     this.router.use(Middleware.userProfileValidation);
 

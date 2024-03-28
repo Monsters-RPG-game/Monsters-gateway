@@ -50,6 +50,19 @@ export default class Redis {
     return this.rooster.removeFromHash(`${ERedisTargets.CachedUser}:${target}`, target);
   }
 
+  async addAccountToRemove(target: string): Promise<void> {
+    await this.rooster.addToHash(`${ERedisTargets.AccountToRemove}:${target}`, target, target);
+    return this.setExpirationDate(`${ERedisTargets.AccountToRemove}:${target}`, 60 * 60);
+  }
+
+  async getAccountToRemove(target: string): Promise<string | undefined> {
+    return this.rooster.getFromHash({ target: `${ERedisTargets.AccountToRemove}:${target}`, value: target });
+  }
+
+  async removeAccountToRemove(target: string): Promise<void> {
+    return this.rooster.removeFromHash(`${ERedisTargets.AccountToRemove}:${target}`, target);
+  }
+
   async addOidc(target: string, id: string, value: unknown): Promise<void> {
     await this.rooster.addToHash(target, id, JSON.stringify(value));
   }
