@@ -422,3 +422,13 @@ export class ActionNotAllowed extends FullError {
     this.status = 400;
   }
 }
+
+export class NoPermissionToRemoveAccount extends FullError {
+  constructor() {
+    super('NoPermissionToRemoveAccount');
+    this.message = 'No permission to remove account';
+    this.name = 'NoPermissionToRemoveAccount';
+    this.code = '015';
+    this.status = 400;
+  }
+}
