@@ -19,7 +19,7 @@ export default class FightRouter extends RouterFactory {
     state?: Partial<IProfileEntity>;
   }> {
     const locals = res.locals as types.IUsersTokens;
-    const { reqHandler } = locals;
+    const { reqHandler, profile } = locals;
 
     const body = req.body as IAttackDto;
     if (!body.target) throw new errors.MissingArgError('target');
@@ -28,6 +28,10 @@ export default class FightRouter extends RouterFactory {
       userId: locals.userId,
       tempId: locals.tempId,
     });
+
+    if (profile?.state !== ECharacterState.Fight) {
+      throw new errors.UserNotInFight();
+    }
 
     if (users.payload.length === 0) {
       throw new errors.NoUserWithProvidedName([body.target]);

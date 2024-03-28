@@ -432,3 +432,13 @@ export class NoPermissionToRemoveAccount extends FullError {
     this.status = 400;
   }
 }
+
+export class UserNotInFight extends FullError {
+  constructor() {
+    super('UserNotInFight');
+    this.message = 'User is not fighting';
+    this.name = 'UserNotInFight';
+    this.code = '024';
+    this.status = 400;
+  }
+}
