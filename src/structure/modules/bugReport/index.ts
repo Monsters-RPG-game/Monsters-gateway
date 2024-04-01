@@ -1,4 +1,4 @@
-import add from './add/router';
+import add from './add/router.js';
 import type { Router } from 'express';
 
 const initBugReportRoutes = (router: Router): void => {

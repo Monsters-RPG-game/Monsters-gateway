@@ -10,13 +10,11 @@ import { FakeBroker } from '../../utils/mocks';
 import { IFullError } from '../../../src/types';
 import type { IClient } from 'moc-socket';
 import MocSocket from 'moc-socket';
-import { getKeys } from '../../../src/oidc/utils';
-import * as jose from 'node-jose';
-import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../../../src/errors';
 import Utils from '../../utils/utils';
 import { IFullMessageEntity } from '../../../src/structure/modules/message/get/types';
 import { IUserEntity } from '../../../src/structure/modules/user/entity';
+import { fakeAccessToken } from '../../utils';
 
 describe('Socket - chat', () => {
   const fakeBroker = State.broker as FakeBroker;
@@ -54,37 +52,29 @@ describe('Socket - chat', () => {
   };
 
   beforeAll(async () => {
-    State.keys = await getKeys(1);
-    const privateKey = (await jose.JWK.asKey(State.keys[0]!)).toPEM(true);
+    const loginToken1 = fakeAccessToken(fakeUser._id, 1);
+    const loginToken2 = fakeAccessToken(fakeUser2._id, 2);
 
-    const payload = {
-      sub: fakeUser._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-    };
-    const payload2 = {
-      sub: fakeUser2._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-    };
-
-    const loginToken1 = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
-    const loginToken2 = jwt.sign(payload2, privateKey, { algorithm: 'RS256' });
+    await State.redis.addOidc(loginToken1.key, loginToken1.key, loginToken1.body);
+    await State.redis.addOidc(loginToken2.key, loginToken2.key, loginToken2.body);
 
     clientOptions = {
-      headers: { Authorization: `Bearer ${loginToken1}` },
+      headers: { Authorization: `Bearer ${loginToken1.key}` },
     };
     client2Options = {
-      headers: { Authorization: `Bearer ${loginToken2}` },
+      headers: { Authorization: `Bearer ${loginToken2.key}` },
     };
 
-    server = new MocSocket((State.socket as SocketServer).server);
+    // Well. ESM borked plenty of stuff for reasons unknown to me...
+    server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
     client = server.createClient();
 
     await client.connect(clientOptions);
   });
 
   afterAll(() => {
-    client.disconnect();
-    State.keys = [];
+    client?.disconnect();
+    State.keys = { keys: [] };
   });
 
   describe('Should throw', () => {

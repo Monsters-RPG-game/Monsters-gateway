@@ -1,12 +1,11 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type AttackDto from './attack/dto';
-import type CreateFightDto from './debug/dto';
-import type { IActionEntity, IFight, IFightLogsEntity } from './entity';
-import type { IGetFightDto } from './getFights/types';
-import type { IGetFightLogsDto } from './getLogs/types';
-import type { EFightStatus, EMessageTypes } from '../../../enums';
-import type * as types from '../../../types';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type AttackDto from './attack/dto.js';
+import type CreateFightDto from './debug/dto.js';
+import type { IActionEntity, IFight, IFightLogsEntity } from './entity.d.js';
+import type { IGetFightDto } from './getFights/types.d.js';
+import type { IGetFightLogsDto } from './getLogs/types.d.js';
+import type * as types from '../../../types/index.d.js';
 
 export default class Fight extends ReqHandler {
   async createFight(
@@ -24,7 +23,7 @@ export default class Fight extends ReqHandler {
     data: IGetFightLogsDto,
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IFightLogsEntity;
   }> {
     return (await this.sendReq(
@@ -34,7 +33,7 @@ export default class Fight extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IFightLogsEntity;
     };
   }
@@ -43,7 +42,7 @@ export default class Fight extends ReqHandler {
     data: IGetFightDto,
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IFight[];
   }> {
     return (await this.sendReq(
@@ -53,7 +52,7 @@ export default class Fight extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IFight[];
     };
   }
@@ -62,8 +61,8 @@ export default class Fight extends ReqHandler {
     data: AttackDto,
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
-    payload: { logs: IActionEntity[]; status: EFightStatus };
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: { logs: IActionEntity[]; status: enums.EFightStatus };
   }> {
     return (await this.sendReq(
       this.service,
@@ -72,8 +71,8 @@ export default class Fight extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
-      payload: { logs: IActionEntity[]; status: EFightStatus };
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: { logs: IActionEntity[]; status: enums.EFightStatus };
     };
   }
 }

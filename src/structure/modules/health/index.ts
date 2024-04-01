@@ -1,4 +1,4 @@
-import get from './get/router';
+import get from './get/router.js';
 import type { Router } from 'express';
 
 const initHealthRoutes = (router: Router): void => {

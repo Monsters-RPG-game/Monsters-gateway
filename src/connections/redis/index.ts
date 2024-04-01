@@ -1,12 +1,11 @@
 import { createClient } from 'redis';
-import Rooster from './rooster';
-import { ERedisTargets } from '../../enums';
-import getConfig from '../../tools/configLoader';
-import Log from '../../tools/logger';
-import type * as enums from '../../enums';
-import type { IProfileEntity } from '../../structure/modules/profile/entity';
-import type { IUserEntity } from '../../structure/modules/user/entity';
-import type { ICachedUser, IFullError } from '../../types';
+import Rooster from './rooster.js';
+import * as enums from '../../enums/index.js';
+import getConfig from '../../tools/configLoader.js';
+import Log from '../../tools/logger/index.js';
+import type { IProfileEntity } from '../../structure/modules/profile/entity.d.js';
+import type { IUserEntity } from '../../structure/modules/user/entity.d.js';
+import type { ICachedUser, IFullError } from '../../types/index.d.js';
 import type { RedisClientType } from 'redis';
 
 export default class Redis {
@@ -47,20 +46,20 @@ export default class Redis {
   }
 
   async removeCachedUser(target: string): Promise<void> {
-    return this.rooster.removeFromHash(`${ERedisTargets.CachedUser}:${target}`, target);
+    return this.rooster.removeFromHash(`${enums.ERedisTargets.CachedUser}:${target}`, target);
   }
 
   async addAccountToRemove(target: string): Promise<void> {
-    await this.rooster.addToHash(`${ERedisTargets.AccountToRemove}:${target}`, target, target);
-    return this.setExpirationDate(`${ERedisTargets.AccountToRemove}:${target}`, 60 * 60);
+    await this.rooster.addToHash(`${enums.ERedisTargets.AccountToRemove}:${target}`, target, target);
+    return this.setExpirationDate(`${enums.ERedisTargets.AccountToRemove}:${target}`, 60 * 60);
   }
 
   async getAccountToRemove(target: string): Promise<string | undefined> {
-    return this.rooster.getFromHash({ target: `${ERedisTargets.AccountToRemove}:${target}`, value: target });
+    return this.rooster.getFromHash({ target: `${enums.ERedisTargets.AccountToRemove}:${target}`, value: target });
   }
 
   async removeAccountToRemove(target: string): Promise<void> {
-    return this.rooster.removeFromHash(`${ERedisTargets.AccountToRemove}:${target}`, target);
+    return this.rooster.removeFromHash(`${enums.ERedisTargets.AccountToRemove}:${target}`, target);
   }
 
   async addOidc(target: string, id: string, value: unknown): Promise<void> {
@@ -78,7 +77,7 @@ export default class Redis {
       account?: Partial<IUserEntity>;
     },
   ): Promise<void> {
-    const cachedUser = await this.rooster.getFromHash({ target: `${ERedisTargets.CachedUser}:${id}`, value: id });
+    const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
     if (!cachedUser) return;
     const parsedUser = JSON.parse(cachedUser) as { account: IUserEntity; profile: IProfileEntity };
     await this.addCachedUser({
@@ -94,15 +93,15 @@ export default class Redis {
 
   async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
     await this.rooster.addToHash(
-      `${ERedisTargets.CachedUser}:${user.account._id}`,
+      `${enums.ERedisTargets.CachedUser}:${user.account._id}`,
       user.account._id,
       JSON.stringify(user),
     );
-    await this.rooster.setExpirationDate(`${ERedisTargets.CachedUser}:${user.account._id}`, 60000);
+    await this.rooster.setExpirationDate(`${enums.ERedisTargets.CachedUser}:${user.account._id}`, 60000);
   }
 
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {
-    const cachedUser = await this.rooster.getFromHash({ target: `${ERedisTargets.CachedUser}:${id}`, value: id });
+    const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
     return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
   }
 

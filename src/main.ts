@@ -1,11 +1,11 @@
-import Broker from './connections/broker';
-import Mysql from './connections/mysql';
-import Redis from './connections/redis';
-import WebsocketServer from './connections/websocket';
-import State from './state';
-import Router from './structure';
-import Log from './tools/logger';
-import type { IFullError } from './types';
+import Broker from './connections/broker/index.js';
+import Mysql from './connections/mysql/index.js';
+import Redis from './connections/redis/index.js';
+import WebsocketServer from './connections/websocket/index.js';
+import State from './state.js';
+import Router from './structure/index.js';
+import Log from './tools/logger/index.js';
+import type { IFullError } from './types/index.d.js';
 
 class App {
   init(): void {

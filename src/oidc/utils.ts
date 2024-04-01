@@ -1,14 +1,14 @@
 import * as jose from 'node-jose';
-import type { JSONWebKey } from 'jose';
+import type { JWK } from 'jose';
 
-export const generateKey = async (): Promise<JSONWebKey> => {
+export const generateKey = async (): Promise<JWK> => {
   const keystore = jose.JWK.createKeyStore();
   const key = await keystore.generate('RSA', 2048, { alg: 'RS256' });
-  return key.toJSON(true) as JSONWebKey;
+  return key.toJSON(true) as JWK;
 };
 
-export const getKeys = async (amount: number): Promise<JSONWebKey[]> => {
-  const keys: JSONWebKey[] = [];
+export const getKeys = async (amount: number): Promise<JWK[]> => {
+  const keys: JWK[] = [];
   const actions: (() => Promise<void>)[] = [];
 
   for (let i = 0; i < amount; i++) {

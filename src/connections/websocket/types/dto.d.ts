@@ -1,5 +1,5 @@
 import type * as types from './index';
-import type * as enums from '../../../enums';
+import type * as enums from '../../../enums/index.js';
 
 /**
  * @openapi

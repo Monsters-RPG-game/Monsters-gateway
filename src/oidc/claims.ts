@@ -1,9 +1,10 @@
-import Adapter from './adapter';
-import findAccount from './user';
-import type { JSONWebKey } from 'jose';
+import Adapter from './adapter.js';
+import findAccount from './user.js';
+import { EClaimsTTL } from '../enums/index.js';
+import type { JSONWebKeySet } from 'jose';
 import type * as oidc from 'oidc-provider';
 
-const claims = (keys: JSONWebKey[], clients: oidc.ClientMetadata[]): oidc.Configuration => {
+const claims = (jwks: JSONWebKeySet, clients: oidc.ClientMetadata[]): oidc.Configuration => {
   return {
     adapter: Adapter,
 
@@ -15,7 +16,6 @@ const claims = (keys: JSONWebKey[], clients: oidc.ClientMetadata[]): oidc.Config
 
     cookies: {
       long: {
-        maxAge: 60 * 1000,
         signed: true,
       },
       keys: ['key'],
@@ -68,31 +68,29 @@ const claims = (keys: JSONWebKey[], clients: oidc.ClientMetadata[]): oidc.Config
         },
       },
     },
-    formats: {
-      AccessToken: 'jwt',
-      ClientCredentials: 'jwt',
-    },
 
     issueRefreshToken: (_ctx, client): boolean => {
       return client.grantTypeAllowed('refresh_token');
     },
     expiresWithSession: (): boolean => false,
 
-    jwks: {
-      keys,
+    jwks,
+
+    pkce: {
+      methods: ['S256'],
+      required: () => true,
     },
 
     routes: {
       jwks: '/certs',
     },
 
-    tokenEndpointAuthMethods: ['client_secret_basic', 'client_secret_jwt', 'client_secret_post'],
-
     ttl: {
-      AccessToken: 7 * 24 * 60 * 60,
-      AuthorizationCode: 60,
-      Interaction: 120,
-      RefreshToken: 14 * 24 * 60 * 60,
+      Session: EClaimsTTL.Session,
+      AccessToken: EClaimsTTL.AccessToken,
+      AuthorizationCode: EClaimsTTL.AuthorizationCode,
+      Interaction: EClaimsTTL.Interaction,
+      RefreshToken: EClaimsTTL.RefreshToken,
     },
   };
 };

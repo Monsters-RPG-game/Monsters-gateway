@@ -1,11 +1,12 @@
-import Log from './tools/logger';
-import type Broker from './connections/broker';
-import type Mysql from './connections/mysql';
-import type Redis from './connections/redis';
-import type WebsocketServer from './connections/websocket';
-import type Router from './structure';
-import type { IState } from './types';
-import type { JSONWebKey } from 'jose';
+import Log from './tools/logger/index.js';
+import type Broker from './connections/broker/index.js';
+import type Mysql from './connections/mysql/index.js';
+import type Redis from './connections/redis/index.js';
+import type WebsocketServer from './connections/websocket/index.js';
+import type Router from './structure/index.js';
+import type { IState } from './types/index.d.js';
+import type { JSONWebKeySet } from 'jose';
+import type Provider from 'oidc-provider';
 
 class State implements IState {
   private _broker: Broker | null = null;
@@ -13,7 +14,8 @@ class State implements IState {
   private _redis: Redis | null = null;
   private _router: Router | null = null;
   private _mysql: Mysql | null = null;
-  private _keys: JSONWebKey[] = [];
+  private _keys: JSONWebKeySet = { keys: [] };
+  private _provider: Provider | null = null;
 
   get broker(): Broker {
     return this._broker as Broker;
@@ -55,12 +57,20 @@ class State implements IState {
     this._router = value;
   }
 
-  get keys(): JSONWebKey[] {
+  get keys(): JSONWebKeySet {
     return this._keys;
   }
 
-  set keys(value: JSONWebKey[]) {
+  set keys(value: JSONWebKeySet) {
     this._keys = value;
+  }
+
+  get provider(): Provider {
+    return this._provider as Provider;
+  }
+
+  set provider(value: Provider) {
+    this._provider = value;
   }
 
   async kill(): Promise<void> {

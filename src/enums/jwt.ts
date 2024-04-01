@@ -1,10 +1,8 @@
-export const EJwtTime = {
-  TokenMaxAge: 24 * 60 * 60,
-  RefreshTokenMaxAge: 7 * 24 * 60 * 60,
-  RemoveMaxAge: 1,
+// eslint-disable-next-line import/prefer-default-export
+export const EClaimsTTL = {
+  RefreshToken: 60 * 60 * 7 * 24,
+  AccessToken: 60 * 60 * 7 * 24,
+  Session: 60 * 60 * 24 * 14,
+  AuthorizationCode: 60,
+  Interaction: 120,
 };
-
-export enum EJwt {
-  AccessToken = 'accessToken',
-  RefreshToken = 'refreshToken',
-}

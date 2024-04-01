@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IAddLogDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IAddLogDto } from './types.d.js';
 
 export default class AddLogDto implements IAddLogDto {
   message: string;

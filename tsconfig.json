@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "CommonJS",
+    "target": "ESNext",
+    "module": "ESNext",
     "types": [
       "node",
       "jest"
     ],
     "lib": [
-      "ES6",
+      "ES2022",
       "ESNext"
     ],
     "allowJs": false,
+    "allowImportingTsExtensions": false,
     "allowSyntheticDefaultImports": true,
     "allowUmdGlobalAccess": true,
     "alwaysStrict": true,
@@ -28,6 +29,7 @@
     "incremental": true,
     "inlineSources": true,
     "isolatedModules": true,
+    "moduleDetection": "force",
     "moduleResolution": "Node",
     "noEmit": false,
     "noEmitOnError": false,
@@ -39,6 +41,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": false,
     "outDir": "build",
     "rootDir": ".",
     "preserveSymlinks": true,
@@ -53,7 +56,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "sourceMap": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": true
   },
   "include": [
     "src"

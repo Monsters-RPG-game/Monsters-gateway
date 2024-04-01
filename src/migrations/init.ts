@@ -1,6 +1,6 @@
-import { knex } from 'knex';
-import getConfig from '../tools/configLoader';
-import Log from '../tools/logger';
+import knex from 'knex';
+import getConfig from '../tools/configLoader.js';
+import Log from '../tools/logger/index.js';
 
 class DbInit {
   private _client: knex.Knex | undefined;

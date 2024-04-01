@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IUseItemDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IUseItemDto } from './types.d.js';
 
 export default class InventoryUseDto implements IUseItemDto {
   itemId: string;

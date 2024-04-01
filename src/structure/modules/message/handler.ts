@@ -1,13 +1,12 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type * as getTypes from './get/types';
-import type { IUnreadMessage } from './getUnread/types';
-import type { EMessageTypes } from '../../../enums';
-import type { IUserBrokerInfo } from '../../../types';
-import type GetMessagesDto from '../../modules/message/get/dto';
-import type GetUnreadMessagesDto from '../../modules/message/getUnread/dto';
-import type ReadMessagesDto from '../../modules/message/read/dto';
-import type SendMessagesDto from '../../modules/message/send/dto';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type * as getTypes from './get/types.d.js';
+import type { IUnreadMessage } from './getUnread/types.d.js';
+import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type GetMessagesDto from '../../modules/message/get/dto.js';
+import type GetUnreadMessagesDto from '../../modules/message/getUnread/dto.js';
+import type ReadMessagesDto from '../../modules/message/read/dto.js';
+import type SendMessagesDto from '../../modules/message/send/dto.js';
 
 export default class Message extends ReqHandler {
   async send(data: SendMessagesDto, userData: IUserBrokerInfo): Promise<void> {
@@ -22,7 +21,7 @@ export default class Message extends ReqHandler {
     data: GetUnreadMessagesDto,
     userData: IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IUnreadMessage[];
   }> {
     return (await this.sendReq(
@@ -32,7 +31,7 @@ export default class Message extends ReqHandler {
       userData,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IUnreadMessage[];
     };
   }
@@ -41,7 +40,7 @@ export default class Message extends ReqHandler {
     data: GetMessagesDto,
     userData: IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: Record<string, getTypes.IPreparedMessagesBody> | getTypes.IFullMessageEntity[];
   }> {
     return (await this.sendReq(
@@ -51,7 +50,7 @@ export default class Message extends ReqHandler {
       userData,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: Record<string, getTypes.IPreparedMessagesBody> | getTypes.IFullMessageEntity[];
     };
   }

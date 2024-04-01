@@ -1,4 +1,4 @@
-import type { EUserRace } from '../../../../enums';
+import type { EUserRace } from '../../../../enums/index.js';
 
 /**
  * @openapi

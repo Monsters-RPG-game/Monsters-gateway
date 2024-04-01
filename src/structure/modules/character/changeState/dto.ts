@@ -1,6 +1,6 @@
-import Validation from '../../../../tools/validation';
-import type { IChangeCharacterStatusDto } from './types';
-import type { ECharacterState } from '../../../../enums';
+import Validation from '../../../../tools/validation/index.js';
+import type { IChangeCharacterStatusDto } from './types.d.js';
+import type { ECharacterState } from '../../../../enums/index.js';
 
 export default class ChangeCharacterStatusDto implements IChangeCharacterStatusDto {
   state: ECharacterState;

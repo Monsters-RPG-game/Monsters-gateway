@@ -1,13 +1,12 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type DebugGetAllUsersDto from './debug/dto';
-import type { IUserEntity } from './entity';
-import type { EMessageTypes } from '../../../enums';
-import type * as types from '../../../types';
-import type LoginDto from '../../modules/oidc/interaction/dto';
-import type UserDetailsDto from '../../modules/user/details/dto';
-import type RegisterDto from '../../modules/user/register/dto';
-import type RemoveUserDto from '../../modules/user/remove/dto';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type DebugGetAllUsersDto from './debug/dto.js';
+import type { IUserEntity } from './entity.d.js';
+import type * as types from '../../../types/index.d.js';
+import type LoginDto from '../../modules/oidc/interaction/dto.js';
+import type UserDetailsDto from '../../modules/user/details/dto.js';
+import type RegisterDto from '../../modules/user/register/dto.js';
+import type RemoveUserDto from '../../modules/user/remove/dto.js';
 
 export default class User extends ReqHandler {
   async delete(data: RemoveUserDto, userInfo: types.IUserBrokerInfo): Promise<void> {
@@ -22,7 +21,7 @@ export default class User extends ReqHandler {
     data: DebugGetAllUsersDto,
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IUserEntity[];
   }> {
     return (await this.sendReq(
@@ -32,7 +31,7 @@ export default class User extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IUserEntity[];
     };
   }
@@ -41,7 +40,7 @@ export default class User extends ReqHandler {
     data: UserDetailsDto[],
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IUserEntity[];
   }> {
     return (await this.sendReq(
@@ -51,7 +50,7 @@ export default class User extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IUserEntity[];
     };
   }
@@ -60,7 +59,7 @@ export default class User extends ReqHandler {
     data: LoginDto,
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: types.IUserCredentials;
   }> {
     return (await this.sendReq(
@@ -70,7 +69,7 @@ export default class User extends ReqHandler {
       userInfo,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: types.IUserCredentials;
     };
   }

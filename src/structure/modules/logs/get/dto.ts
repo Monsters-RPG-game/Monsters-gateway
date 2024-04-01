@@ -1,4 +1,4 @@
-import type { IGetLogDto } from './types';
+import type { IGetLogDto } from './types.d.js';
 
 export default class GetLogDto implements IGetLogDto {
   lastId?: string;

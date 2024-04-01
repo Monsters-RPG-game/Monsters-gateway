@@ -1,30 +1,23 @@
-import * as jose from 'node-jose';
-import Log from './logger';
-import * as errors from '../errors';
-import { IncorrectTokenError, InternalError } from '../errors';
-import State from '../state';
-import type { ITokenPayload } from '../types';
+import Log from './logger/index.js';
+import * as errors from '../errors/index.js';
+import { IncorrectTokenError, InternalError } from '../errors/index.js';
+import State from '../state.js';
+import type { IAccessToken } from '../types';
 import type { AdapterPayload } from 'oidc-provider';
-import type Provider from 'oidc-provider';
 
-export const validateToken = async (token: string | undefined): Promise<ITokenPayload> => {
+export const validateToken = async (token: string | undefined): Promise<IAccessToken> => {
   if (!token) throw new errors.UnauthorizedError();
 
-  const keyStore = await jose.JWK.asKeyStore({ keys: State.keys });
-  const verifier = jose.JWS.createVerify(keyStore);
-  const payload = JSON.parse((await verifier.verify(token)).payload.toString()) as ITokenPayload;
+  const userToken = await State.provider.AccessToken.find(token);
+  if (!userToken) throw new errors.UnauthorizedError();
 
-  if (new Date(payload.exp * 1000) < new Date()) {
-    // Token expired
-    throw new errors.UnauthorizedError();
-  }
-  return payload;
+  return userToken as IAccessToken;
 };
 
-export const revokeUserToken = async (provider: Provider, token: string | undefined): Promise<void> => {
+export const revokeUserToken = async (token: string | undefined): Promise<void> => {
   try {
     const payload = await validateToken(token);
-    const userToken = (await provider.AccessToken.adapter.find(payload.jti)) as AdapterPayload;
+    const userToken = (await State.provider.AccessToken.adapter.find(payload.jti)) as AdapterPayload;
 
     if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'testDev') {
       const cachedToken = await State.redis.getOidcHash(`oidc:AccessToken:${payload.jti}`, payload.jti);
@@ -62,7 +55,7 @@ export const revokeUserToken = async (provider: Provider, token: string | undefi
         'Revoking user token',
         'Got req to revoke user token, but token does not exist in redis. How is it possible ?',
         {
-          userId: payload.sub,
+          userId: payload.accountId,
         },
       );
     }

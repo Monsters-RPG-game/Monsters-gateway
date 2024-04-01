@@ -1,7 +1,7 @@
-import InventoryDropDto from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IUnreadMessage } from './types';
-import type { IUsersTokens } from '../../../../types';
+import InventoryDropDto from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IUnreadMessage } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class MessagesRouter extends RouterFactory {

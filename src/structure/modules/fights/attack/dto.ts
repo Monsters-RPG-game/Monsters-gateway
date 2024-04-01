@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IAttackDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IAttackDto } from './types.d.js';
 
 export default class AttackDto implements IAttackDto {
   target: string;

@@ -1,18 +1,10 @@
-import interaction from './interaction/router';
+import interaction from './interaction/router.js';
 import type { Router } from 'express';
-import type Provider from 'oidc-provider';
 
-const routes = {
-  init: (provider: Provider): void => {
-    interaction.init(provider);
-  },
-  interaction: interaction.router,
-};
-
-export const initOidcRoutes = (router: Router): void => {
+const initOidcRoutes = (router: Router): void => {
   const prefix = '/interaction';
 
   router.use(prefix, interaction.router);
 };
 
-export default routes;
+export default initOidcRoutes;

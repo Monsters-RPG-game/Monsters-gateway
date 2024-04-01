@@ -6,46 +6,33 @@ import * as enums from '../../../src/enums';
 import { EUserTypes } from '../../../src/enums';
 import fakeData from '../../fakeData.json';
 import * as types from '../../types';
+import { IFakeOidcKey } from '../../types';
 import State from '../../../src/state';
 import { MissingArgError } from '../../../src/errors';
-import { getKeys } from '../../../src/oidc/utils';
-import * as jose from 'node-jose';
-import jwt from 'jsonwebtoken';
 import { FakeBroker } from '../../utils/mocks';
+import { fakeAccessToken } from '../../utils';
 
 describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
   const addProfile: types.IAddProfileDto = {
     race: enums.EUserRace.Elf,
   };
-  let accessToken: string;
-  let accessToken2: string;
-  let accessToken3: string;
+  let accessToken: IFakeOidcKey;
+  let accessToken2: IFakeOidcKey;
+  let accessToken3: IFakeOidcKey;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
   const fakeUser3 = fakeData.users[2] as IUserEntity;
   const { app } = State.router;
 
   beforeAll(async () => {
-    State.keys = await getKeys(1);
-    const privateKey = (await jose.JWK.asKey(State.keys[0]!)).toPEM(true);
+    accessToken = fakeAccessToken(fakeUser._id, 1);
+    accessToken2 = fakeAccessToken(fakeUser2._id, 2);
+    accessToken3 = fakeAccessToken(fakeUser3._id, 3);
 
-    const payload = {
-      sub: fakeUser._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-    };
-    const payload2 = {
-      sub: fakeUser2._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-    };
-    const payload3 = {
-      sub: fakeUser3._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-    };
-
-    accessToken = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
-    accessToken2 = jwt.sign(payload2, privateKey, { algorithm: 'RS256' });
-    accessToken3 = jwt.sign(payload3, privateKey, { algorithm: 'RS256' });
+    await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
+    await State.redis.addOidc(accessToken2.key, accessToken2.key, accessToken2.body);
+    await State.redis.addOidc(accessToken3.key, accessToken3.key, accessToken3.body);
   });
 
   describe('Should throw', () => {
@@ -73,7 +60,7 @@ describe('Profiles - add', () => {
           returns: { payload: { _id: fakeUser._id, initialized: false }, target: enums.EMessageTypes.Send },
         });
 
-        const res = await supertest(app).post('/profile').auth(accessToken, { type: 'bearer' }).send(clone);
+        const res = await supertest(app).post('/profile').auth(accessToken.key, { type: 'bearer' }).send(clone);
         const body = res.body as { error: IFullError };
         const target = new MissingArgError('race');
 
@@ -91,7 +78,7 @@ describe('Profiles - add', () => {
 
         const res = await supertest(app)
           .post('/profile')
-          .auth(accessToken, { type: 'bearer' })
+          .auth(accessToken.key, { type: 'bearer' })
           .send({ ...addProfile, race: 'abc' });
         const body = res.body as { error: IFullError };
 
@@ -105,7 +92,7 @@ describe('Profiles - add', () => {
           returns: { payload: target, target: enums.EMessageTypes.Send },
         });
 
-        const res = await supertest(app).post('/profile').auth(accessToken3, { type: 'bearer' }).send(addProfile);
+        const res = await supertest(app).post('/profile').auth(accessToken3.key, { type: 'bearer' }).send(addProfile);
         const body = res.body as { error: IFullError };
 
         expect(body.error.message).toEqual('Profile already initialized');
@@ -136,7 +123,7 @@ describe('Profiles - add', () => {
 
       const res = await supertest(app)
         .post('/profile')
-        .auth(accessToken2, { type: 'bearer' })
+        .auth(accessToken2.key, { type: 'bearer' })
         .send({ ...addProfile });
 
       expect(res.status).toEqual(200);

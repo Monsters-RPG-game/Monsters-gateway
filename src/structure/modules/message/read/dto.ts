@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IReadMessageDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IReadMessageDto } from './types.d.js';
 
 export default class ReadMessagesDto implements IReadMessageDto {
   chatId: string;

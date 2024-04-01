@@ -66,7 +66,7 @@ describe('Register', () => {
 
       it(`Register incorrect`, async () => {
         const target = new Error(
-          'login should only contain arabic letters, numbers and special characters',
+          'login should only contain letters, numbers and special characters',
         ) as unknown as Record<string, unknown>;
         fakeBroker.actions.push({
           shouldFail: true,
@@ -78,7 +78,7 @@ describe('Register', () => {
           .send({ ...registerData, login: '!@#$%^&*&*()_+P{:"<?a' });
         const body = res.body as { error: IFullError };
 
-        expect(body.error.message).toEqual('login should only contain arabic letters, numbers and special characters');
+        expect(body.error.message).toEqual('login should only contain letters, numbers and special characters');
       });
 
       it(`Login too short`, async () => {

@@ -1,8 +1,8 @@
-import GetMessagesDto from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import UserDetailsDto from '../../user/details/dto';
-import type * as types from './types';
-import type { IUsersTokens } from '../../../../types';
+import GetMessagesDto from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import UserDetailsDto from '../../user/details/dto.js';
+import type * as types from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class MessagesRouter extends RouterFactory {
@@ -38,8 +38,8 @@ export default class MessagesRouter extends RouterFactory {
       return messages.map((m) => {
         return {
           ...m,
-          receiver: users.find((e) => e._id === m.receiver)!.login,
-          sender: users.find((e) => e._id === m.sender)!.login,
+          receiver: users.find((e) => e._id === m.receiver)?.login ?? 'Removed account',
+          sender: users.find((e) => e._id === m.sender)?.login ?? 'Removed account',
         };
       });
     }
@@ -57,8 +57,8 @@ export default class MessagesRouter extends RouterFactory {
     Object.entries(messages).forEach(([k, v]) => {
       prepared[k] = {
         ...v,
-        receiver: users.find((e) => e._id === v.receiver)!.login,
-        sender: users.find((e) => e._id === v.sender)!.login,
+        receiver: users.find((e) => e._id === v.receiver)?.login ?? 'Removed account',
+        sender: users.find((e) => e._id === v.sender)?.login ?? 'Removed account',
       };
     });
 

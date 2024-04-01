@@ -1,11 +1,11 @@
-import SendMessagesDto from './dto';
-import { ESocketType } from '../../../../enums';
-import { NoUserWithProvidedName } from '../../../../errors';
-import State from '../../../../state';
-import RouterFactory from '../../../../tools/abstracts/router';
-import UserDetailsDto from '../../user/details/dto';
-import type { ISendMessageDto } from './types';
-import type { IUsersTokens } from '../../../../types';
+import SendMessagesDto from './dto.js';
+import { ESocketType } from '../../../../enums/index.js';
+import { NoUserWithProvidedName } from '../../../../errors/index.js';
+import State from '../../../../state.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import UserDetailsDto from '../../user/details/dto.js';
+import type { ISendMessageDto } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class MessagesRouter extends RouterFactory {

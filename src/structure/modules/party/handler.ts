@@ -1,16 +1,15 @@
-import * as enums from '../../../enums';
-import { type EMessageTypes } from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type { IPartyEntity } from './get/types';
-import type { IUserBrokerInfo } from '../../../types';
-import type GetPartyDto from '../../modules/party/get/dto';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type { IPartyEntity } from './get/types.d.js';
+import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type GetPartyDto from '../../modules/party/get/dto.js';
 
 export default class Party extends ReqHandler {
   async get(
     data: GetPartyDto,
     userData: IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IPartyEntity;
   }> {
     return (await this.sendReq(
@@ -20,7 +19,7 @@ export default class Party extends ReqHandler {
       userData,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IPartyEntity;
     };
   }

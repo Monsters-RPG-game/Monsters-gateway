@@ -5,3 +5,8 @@ export { IRegisterDto } from '../../src/structure/modules/user/register/dto';
 
 export * from './users';
 export * from './broker';
+
+export interface IFakeOidcKey {
+  key: string;
+  body: Record<string, unknown>;
+}

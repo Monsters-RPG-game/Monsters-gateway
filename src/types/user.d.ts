@@ -1,7 +1,7 @@
-import type * as enums from '../enums';
-import type { IProfileEntity } from '../structure/modules/profile/entity';
-import type { IUserEntity } from '../structure/modules/user/entity';
-import type ReqHandler from '../structure/reqHandler';
+import type * as enums from '../enums/index.js';
+import type { IProfileEntity } from '../structure/modules/profile/entity.d.js';
+import type { IUserEntity } from '../structure/modules/user/entity.d.js';
+import type ReqHandler from '../structure/reqHandler.js';
 import type { Locals } from 'express';
 import type session from 'express-session';
 
@@ -33,4 +33,17 @@ export interface IUserBrokerInfo {
 export interface ICachedUser {
   account: IUserEntity | undefined;
   profile: IProfileEntity | undefined;
+}
+
+export interface IAccessToken {
+  iat: number;
+  exp: number;
+  accountId: string;
+  grantId: string;
+  gty: string;
+  sessionUid: string;
+  clientId: string;
+  scope: string;
+  kind: string;
+  jti: string;
 }

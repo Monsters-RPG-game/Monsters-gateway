@@ -1,5 +1,5 @@
-import add from './add/router';
-import get from './get/router';
+import add from './add/router.js';
+import get from './get/router.js';
 import type { Router } from 'express';
 
 const initLogsRoutes = (router: Router): void => {

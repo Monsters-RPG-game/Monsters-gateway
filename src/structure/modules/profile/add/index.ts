@@ -1,10 +1,10 @@
-import AddProfileDto from './dto';
-import State from '../../../../state';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IAddProfileDto } from './types';
-import type { IUsersTokens } from '../../../../types';
-import type { IUserEntity } from '../../user/entity';
-import type { IProfileEntity } from '../entity';
+import AddProfileDto from './dto.js';
+import State from '../../../../state.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IAddProfileDto } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
+import type { IUserEntity } from '../../user/entity.d.js';
+import type { IProfileEntity } from '../entity.d.js';
 import type express from 'express';
 
 export default class AddProfileRouter extends RouterFactory {

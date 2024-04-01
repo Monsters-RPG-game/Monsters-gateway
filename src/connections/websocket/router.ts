@@ -1,11 +1,10 @@
-import Validation from './validation';
-import * as enums from '../../enums';
-import { ESocketType, EUserTypes } from '../../enums';
-import * as errors from '../../errors';
-import State from '../../state';
-import Log from '../../tools/logger';
-import type * as types from './types';
-import type { IFullError } from '../../types';
+import Validation from './validation.js';
+import * as enums from '../../enums/index.js';
+import * as errors from '../../errors/index.js';
+import State from '../../state.js';
+import Log from '../../tools/logger/index.js';
+import type * as types from './types/index.d.js';
+import type { IFullError } from '../../types/index.d.js';
 
 export default class Router {
   private readonly _validator: Validation;
@@ -59,9 +58,9 @@ export default class Router {
     };
 
     ws.reqHandler.chat
-      .send(prepared, { userId: ws.userId, tempId: '', type: EUserTypes.User })
+      .send(prepared, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then(() => {
-        ws.send(JSON.stringify({ type: ESocketType.Success } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
 
         const { message, target } = data;
         const isOnline = State.socket.isOnline(target);
@@ -69,7 +68,7 @@ export default class Router {
       })
       .catch((err) => {
         Log.error('Socket send message error', err);
-        ws.send(JSON.stringify({ type: ESocketType.Error, payload: err } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
 
@@ -77,13 +76,13 @@ export default class Router {
     this.validator.validateReadMessage(data);
 
     ws.reqHandler.chat
-      .read(data, { userId: ws.userId, tempId: '', type: EUserTypes.User })
+      .read(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then(() => {
-        ws.send(JSON.stringify({ type: ESocketType.Success } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
       })
       .catch((err) => {
         Log.error('Socket read message error', err);
-        ws.send(JSON.stringify({ type: ESocketType.Error, payload: err } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
 
@@ -91,18 +90,18 @@ export default class Router {
     this.validator.validateGetMessage(data);
 
     ws.reqHandler.chat
-      .get(data, { userId: ws.userId, tempId: '', type: EUserTypes.User })
+      .get(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then((callback) => {
         ws.send(
           JSON.stringify({
-            type: ESocketType.Success,
+            type: enums.ESocketType.Success,
             payload: callback.payload,
           } as types.ISocketOutMessage),
         );
       })
       .catch((err) => {
         Log.error('Socket get messages error', err);
-        ws.send(JSON.stringify({ type: ESocketType.Error, payload: err } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
 
@@ -110,18 +109,18 @@ export default class Router {
     this.validator.validateGetMessage(data);
 
     ws.reqHandler.chat
-      .getUnread(data, { userId: ws.userId, tempId: '', type: EUserTypes.User })
+      .getUnread(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then((callback) => {
         ws.send(
           JSON.stringify({
-            type: ESocketType.Success,
+            type: enums.ESocketType.Success,
             payload: callback.payload,
           } as types.ISocketOutMessage),
         );
       })
       .catch((err) => {
         Log.error('Socket get unread messages error', err);
-        ws.send(JSON.stringify({ type: ESocketType.Error, payload: err } as types.ISocketOutMessage));
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
 }

@@ -1,44 +1,43 @@
-import LoginDto from './dto';
-import { ProviderNotInitialized } from '../../../../errors';
-import RouterFactory from '../../../../tools/abstracts/router';
-import getConfig from '../../../../tools/configLoader';
-import Log from '../../../../tools/logger';
-import type * as types from '../../../../types';
-import type ReqHandler from '../../../reqHandler';
+import LoginDto from './dto.js';
+import State from '../../../../state.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import Log from '../../../../tools/logger/index.js';
+import type * as types from '../../../../types/index.d.js';
+import type ReqHandler from '../../../reqHandler.js';
 import type express from 'express';
-import type Provider from 'oidc-provider';
+import type { InteractionResults } from 'oidc-provider';
+import { strict as assert } from 'node:assert';
 
 export default class UserRouter extends RouterFactory {
-  private _provider: Provider | undefined;
-
-  private get provider(): Provider | undefined {
-    return this._provider;
-  }
-
-  private set provider(value: Provider) {
-    this._provider = value;
-  }
-
-  init(provider: Provider): void {
-    this.provider = provider;
-  }
-
   async get(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    const { provider } = State;
+
     try {
-      const { provider } = this;
-      if (!provider) {
-        Log.error('Oidc', 'Provider was not initialized');
-        throw new ProviderNotInitialized();
-      }
       const interactionDetails = await provider.interactionDetails(req, res);
-      const { prompt } = interactionDetails;
+      const { prompt, params, uid } = interactionDetails;
+      const client = await provider.Client.find(params?.client_id as string);
 
       switch (prompt.name) {
         case 'login':
           res.type('html');
-          res.render('login', { url: `${getConfig().myAddress}/interaction/${req.params.grant}/login` });
+          res.render('login', {
+            client,
+            uid,
+            details: prompt.details,
+            params,
+          });
+          return;
+        case 'consent':
+          res.type('html');
+          res.render('consent', {
+            client,
+            uid,
+            details: prompt.details,
+            params,
+          });
           return;
         default:
+          Log.error('Unsupported prompt', provider);
           next();
       }
     } catch (err) {
@@ -51,31 +50,33 @@ export default class UserRouter extends RouterFactory {
           message: (err as types.IFullError).message,
         });
       } else {
+        const interactionDetails = await provider.interactionDetails(req, res);
+        const { prompt, params, uid } = interactionDetails;
+        const client = await provider.Client.find(params?.client_id as string);
         res.render('login', {
-          url: `${getConfig().myAddress}/interaction/${req.params.grant}/login`,
           error: (err as types.IFullError).message,
+          client,
+          uid,
+          details: prompt.details,
+          params,
         });
       }
     }
   }
 
   async post(req: express.Request, res: express.Response): Promise<void> {
-    try {
-      const { provider } = this;
-      if (!provider) {
-        Log.error('Oidc', 'Provider was not initialized');
-        return;
-      }
+    const { provider } = State;
 
+    try {
       const data = new LoginDto(req.body as LoginDto);
       const account = await (res.locals.reqHandler as ReqHandler).user.login(data, res.locals as types.IUsersTokens);
 
       (req.session as types.IUserSession).userId = account.payload.id;
       const details = await provider.interactionDetails(req, res);
 
-      const result = {
+      const result: InteractionResults = {
         login: {
-          account: (req.session as types.IUserSession).userId,
+          accountId: (req.session as types.IUserSession).userId,
           remember: true,
         },
         consent: {
@@ -93,19 +94,91 @@ export default class UserRouter extends RouterFactory {
         stack: (err as types.IFullError).stack,
       });
       res.type('html');
-
       if ((err as types.IFullError).name === 'SessionNotFound') {
         res.render('error', {
           name: (err as types.IFullError).name,
           message: (err as types.IFullError).message,
         });
       } else {
+        const interactionDetails = await provider.interactionDetails(req, res);
+        const { prompt, params, uid } = interactionDetails;
+        const client = await provider.Client.find(params?.client_id as string);
         res.render('login', {
-          url: `${getConfig().myAddress}/interaction/${req.params.grant}/login`,
           error: (err as types.IFullError).message,
-          userName: (req.body as LoginDto)?.login,
+          client,
+          uid,
+          details: prompt.details,
+          params,
         });
       }
+    }
+  }
+
+  async confirm(req: express.Request, res: express.Response): Promise<void> {
+    const { provider } = State;
+
+    try {
+      const interactionDetails = await provider.interactionDetails(req, res);
+      const {
+        prompt: { name, details },
+        params,
+        session,
+      } = interactionDetails;
+      const accountId = session?.accountId as string;
+      assert.equal(name, 'consent');
+
+      let { grantId } = interactionDetails;
+      const grant = grantId
+        ? await provider.Grant.find(grantId)
+        : new provider.Grant({
+            accountId,
+            clientId: params.client_id as string,
+          });
+
+      if (details.missingOIDCScope) {
+        grant!.addOIDCScope((details.missingOIDCScope as string[]).join(' '));
+      }
+      if (details.missingOIDCClaims) {
+        grant!.addOIDCClaims(details.missingOIDCClaims as string[]);
+      }
+      if (details.missingResourceScopes) {
+        for (const [indicator, scopes] of Object.entries(details.missingResourceScopes)) {
+          grant!.addResourceScope(indicator, (scopes as string[]).join(' '));
+        }
+      }
+
+      grantId = await grant!.save();
+
+      const consent: Record<string, unknown> = {};
+      if (!interactionDetails.grantId) {
+        // we don't have to pass grantId to consent, we're just modifying existing one
+        consent.grantId = grantId;
+      }
+
+      const result = { consent };
+      await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: true });
+    } catch (err) {
+      res.render('error', {
+        name: (err as types.IFullError).name,
+        message: (err as types.IFullError).message,
+      });
+    }
+  }
+
+  async abort(req: express.Request, res: express.Response): Promise<void> {
+    const { provider } = State;
+
+    try {
+      const result = {
+        error: 'access_denied',
+        error_description: 'End-User aborted interaction',
+      };
+      await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
+    } catch (err) {
+      res.render('error', {
+        name: (err as types.IFullError).name,
+        message: (err as types.IFullError).message,
+      });
     }
   }
 }

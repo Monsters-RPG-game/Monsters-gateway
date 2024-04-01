@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IDropItemDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IDropItemDto } from './types.d.js';
 
 export default class InventoryDropDto implements IDropItemDto {
   itemId: string;

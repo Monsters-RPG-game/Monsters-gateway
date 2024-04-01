@@ -3,63 +3,57 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import GetProfileDto from './modules/profile/get/dto';
-import UserDetailsDto from './modules/user/details/dto';
-import ReqHandler from './reqHandler';
-import * as errors from '../errors';
-import { IncorrectDataType, IncorrectTokenError, InternalError, ProfileNotInitialized } from '../errors';
-import handleErr from '../errors/utils';
-import State from '../state';
-import getConfig from '../tools/configLoader';
-import Log from '../tools/logger';
-import errLogger from '../tools/logger/logger';
-import { validateToken } from '../tools/token';
-import type { IProfileEntity } from './modules/profile/entity';
-import type { IUserEntity } from './modules/user/entity';
-import type * as types from '../types';
+import helmet from 'helmet';
+import GetProfileDto from './modules/profile/get/dto.js';
+import UserDetailsDto from './modules/user/details/dto.js';
+import ReqHandler from './reqHandler.js';
+import * as errors from '../errors/index.js';
+import handleErr from '../errors/utils.js';
+import State from '../state.js';
+import getConfig from '../tools/configLoader.js';
+import Log from '../tools/logger/index.js';
+import errLogger from '../tools/logger/logger.js';
+import { validateToken } from '../tools/token.js';
+import type { IProfileEntity } from './modules/profile/entity.d.js';
+import type { IUserEntity } from './modules/user/entity.d.js';
+import type * as types from '../types/index.d.js';
 import type { Express } from 'express';
-import type Provider from 'oidc-provider';
-import type { AdapterPayload } from 'oidc-provider';
-import * as path from 'path';
 
 export default class Middleware {
-  static async userValidation(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-    if (Middleware.shouldSkipUserValidation(req)) {
-      return next();
-    }
-    // Validate token
-    const token =
-      ((req.cookies as Record<string, string>)['monsters.uid'] as string) ??
-      (req.headers.authorization !== undefined
-        ? (req.headers.authorization.split('Bearer')?.[1] ?? '').trim()
-        : undefined);
-
-    try {
-      const payload = await validateToken(token);
-      res.locals.userId = payload.sub;
-
-      if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'testDev') return next();
-
-      const cachedToken = await State.redis.getOidcHash(`oidc:AccessToken:${payload.jti}`, payload.jti);
-      if (!cachedToken) {
-        Log.error(
-          'User tried to log in using token, which does not exist in redis. Might just expired between validation and redis',
-        );
-        throw new IncorrectTokenError();
+  static userValidation(app: Express): void {
+    app.use(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+      if (Middleware.shouldSkipUserValidation(req)) {
+        return next();
       }
-      const t = JSON.parse(cachedToken) as AdapterPayload;
-      if (Date.now() - new Date((t.exp as number) * 1000).getTime() > 0) {
-        Log.error('User tried to log in using expired token, which for some reason is in redis', {
-          token: payload.jti,
-        });
-        throw new IncorrectTokenError();
+
+      try {
+        const token =
+          ((req.cookies as Record<string, string>)['monsters.uid'] as string) ??
+          (req.headers.authorization !== undefined
+            ? (req.headers.authorization.split('Bearer')?.[1] ?? '').trim()
+            : undefined);
+        const userToken = await validateToken(token);
+        res.locals.userId = userToken.accountId;
+      } catch (err) {
+        // Access token is invalid. Check if session is valid
+        const sessionId = (req.cookies as Record<string, string>)._session as string;
+        const userSession = await State.provider.Session.find(sessionId);
+
+        if (!userSession) {
+          Log.error('Token validation error', 'No token nor session');
+          return handleErr(new errors.UnauthorizedError(), res);
+        }
+
+        res.locals.userId = userSession.accountId;
       }
 
       return next();
-    } catch (err) {
-      Log.error('Token validation error', err);
-      return handleErr(new errors.UnauthorizedError(), res);
-    }
+    });
+  }
+
+  static setNoCache(_req: express.Request, res: express.Response, next: express.NextFunction): void {
+    res.set('cache-control', 'no-store');
+    next();
   }
 
   static async initUserProfile(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
@@ -103,7 +97,7 @@ export default class Middleware {
       }
 
       if (!profile?.initialized) {
-        throw new ProfileNotInitialized();
+        throw new errors.ProfileNotInitialized();
       }
 
       return next();
@@ -141,7 +135,7 @@ export default class Middleware {
         'Token validation',
         'User tried to log in using token, that got validated, but there is no user related to token. Is token fake ?',
       );
-      throw new IncorrectTokenError();
+      throw new errors.IncorrectTokenError();
     }
     await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
     return user;
@@ -158,18 +152,21 @@ export default class Middleware {
         credentials: true,
       }),
     );
-    // #TODO I am struggling with setting helmet properly. Chrome says "Refused to send form data because it violates the following Content Security Policy directive: "form-action 'self'"." and I already spend too long on this...
-    // app.use(
-    //   helmet({
-    //     contentSecurityPolicy: {
-    //       useDefaults: true,
-    //       directives: {
-    //         defaultSrc: ["'self'", `${getConfig().corsOrigin as string}`, `${getConfig().myAddress}`],
-    //         'form-action': ["'self'", `${getConfig().corsOrigin as string}`, `${getConfig().myAddress}`],
-    //       },
-    //     },
-    //   }),
-    // );
+    const helmetDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
+    // delete helmetDirectives['form-action']; // Removed form-action on oidc v6. Was causing problems for chrome
+    app.use(
+      helmet({
+        contentSecurityPolicy: {
+          useDefaults: false,
+          directives: {
+            ...helmetDirectives,
+            'form-action': ["'self'", getConfig().myAddress],
+            'script-src': ["'self'", "'unsafe-inline'"],
+            'default-src': ["'self'", 'data:'],
+          },
+        },
+      }),
+    );
 
     app.use((_req: express.Request, res, next: express.NextFunction) => {
       res.header('Content-Type', 'application/json;charset=UTF-8');
@@ -191,8 +188,8 @@ export default class Middleware {
         name: 'monsters.sid',
       }),
     );
-    app.set('views', path.join(__dirname, '..', '..', '..', 'public'));
-    app.use('/public', express.static(path.join(__dirname, '..', '..', '..', 'public', 'static')));
+    app.set('views', 'public');
+    app.use('/public', express.static('public/static'));
     app.get('/favicon.ico', (_req, res) => {
       res.status(404).send();
     });
@@ -230,17 +227,8 @@ export default class Middleware {
     });
   }
 
-  generateOidc(app: Express, provider: Provider): void {
-    app.use((req: express.Request, _res: express.Response, next: express.NextFunction) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      req.provider = provider;
-      next();
-    });
-  }
-
-  generateOidcMiddleware(app: Express, provider: Provider): void {
-    app.use(provider.callback);
+  generateOidcMiddleware(app: Express): void {
+    app.use(State.provider.callback());
   }
 
   generateErrHandler(app: Express): void {
@@ -259,12 +247,12 @@ export default class Middleware {
 
         if (error.message.includes('is not valid JSON')) {
           Log.error('Middleware', 'Received req is not of json type', error.message, error.stack);
-          const { message, name, status } = new IncorrectDataType();
+          const { message, name, status } = new errors.IncorrectDataType();
           return res.status(status).json({ message, name });
         }
         if (error.name === 'SyntaxError') {
           Log.error('Middleware', 'Generic err', error.message, error.stack);
-          const { message, code, name, status } = new InternalError();
+          const { message, code, name, status } = new errors.InternalError();
           return res.status(status).json({ message, code, name });
         }
         if (error.code !== undefined) {
@@ -272,7 +260,7 @@ export default class Middleware {
           return res.status(status).json({ message, code, name });
         }
         Log.error('Middleware', 'Generic err', error.message, error.stack);
-        const { message, code, name, status } = new InternalError();
+        const { message, code, name, status } = new errors.InternalError();
         return res.status(status).json({ message, code, name });
       },
     );

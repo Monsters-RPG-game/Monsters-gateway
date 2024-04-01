@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IGetFightLogsDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IGetFightLogsDto } from './types.d.js';
 
 export default class GetFightLogsDto implements IGetFightLogsDto {
   id: string;

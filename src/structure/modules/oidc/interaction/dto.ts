@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { ILoginDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { ILoginDto } from './types.d.js';
 
 export default class LoginDto implements ILoginDto {
   login: string;

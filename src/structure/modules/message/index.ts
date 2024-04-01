@@ -1,7 +1,7 @@
-import get from './get/router';
-import getUnread from './getUnread/router';
-import read from './read/router';
-import send from './send/router';
+import get from './get/router.js';
+import getUnread from './getUnread/router.js';
+import read from './read/router.js';
+import send from './send/router.js';
 
 import type { Router } from 'express';
 

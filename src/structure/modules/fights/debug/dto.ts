@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { ICreateFightDto, IFightStateTeam } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { ICreateFightDto, IFightStateTeam } from './types.d.js';
 
 export default class CreateFightDto implements ICreateFightDto {
   teams: [IFightStateTeam[], IFightStateTeam[]] = [[], []];

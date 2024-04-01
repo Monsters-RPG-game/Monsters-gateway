@@ -1,9 +1,9 @@
-import GetFightDto from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import UserDetailsDto from '../../user/details/dto';
-import type * as types from '../../../../types';
-import type { IUserEntity } from '../../user/entity';
-import type { IActionEntity, IFight, IFightLogsEntity, IFightTeam } from '../entity';
+import GetFightDto from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import UserDetailsDto from '../../user/details/dto.js';
+import type * as types from '../../../../types/index.d.js';
+import type { IUserEntity } from '../../user/entity.d.js';
+import type { IActionEntity, IFight, IFightLogsEntity, IFightTeam } from '../entity.d.js';
 import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
