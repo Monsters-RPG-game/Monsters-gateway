@@ -1,4 +1,5 @@
-import * as jose from 'node-jose';
+import jose from 'node-jose';
+import Log from '../tools/logger/index.js';
 import type { JWK } from 'jose';
 
 export const generateKey = async (): Promise<JWK> => {
@@ -16,7 +17,9 @@ export const getKeys = async (amount: number): Promise<JWK[]> => {
       keys.push(await generateKey());
     });
   }
-  await Promise.allSettled(actions.map((a) => a()));
+  await Promise.allSettled(actions.map(async (a) => a())).catch((err) => {
+    Log.error('Cannot generate private key', err);
+  });
 
   return keys;
 };

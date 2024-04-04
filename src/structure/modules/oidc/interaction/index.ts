@@ -43,7 +43,6 @@ export default class UserRouter extends RouterFactory {
     } catch (err) {
       Log.error('Oidc get Err', { message: (err as types.IFullError).message, stack: (err as types.IFullError).stack });
       res.type('html');
-
       if ((err as types.IFullError).name === 'SessionNotFound') {
         res.render('error', {
           name: (err as types.IFullError).name,
@@ -53,6 +52,7 @@ export default class UserRouter extends RouterFactory {
         const interactionDetails = await provider.interactionDetails(req, res);
         const { prompt, params, uid } = interactionDetails;
         const client = await provider.Client.find(params?.client_id as string);
+        res.type('html');
         res.render('login', {
           error: (err as types.IFullError).message,
           client,
@@ -103,6 +103,7 @@ export default class UserRouter extends RouterFactory {
         const interactionDetails = await provider.interactionDetails(req, res);
         const { prompt, params, uid } = interactionDetails;
         const client = await provider.Client.find(params?.client_id as string);
+        res.type('html');
         res.render('login', {
           error: (err as types.IFullError).message,
           client,
@@ -158,6 +159,7 @@ export default class UserRouter extends RouterFactory {
       const result = { consent };
       await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: true });
     } catch (err) {
+      res.type('html');
       res.render('error', {
         name: (err as types.IFullError).name,
         message: (err as types.IFullError).message,
@@ -175,6 +177,7 @@ export default class UserRouter extends RouterFactory {
       };
       await provider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
     } catch (err) {
+      res.type('html');
       res.render('error', {
         name: (err as types.IFullError).name,
         message: (err as types.IFullError).message,

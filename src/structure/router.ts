@@ -10,7 +10,7 @@ import initMessagesRoutes from './modules/message/index.js';
 import initOidcRoutes from './modules/oidc/index.js';
 import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
-import { initSecuredUserRoutes, initUserRoutes } from './modules/user/index.js';
+import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from './modules/user/index.js';
 import type { Express, Router } from 'express';
 import type swaggerJsdoc from 'swagger-jsdoc';
 import fs from 'fs';
@@ -37,6 +37,7 @@ export default class AppRouter {
 
     initLogsRoutes(this.router);
     initBugReportRoutes(this.router);
+    initUserRemoveAccountRoutes(this.router);
 
     this.router.use(Middleware.initUserProfile);
 
@@ -74,11 +75,6 @@ export default class AppRouter {
               scheme: 'bearer',
               bearerFormat: 'JWT',
             },
-            refreshToken: {
-              type: 'http',
-              scheme: 'x-refresh-token',
-              bearerFormat: 'JWT',
-            },
           },
         },
         security: [
@@ -101,6 +97,11 @@ export default class AppRouter {
         './src/connections/websocket/docs/index.ts',
         './src/connections/websocket/types/dto.d.ts',
         './src/connections/websocket/types/entities.d.ts',
+        './src/errors/index.js',
+        './src/structure/modules/*/router.js',
+        './src/structure/modules/*/*/router.js',
+        './src/structure/modules/*/*/*/router.js',
+        './src/connections/websocket/docs/index.js',
       ],
     };
 

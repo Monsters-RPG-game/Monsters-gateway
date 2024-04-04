@@ -7,7 +7,7 @@ const service = new Router();
 
 /**
  * @openapi
- * /users:
+ * /users/remove:
  *   delete:
  *     tags:
  *       - user
@@ -43,7 +43,7 @@ service.router.delete('/remove', limitRate, async (req, res) => {
 
 /**
  * @openapi
- * /users:
+ * /users/remove:
  *   post:
  *     tags:
  *       - user

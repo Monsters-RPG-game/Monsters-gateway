@@ -9,17 +9,17 @@ import type express from 'express';
 export default class UserRouter extends RouterFactory {
   async delete(_req: express.Request, res: express.Response): Promise<void> {
     const locals = res.locals as IUsersTokens;
-    const { user } = locals;
+    const { userId } = locals;
 
-    await State.redis.addAccountToRemove(user?._id as string);
+    await State.redis.addAccountToRemove(userId as string);
   }
 
   async post(req: express.Request, res: express.Response): Promise<void> {
     const locals = res.locals as IUsersTokens;
-    const { reqHandler, user } = locals;
+    const { reqHandler, userId } = locals;
 
-    const data = new RemoveUserDto(req.body as RemoveUserDto, user?._id as string);
-    const canRemove = await State.redis.getAccountToRemove(user?._id as string);
+    const data = new RemoveUserDto(req.body as RemoveUserDto, userId as string);
+    const canRemove = await State.redis.getAccountToRemove(userId as string);
     if (!canRemove) throw new NoPermissionToRemoveAccount();
 
     await reqHandler.user.delete(data, { userId: locals.userId, tempId: locals.tempId });
@@ -28,6 +28,6 @@ export default class UserRouter extends RouterFactory {
         (req.headers.authorization !== undefined ? req.headers.authorization.split('Bearer')[1]!.trim() : undefined),
     );
     await State.redis.removeCachedUser(locals.userId as string);
-    await State.redis.removeAccountToRemove(user?._id as string);
+    await State.redis.removeAccountToRemove(userId as string);
   }
 }
