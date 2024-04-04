@@ -1,5 +1,17 @@
 import type { IGetFightDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IGetFightDto:
+ *       type: object
+ *       properties:
+ *         target:
+ *           type: string
+ *         page:
+ *           type: number
+ */
 export default class GetFightDto implements IGetFightDto {
   owner: string;
   active: boolean;

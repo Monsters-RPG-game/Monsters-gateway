@@ -1,6 +1,16 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IAddBugReport } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IAddBugReport:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ */
 export default class AddBugReport implements IAddBugReport {
   message: string;
   user: string;

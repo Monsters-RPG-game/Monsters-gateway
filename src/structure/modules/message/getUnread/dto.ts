@@ -1,6 +1,18 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IGetUnreadMessagesDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IGetUnreadMessagesDto:
+ *     parameters:
+ *      - in: query
+ *        name: page
+ *        required: true
+ *        schema:
+ *          type: number
+ */
 export default class GetUnreadMessagesDto implements IGetUnreadMessagesDto {
   page: number;
 

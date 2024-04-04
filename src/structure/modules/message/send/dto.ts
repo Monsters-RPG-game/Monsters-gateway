@@ -1,6 +1,18 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { ISendMessageDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ISendMessageDto:
+ *       type: object
+ *       properties:
+ *         body:
+ *           type: string
+ *         receiver:
+ *           type: string
+ */
 export default class SendMessagesDto implements ISendMessageDto {
   body: string;
   receiver: string;

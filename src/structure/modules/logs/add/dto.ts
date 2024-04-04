@@ -1,6 +1,18 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IAddLogDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IAddLogDto:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         target:
+ *           type: string
+ */
 export default class AddLogDto implements IAddLogDto {
   message: string;
   target: string;

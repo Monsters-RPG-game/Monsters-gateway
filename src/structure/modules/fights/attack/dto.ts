@@ -1,6 +1,16 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IAttackDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IAttackDto:
+ *       type: object
+ *       properties:
+ *         target:
+ *           type: string
+ */
 export default class AttackDto implements IAttackDto {
   target: string;
 

@@ -1,6 +1,18 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IGetMessagesDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IGetMessagesDto:
+ *     parameters:
+ *      - in: query
+ *        name: page
+ *        required: true
+ *        schema:
+ *          type: number
+ */
 export default class GetMessagesDto implements IGetMessagesDto {
   page: number;
   target: string | undefined;

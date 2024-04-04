@@ -2,6 +2,17 @@ import Validation from '../../../../tools/validation/index.js';
 import type { IAddProfileDto } from './types.d.js';
 import type { EUserRace } from '../../../../enums/index.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IAddProfileDto:
+ *       type: object
+ *       properties:
+ *         race:
+ *           type: string
+ *           enum: ['human', 'elf', 'goblin', 'dwarf', 'orc', 'fairy', 'dragonBorn']
+ */
 export default class AddProfileDto implements IAddProfileDto {
   race: EUserRace;
 

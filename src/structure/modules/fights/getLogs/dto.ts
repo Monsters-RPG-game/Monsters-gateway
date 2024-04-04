@@ -1,6 +1,16 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IGetFightLogsDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IGetFightLogsDto:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ */
 export default class GetFightLogsDto implements IGetFightLogsDto {
   id: string;
 

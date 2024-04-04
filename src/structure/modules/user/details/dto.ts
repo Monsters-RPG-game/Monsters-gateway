@@ -2,6 +2,23 @@ import { MissingArgError } from '../../../../errors/index.js';
 import Validation from '../../../../tools/validation/index.js';
 import type { IUserDetailsDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IUserDetailsDto:
+ *     parameters:
+ *      - in: query
+ *        name: name
+ *        required: false
+ *        schema:
+ *          type: string
+ *      - in: query
+ *        name: id
+ *        required: false
+ *        schema:
+ *          type: string
+ */
 export default class UserDetailsDto implements IUserDetailsDto {
   name?: string;
   id?: string;
