@@ -1,4 +1,4 @@
-import type * as enums from '../../enums';
+import type * as enums from '../../enums/index.js';
 import type { RedisClientType } from 'redis';
 
 export default class Rooster {

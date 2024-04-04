@@ -1,11 +1,12 @@
-import type { Config } from 'jest';
+import type { JestConfigWithTsJest } from 'ts-jest';
 
-const config: Config = {
+const config: JestConfigWithTsJest = {
   verbose: true,
   moduleDirectories: ['node_modules', 'src'],
   moduleFileExtensions: ['js', 'ts', 'json'],
   testPathIgnorePatterns: ['build'],
-  preset: 'ts-jest',
+  extensionsToTreatAsEsm: ['.ts'],
+  preset: 'ts-jest/presets/default-esm',
   testMatch: ['**/*.test.ts'],
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!(mongodb-memory-server/index.d.ts))'],
   testEnvironment: 'node',
@@ -13,6 +14,17 @@ const config: Config = {
   clearMocks: true,
   testTimeout: 10000,
   passWithNoTests: true,
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
+  },
 };
 
 export default config;

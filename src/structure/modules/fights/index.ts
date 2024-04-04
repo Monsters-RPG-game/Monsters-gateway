@@ -1,8 +1,8 @@
-import attack from './attack/router';
-import debug from './debug/router';
-import getFight from './getFights/router';
-import getFightLogs from './getLogs/router';
-import leave from './leave/router';
+import attack from './attack/router.js';
+import debug from './debug/router.js';
+import getFight from './getFights/router.js';
+import getFightLogs from './getLogs/router.js';
+import leave from './leave/router.js';
 import type { Router } from 'express';
 
 const initFightsRoutes = (router: Router): void => {

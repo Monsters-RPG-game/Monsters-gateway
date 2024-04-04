@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IDebugGetAllUsersDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IDebugGetAllUsersDto } from './types.d.js';
 
 export default class DebugGetAllUsersDto implements IDebugGetAllUsersDto {
   page: number;

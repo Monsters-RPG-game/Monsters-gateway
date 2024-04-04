@@ -2,12 +2,32 @@ import Redis from '../../../src/connections/redis';
 import type { IUserEntity } from '../../../src/structure/modules/user/entity';
 import type { IProfileEntity } from '../../../src/structure/modules/profile/entity';
 import type { ICachedUser } from '../../../src/types';
+import * as enums from '../../../src/enums';
+import type { AdapterPayload } from 'oidc-provider';
 
 export default class FakeRedis extends Redis {
   private _cachedUsers: ICachedUser[] = [];
+  private _accountsToRemove: string[] = [];
+  private _accessTokens: AdapterPayload[] = [];
 
   constructor() {
     super();
+  }
+
+  get accessTokens(): AdapterPayload[] {
+    return this._accessTokens;
+  }
+
+  set accessTokens(value: AdapterPayload[]) {
+    this._accessTokens = value;
+  }
+
+  get accountsToRemove(): string[] {
+    return this._accountsToRemove;
+  }
+
+  set accountsToRemove(value: string[]) {
+    this._accountsToRemove = value;
   }
 
   get cachedUsers(): ICachedUser[] {
@@ -28,6 +48,52 @@ export default class FakeRedis extends Redis {
   override async removeCachedUser(id: string): Promise<void> {
     return new Promise((resolve) => {
       this.cachedUsers = this.cachedUsers.filter((u) => u.account?._id !== id);
+      resolve();
+    });
+  }
+
+  override async removeOidcElement(_target: string): Promise<void> {
+    return new Promise((resolve) => {
+      resolve();
+    });
+  }
+
+  override async addAccountToRemove(target: string): Promise<void> {
+    return new Promise((resolve) => {
+      this.accountsToRemove.push(target);
+      resolve();
+    });
+  }
+
+  override async removeAccountToRemove(target: string): Promise<void> {
+    return new Promise((resolve) => {
+      this.accountsToRemove = this.accountsToRemove.filter((t) => t !== target);
+      resolve();
+    });
+  }
+
+  override async addOidc(_target: string, _id: string, value: unknown): Promise<void> {
+    return new Promise((resolve) => {
+      this.accessTokens.push(value as AdapterPayload);
+      resolve();
+    });
+  }
+
+  override async getOidcHash(_target: string, id: string): Promise<string | undefined> {
+    return new Promise((resolve) => {
+      const data = this.accessTokens.find((t) => t.jti === id);
+      resolve(data ? JSON.stringify(data) : undefined);
+    });
+  }
+
+  override async getAccountToRemove(target: string): Promise<string | undefined> {
+    return new Promise((resolve) => {
+      resolve(this.accountsToRemove.find((t) => t === target));
+    });
+  }
+
+  override async setExpirationDate(_target: enums.ERedisTargets | string, _ttl: number): Promise<void> {
+    return new Promise((resolve) => {
       resolve();
     });
   }

@@ -1,13 +1,13 @@
-import AttackDto from './dto';
-import { ECharacterState, EFightStatus } from '../../../../enums';
-import * as errors from '../../../../errors';
-import RouterFactory from '../../../../tools/abstracts/router';
-import ChangeCharacterStatusDto from '../../character/changeState/dto';
-import UserDetailsDto from '../../user/details/dto';
-import type { IAttackDto } from './types';
-import type * as types from '../../../../types';
-import type { IProfileEntity } from '../../profile/entity';
-import type { IActionEntity } from '../entity';
+import AttackDto from './dto.js';
+import * as enums from '../../../../enums/index.js';
+import * as errors from '../../../../errors/index.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
+import UserDetailsDto from '../../user/details/dto.js';
+import type { IAttackDto } from './types.d.js';
+import type * as types from '../../../../types/index.d.js';
+import type { IProfileEntity } from '../../profile/entity.d.js';
+import type { IActionEntity } from '../entity.d.js';
 import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
@@ -15,7 +15,7 @@ export default class FightRouter extends RouterFactory {
     req: express.Request,
     res: express.Response,
   ): Promise<{
-    data: { logs: IActionEntity[]; status: EFightStatus };
+    data: { logs: IActionEntity[]; status: enums.EFightStatus };
     state?: Partial<IProfileEntity>;
   }> {
     const locals = res.locals as types.IUsersTokens;
@@ -29,7 +29,7 @@ export default class FightRouter extends RouterFactory {
       tempId: locals.tempId,
     });
 
-    if (profile?.state !== ECharacterState.Fight) {
+    if (profile?.state !== enums.ECharacterState.Fight) {
       throw new errors.UserNotInFight();
     }
 
@@ -44,8 +44,8 @@ export default class FightRouter extends RouterFactory {
 
     payload = await this.prepareLogs(payload, locals);
 
-    if (payload.status !== EFightStatus.Ongoing) {
-      const characterState = new ChangeCharacterStatusDto({ state: ECharacterState.Map });
+    if (payload.status !== enums.EFightStatus.Ongoing) {
+      const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Map });
       const stateUpdate = await reqHandler.characterState.changeState(characterState, {
         userId: locals.userId,
         tempId: locals.tempId,
@@ -58,9 +58,9 @@ export default class FightRouter extends RouterFactory {
   }
 
   private async prepareLogs(
-    data: { logs: IActionEntity[]; status: EFightStatus },
+    data: { logs: IActionEntity[]; status: enums.EFightStatus },
     locals: types.IUsersTokens,
-  ): Promise<{ logs: IActionEntity[]; status: EFightStatus }> {
+  ): Promise<{ logs: IActionEntity[]; status: enums.EFightStatus }> {
     const { reqHandler } = locals;
     const ids: string[] = data.logs.map((l) => [l.character, l.target]).flat();
 

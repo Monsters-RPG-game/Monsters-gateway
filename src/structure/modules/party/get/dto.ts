@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IGetPartyDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IGetPartyDto } from './types.d.js';
 
 export default class GetPartyDto implements IGetPartyDto {
   id: string;

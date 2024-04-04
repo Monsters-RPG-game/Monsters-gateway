@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IGetProfileDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IGetProfileDto } from './types.d.js';
 
 export default class GetProfileDto implements IGetProfileDto {
   id: string;

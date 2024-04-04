@@ -1,7 +1,7 @@
-import { generateRandomName } from '../../utils';
-import type { Knex } from 'knex';
+import { generateRandomName } from '../../utils/index.js';
+import type knex from 'knex';
 
-export const up = async (knex: Knex): Promise<void> => {
+export const up = async (knex: knex.Knex): Promise<void> => {
   return knex('oidcClients').insert({
     client_id: 'oidcClient',
     client_secret: generateRandomName(),

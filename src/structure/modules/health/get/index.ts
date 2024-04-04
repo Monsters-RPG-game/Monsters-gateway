@@ -1,6 +1,6 @@
-import State from '../../../../state';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IHealth } from '../types';
+import State from '../../../../state.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IHealth } from '../types.d.js';
 import type express from 'express';
 
 export default class HealthRouter extends RouterFactory {

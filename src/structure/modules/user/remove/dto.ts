@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IRemoveAccountDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IRemoveAccountDto } from './types.d.js';
 
 export default class RemoveUserDto implements IRemoveAccountDto {
   id: string;

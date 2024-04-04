@@ -1,5 +1,5 @@
-import * as errors from '../../errors';
-import { IncorrectArgLengthError } from '../../errors';
+import * as errors from '../../errors/index.js';
+import { IncorrectArgLengthError } from '../../errors/index.js';
 
 export default class Validation {
   private readonly _v: unknown;

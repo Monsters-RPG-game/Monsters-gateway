@@ -1,7 +1,7 @@
-import BugReport from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IAddBugReport } from './types';
-import type { IUsersTokens } from '../../../../types';
+import BugReport from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IAddBugReport } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class BugReportRouter extends RouterFactory {

@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IAddBugReport } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IAddBugReport } from './types.d.js';
 
 export default class AddBugReport implements IAddBugReport {
   message: string;

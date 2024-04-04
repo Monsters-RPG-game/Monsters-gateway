@@ -1,7 +1,9 @@
-import Router from './index';
-import handleErr from '../../../../errors/utils';
-import limitRate from '../../../utils';
-import type * as types from '../../../../types';
+import Router from './index.js';
+import handleErr from '../../../../errors/utils.js';
+import Log from '../../../../tools/logger/index.js';
+import Middleware from '../../../middleware.js';
+import limitRate from '../../../utils.js';
+import type * as types from '../../../../types/index.d.js';
 
 const service = new Router();
 
@@ -22,7 +24,7 @@ const service = new Router();
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
  */
-service.router.get('/:grant', limitRate, async (req, res, next) => {
+service.router.get('/:grant', Middleware.setNoCache, limitRate, async (req, res, next) => {
   try {
     await service.get(req, res, next);
   } catch (err) {
@@ -52,12 +54,67 @@ service.router.get('/:grant', limitRate, async (req, res, next) => {
  *           description: On success, user will be redirected to previously provided path with code in url
  *           value: "/code=....."
  */
-
-service.router.post('/:grant/login', limitRate, async (req, res) => {
+service.router.post('/:grant/login', Middleware.setNoCache, limitRate, async (req, res) => {
   try {
     await service.post(req, res);
   } catch (err) {
-    handleErr(err as types.IFullError, res);
+    // It is possible for provider to throw an error when session expires, but user tries to send requests.
+    Log.error('Error', (err as types.IFullError).message, (err as types.IFullError).stack);
+
+    res.type('html');
+    res.render('error', {
+      name: (err as types.IFullError).name ?? 'Unknown error',
+      message:
+        (err as types.IFullError).message ?? 'Unknown error occured. Please access previous website and try again',
+    });
+  }
+});
+
+/**
+ * @openapi
+ * /interaction/:uid/confirm:
+ *   post:
+ *     tags:
+ *       - interaction
+ *     description: Confirm consent
+ */
+service.router.post('/:uid/confirm', Middleware.setNoCache, limitRate, async (req, res) => {
+  try {
+    await service.confirm(req, res);
+  } catch (err) {
+    // It is possible for provider to throw an error when session expires, but user tries to send requests.
+    Log.error('Error', (err as types.IFullError).message, (err as types.IFullError).stack);
+
+    res.type('html');
+    res.render('error', {
+      name: (err as types.IFullError).name ?? 'Unknown error',
+      message:
+        (err as types.IFullError).message ?? 'Unknown error occured. Please access previous website and try again',
+    });
+  }
+});
+
+/**
+ * @openapi
+ * /interaction/:uid/abort:
+ *   post:
+ *     tags:
+ *       - interaction
+ *     description: Abort consent
+ */
+service.router.post('/:grant/abort', Middleware.setNoCache, limitRate, async (req, res) => {
+  try {
+    await service.abort(req, res);
+  } catch (err) {
+    // It is possible for provider to throw an error when session expires, but user tries to send requests.
+    Log.error('Error', (err as types.IFullError).message, (err as types.IFullError).stack);
+
+    res.type('html');
+    res.render('error', {
+      name: (err as types.IFullError).name ?? 'Unknown error',
+      message:
+        (err as types.IFullError).message ?? 'Unknown error occured. Please access previous website and try again',
+    });
   }
 });
 

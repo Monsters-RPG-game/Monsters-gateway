@@ -1,6 +1,6 @@
-import drop from './drop/router';
-import get from './get/router';
-import use from './use/router';
+import drop from './drop/router.js';
+import get from './get/router.js';
+import use from './use/router.js';
 import type { Router } from 'express';
 
 const initInventoryRoutes = (router: Router): void => {

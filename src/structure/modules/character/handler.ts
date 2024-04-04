@@ -1,9 +1,9 @@
-import * as enums from '../../../enums';
-import State from '../../../state';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type ChangeCharacterStatusDto from './changeState/dto';
-import type { IUserBrokerInfo } from '../../../types';
-import type { IProfileEntity } from '../profile/entity';
+import * as enums from '../../../enums/index.js';
+import State from '../../../state.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type ChangeCharacterStatusDto from './changeState/dto.js';
+import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type { IProfileEntity } from '../profile/entity.d.js';
 
 export default class CharacterState extends ReqHandler {
   async changeState(data: ChangeCharacterStatusDto, userInfo: IUserBrokerInfo): Promise<Partial<IProfileEntity>> {

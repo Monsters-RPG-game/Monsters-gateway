@@ -1,20 +1,19 @@
-import Websocket from 'ws';
-import Router from './router';
-import * as enums from '../../enums';
-import * as errors from '../../errors';
-import { IncorrectTokenError } from '../../errors';
-import State from '../../state';
-import ReqHandler from '../../structure/reqHandler';
-import getConfig from '../../tools/configLoader';
-import Log from '../../tools/logger';
-import { validateToken } from '../../tools/token';
-import type * as types from './types';
-import type { ESocketType } from '../../enums';
-import type { IFullError } from '../../types';
+import { WebSocketServer } from 'ws';
+import Router from './router.js';
+import * as enums from '../../enums/index.js';
+import * as errors from '../../errors/index.js';
+import State from '../../state.js';
+import ReqHandler from '../../structure/reqHandler.js';
+import getConfig from '../../tools/configLoader.js';
+import Log from '../../tools/logger/index.js';
+import { validateToken } from '../../tools/token.js';
+import type * as types from './types/index.d.js';
+import type { ESocketType } from '../../enums/index.js';
+import type { IFullError } from '../../types/index.d.js';
 import type { AdapterPayload } from 'oidc-provider';
 
 export default class WebsocketServer {
-  protected _server: Websocket.WebSocketServer | null = null;
+  protected _server: WebSocketServer | null = null;
   private readonly _router: Router;
   private _users: types.ISocketUser[] = [];
 
@@ -26,11 +25,11 @@ export default class WebsocketServer {
     return this._users;
   }
 
-  protected get server(): Websocket.WebSocketServer {
+  protected get server(): WebSocketServer {
     return this._server!;
   }
 
-  protected set server(value: Websocket.WebSocketServer) {
+  protected set server(value: WebSocketServer) {
     this._server = value;
   }
 
@@ -39,7 +38,7 @@ export default class WebsocketServer {
   }
 
   init(): void {
-    this._server = new Websocket.Server({
+    this._server = new WebSocketServer({
       port: getConfig().socketPort,
     });
     Log.log('Socket', `Started socket on port ${getConfig().socketPort}`);
@@ -161,21 +160,21 @@ export default class WebsocketServer {
         Log.error(
           'User tried to log in using token, which does not exists in redis. Might just expired between validation and redis',
         );
-        throw new IncorrectTokenError();
+        throw new errors.IncorrectTokenError();
       }
       const t = JSON.parse(cachedToken) as AdapterPayload;
       if (Date.now() - new Date((t.exp as number) * 1000).getTime() > 0) {
         Log.error('User tried to log in using expired token, which for some reason is in redis', {
           token: payload.jti,
         });
-        throw new IncorrectTokenError();
+        throw new errors.IncorrectTokenError();
       }
     }
 
-    ws.userId = payload.sub;
+    ws.userId = payload.accountId;
 
     const isAlreadyOnline = this.users.findIndex((u) => {
-      return u.userId === payload.sub;
+      return u.userId === payload.accountId;
     });
 
     // #TODO This is broken and incorrectly sends messages back to user, who is logged in on 2 devices
@@ -188,7 +187,7 @@ export default class WebsocketServer {
       return;
     }
 
-    this._users.push({ clients: [ws], userId: payload.sub });
+    this._users.push({ clients: [ws], userId: payload.accountId });
   }
 
   private initializeUser(ws: types.ISocket): void {

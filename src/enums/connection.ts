@@ -22,8 +22,3 @@ export enum EAmqQueues {
   Users = 'usersQueue',
   Messages = 'messagesQueue',
 }
-
-export enum EConnectionType {
-  Api = 'api',
-  Socket = 'socket',
-}

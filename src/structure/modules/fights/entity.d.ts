@@ -1,4 +1,4 @@
-import type { EFightAction } from '../../../enums';
+import type { EFightAction } from '../../../enums/index.js';
 
 /**
  * @openapi

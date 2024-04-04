@@ -1,6 +1,6 @@
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IInventoryItem } from './types';
-import type { IUsersTokens } from '../../../../types';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IInventoryItem } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class InventoryGetDto extends RouterFactory {

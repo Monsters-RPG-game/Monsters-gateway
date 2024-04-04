@@ -1,12 +1,12 @@
-import CreateFightDto from './dto';
-import { ECharacterState } from '../../../../enums';
-import { ActionNotAllowed, ElementTooShortError, NoUserWithProvidedName } from '../../../../errors';
-import RouterFactory from '../../../../tools/abstracts/router';
-import ChangeCharacterStatusDto from '../../character/changeState/dto';
-import UserDetailsDto from '../../user/details/dto';
-import type { ICreateFight, ICreateFightDto } from './types';
-import type * as types from '../../../../types';
-import type { IProfileEntity } from '../../profile/entity';
+import CreateFightDto from './dto.js';
+import * as enums from '../../../../enums/index.js';
+import * as errors from '../../../../errors/index.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
+import UserDetailsDto from '../../user/details/dto.js';
+import type { ICreateFight, ICreateFightDto } from './types.d.js';
+import type * as types from '../../../../types/index.d.js';
+import type { IProfileEntity } from '../../profile/entity.d.js';
 import type express from 'express';
 
 export default class UserRouter extends RouterFactory {
@@ -18,9 +18,9 @@ export default class UserRouter extends RouterFactory {
     const body = req.body as ICreateFight;
 
     if (!body.team || body.team.length === 0) {
-      throw new ElementTooShortError('teams', 1);
+      throw new errors.ElementTooShortError('teams', 1);
     }
-    if (body.team.includes(user?.login as string)) throw new ActionNotAllowed();
+    if (body.team.includes(user?.login as string)) throw new errors.ActionNotAllowed();
 
     const preparedNames = body.team.map((character) => {
       return new UserDetailsDto({ name: character });
@@ -33,7 +33,7 @@ export default class UserRouter extends RouterFactory {
     if (users.payload.length !== body.team.length) {
       const dbUsers = users.payload.map((u) => u.login);
       const nonExistingUsers = body.team.filter((u) => !dbUsers.includes(u));
-      throw new NoUserWithProvidedName(nonExistingUsers);
+      throw new errors.NoUserWithProvidedName(nonExistingUsers);
     }
 
     users.payload.forEach((u) => {
@@ -47,7 +47,7 @@ export default class UserRouter extends RouterFactory {
       userId: locals.userId,
       tempId: locals.tempId,
     });
-    const characterState = new ChangeCharacterStatusDto({ state: ECharacterState.Fight });
+    const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Fight });
     const stateUpdate = await reqHandler.characterState.changeState(characterState, {
       userId: locals.userId,
       tempId: locals.tempId,

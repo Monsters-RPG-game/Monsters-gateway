@@ -1,14 +1,15 @@
-import * as jose from 'node-jose';
-import type { JSONWebKey } from 'jose';
+import jose from 'node-jose';
+import Log from '../tools/logger/index.js';
+import type { JWK } from 'jose';
 
-export const generateKey = async (): Promise<JSONWebKey> => {
+export const generateKey = async (): Promise<JWK> => {
   const keystore = jose.JWK.createKeyStore();
   const key = await keystore.generate('RSA', 2048, { alg: 'RS256' });
-  return key.toJSON(true) as JSONWebKey;
+  return key.toJSON(true) as JWK;
 };
 
-export const getKeys = async (amount: number): Promise<JSONWebKey[]> => {
-  const keys: JSONWebKey[] = [];
+export const getKeys = async (amount: number): Promise<JWK[]> => {
+  const keys: JWK[] = [];
   const actions: (() => Promise<void>)[] = [];
 
   for (let i = 0; i < amount; i++) {
@@ -16,7 +17,9 @@ export const getKeys = async (amount: number): Promise<JSONWebKey[]> => {
       keys.push(await generateKey());
     });
   }
-  await Promise.allSettled(actions.map((a) => a()));
+  await Promise.allSettled(actions.map(async (a) => a())).catch((err) => {
+    Log.error('Cannot generate private key', err);
+  });
 
   return keys;
 };

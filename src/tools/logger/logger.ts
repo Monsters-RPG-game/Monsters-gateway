@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import * as errors from '../../errors';
+import * as errors from '../../errors/index.js';
 
 let path = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 const cache = process.platform === 'win32' ? 'AppData/Roaming/' : '.cache';
@@ -14,7 +14,7 @@ const errLogger = winston.createLogger({
   transports: levels.map((l) => {
     return new DailyRotateFile({
       level: l,
-      filename: `${path!}logs/errors-%DATE%.log`,
+      filename: `${path}logs/errors-%DATE%.log`,
       json: true,
       format: winston.format.combine(
         winston.format.timestamp(),

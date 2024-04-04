@@ -1,9 +1,8 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type { IPreparedMessagesBody } from './types';
-import type * as types from '../../../connections/websocket/types';
-import type { EMessageTypes } from '../../../enums';
-import type { IGetUnreadMessagesDto, IUnreadMessage } from '../message/getUnread/types';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type { IPreparedMessagesBody } from './types.d.js';
+import type * as types from '../../../connections/websocket/types/index.d.js';
+import type { IGetUnreadMessagesDto, IUnreadMessage } from '../message/getUnread/types.d.js';
 
 export default class Chat extends ReqHandler {
   async send(
@@ -36,11 +35,11 @@ export default class Chat extends ReqHandler {
       type: enums.EUserTypes;
     },
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[];
   }> {
     return (await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EChatTargets.Get, locals, data)) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[];
     };
   }
@@ -53,7 +52,7 @@ export default class Chat extends ReqHandler {
       type: enums.EUserTypes;
     },
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IUnreadMessage[];
   }> {
     return (await this.sendReq(
@@ -63,7 +62,7 @@ export default class Chat extends ReqHandler {
       locals,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IUnreadMessage[];
     };
   }

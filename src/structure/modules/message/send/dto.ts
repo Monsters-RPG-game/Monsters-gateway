@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { ISendMessageDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { ISendMessageDto } from './types.d.js';
 
 export default class SendMessagesDto implements ISendMessageDto {
   body: string;

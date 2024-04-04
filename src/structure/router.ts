@@ -1,20 +1,19 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import Middleware from './middleware';
-import initBugReportRoutes from './modules/bugReport';
-import initFightsRoutes from './modules/fights';
-import initHealthRoutes from './modules/health';
-import initInventoryRoutes from './modules/inventory';
-import initLogsRoutes from './modules/logs';
-import initMessagesRoutes from './modules/message';
-import oidc, { initOidcRoutes } from './modules/oidc';
-import initPartyRoutes from './modules/party';
-import initProfileRoutes from './modules/profile';
-import { initRemoveAccountRoutes, initSecuredUserRoutes, initUserRoutes } from './modules/user';
-import { version } from '../../package.json';
-import type { Router } from 'express';
-import type Provider from 'oidc-provider';
+import Middleware from './middleware.js';
+import initBugReportRoutes from './modules/bugReport/index.js';
+import initFightsRoutes from './modules/fights/index.js';
+import initHealthRoutes from './modules/health/index.js';
+import initInventoryRoutes from './modules/inventory/index.js';
+import initLogsRoutes from './modules/logs/index.js';
+import initMessagesRoutes from './modules/message/index.js';
+import initOidcRoutes from './modules/oidc/index.js';
+import initPartyRoutes from './modules/party/index.js';
+import initProfileRoutes from './modules/profile/index.js';
+import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from './modules/user/index.js';
+import type { Express, Router } from 'express';
 import type swaggerJsdoc from 'swagger-jsdoc';
+import fs from 'fs';
 
 export default class AppRouter {
   private readonly _router: Router;
@@ -27,23 +26,22 @@ export default class AppRouter {
     return this._router;
   }
 
-  initRoutes(provider: Provider): void {
-    oidc.init(provider);
+  initRoutes(): void {
     initUserRoutes(this.router);
     initOidcRoutes(this.router);
     initHealthRoutes(this.router);
   }
 
-  initSecuredRoutes(provider: Provider): void {
-    this.router.use(Middleware.userValidation);
+  initSecuredRoutes(app: Express): void {
+    Middleware.userValidation(app);
 
     initLogsRoutes(this.router);
     initBugReportRoutes(this.router);
+    initUserRemoveAccountRoutes(this.router);
 
     this.router.use(Middleware.initUserProfile);
 
     initProfileRoutes(this.router);
-    initRemoveAccountRoutes(this.router, provider);
 
     this.router.use(Middleware.userProfileValidation);
 
@@ -55,6 +53,7 @@ export default class AppRouter {
   }
 
   generateDocumentation(): void {
+    const jsonPackage = JSON.parse(fs.readFileSync('package.json').toString()) as Record<string, string>;
     const options: swaggerJsdoc.Options = {
       definition: {
         openapi: '3.0.1',
@@ -67,18 +66,13 @@ export default class AppRouter {
         ],
         info: {
           title: 'Monsters API doc',
-          version,
+          version: jsonPackage.version as string,
         },
         component: {
           securitySchemes: {
             bearerAuth: {
               type: 'http',
               scheme: 'bearer',
-              bearerFormat: 'JWT',
-            },
-            refreshToken: {
-              type: 'http',
-              scheme: 'x-refresh-token',
               bearerFormat: 'JWT',
             },
           },
@@ -103,6 +97,11 @@ export default class AppRouter {
         './src/connections/websocket/docs/index.ts',
         './src/connections/websocket/types/dto.d.ts',
         './src/connections/websocket/types/entities.d.ts',
+        './src/errors/index.js',
+        './src/structure/modules/*/router.js',
+        './src/structure/modules/*/*/router.js',
+        './src/structure/modules/*/*/*/router.js',
+        './src/connections/websocket/docs/index.js',
       ],
     };
 

@@ -1,4 +1,4 @@
-import getConfig from '../tools/configLoader';
+import getConfig from '../tools/configLoader.js';
 
 export default {
   client: 'mysql2',

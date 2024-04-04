@@ -1,5 +1,5 @@
-import Validator from '../../tools/validation';
-import type { IGetMessageBody, IReadMessageBody, ISocketInMessage, ISocketSendMessageBody } from './types';
+import Validator from '../../tools/validation/index.js';
+import type { IGetMessageBody, IReadMessageBody, ISocketInMessage, ISocketSendMessageBody } from './types/index.d.js';
 
 export default class Validation {
   preValidate(data: ISocketInMessage): void {

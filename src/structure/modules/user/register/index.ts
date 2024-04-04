@@ -1,6 +1,6 @@
-import RegisterDto from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IUsersTokens } from '../../../../types';
+import RegisterDto from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class UserRouter extends RouterFactory {

@@ -1,10 +1,10 @@
 import express from 'express';
-import Middleware from './middleware';
-import AppRouter from './router';
-import Oidc from '../oidc';
-import getConfig from '../tools/configLoader';
-import Log from '../tools/logger';
-import type Provider from 'oidc-provider';
+import Middleware from './middleware.js';
+import AppRouter from './router.js';
+import Oidc from '../oidc/index.js';
+import State from '../state.js';
+import getConfig from '../tools/configLoader.js';
+import Log from '../tools/logger/index.js';
 import http from 'http';
 
 export default class Router {
@@ -37,14 +37,14 @@ export default class Router {
   }
 
   async init(): Promise<void> {
-    const provider = await new Oidc().init();
+    State.provider = await new Oidc().init();
     this.initDocumentation();
-    this.initMiddleware(provider);
-    this.initRouter(provider);
+    this.initMiddleware();
+    this.initRouter();
     this.initServer();
-    this.initSecuredRouter(provider);
+    this.initSecuredRouter();
     this.initErrHandler();
-    this.initOidc(provider);
+    this.initOidc();
   }
 
   /**
@@ -61,8 +61,7 @@ export default class Router {
   /**
    * Init middleware
    */
-  private initMiddleware(provider: Provider): void {
-    this.middleware.generateOidc(this.app, provider);
+  private initMiddleware(): void {
     this.middleware.generateMiddleware(this.app);
     this.middleware.initializeHandler(this.app);
   }
@@ -84,22 +83,22 @@ export default class Router {
   /**
    * Init basic routes.
    */
-  private initRouter(provider: Provider): void {
-    this.router.initRoutes(provider);
+  private initRouter(): void {
+    this.router.initRoutes();
   }
 
   /**
    * Init secured routes.
    */
-  private initSecuredRouter(provider: Provider): void {
-    this.router.initSecuredRoutes(provider);
+  private initSecuredRouter(): void {
+    this.router.initSecuredRoutes(this.app);
   }
 
   /**
    * Init basic routes.
    */
-  private initOidc(provider: Provider): void {
-    this.middleware.generateOidcMiddleware(this.app, provider);
+  private initOidc(): void {
+    this.middleware.generateOidcMiddleware(this.app);
   }
 
   /**

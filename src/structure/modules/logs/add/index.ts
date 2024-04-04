@@ -1,7 +1,7 @@
-import AddLogDto from './dto';
-import RouterFactory from '../../../../tools/abstracts/router';
-import type { IAddLogDto } from './types';
-import type { IUsersTokens } from '../../../../types';
+import AddLogDto from './dto.js';
+import RouterFactory from '../../../../tools/abstracts/router.js';
+import type { IAddLogDto } from './types.d.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type express from 'express';
 
 export default class AddLogsRouter extends RouterFactory {

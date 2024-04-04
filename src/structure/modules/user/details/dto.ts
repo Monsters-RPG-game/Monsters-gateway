@@ -1,6 +1,6 @@
-import { MissingArgError } from '../../../../errors';
-import Validation from '../../../../tools/validation';
-import type { IUserDetailsDto } from './types';
+import { MissingArgError } from '../../../../errors/index.js';
+import Validation from '../../../../tools/validation/index.js';
+import type { IUserDetailsDto } from './types.d.js';
 
 export default class UserDetailsDto implements IUserDetailsDto {
   name?: string;

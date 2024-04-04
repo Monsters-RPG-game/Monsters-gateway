@@ -80,15 +80,6 @@ export class IncorrectArgError extends FullError {
   }
 }
 
-export class NotFoundError extends FullError {
-  constructor() {
-    super('NotFoundError');
-    this.message = 'Resource not found';
-    this.name = 'NotFoundError';
-    this.status = 404;
-  }
-}
-
 /**
  * @openapi
  * components:
@@ -185,35 +176,6 @@ export class NoDataProvidedError extends FullError {
   }
 }
 
-/**
- * @openapi
- * components:
- *   schemas:
- *     IncorrectRefreshTokenError:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Error name describing the error cause.
- *           example: 'IncorrectRefreshTokenError'
- *         code:
- *           type: string
- *           description: Unique code associated with the error.
- *           example: '009'
- *         message:
- *           example: 'Refresh token is missing or is incorrect'
- *           description: Error message describing the incorrect parameter.
- *           type: string
- */
-export class IncorrectRefreshTokenError extends FullError {
-  constructor() {
-    super('IncorrectRefreshTokenError');
-    this.message = 'Refresh token is missing or is incorrect';
-    this.name = 'IncorrectRefreshTokenError';
-    this.status = 400;
-  }
-}
-
 export class IncorrectTargetError extends FullError {
   constructor() {
     super('IncorrectTargetError');
@@ -249,35 +211,6 @@ export class IncorrectTokenError extends FullError {
     this.message = 'Provided key is incorrect';
     this.name = 'IncorrectTokenError';
     this.status = 400;
-  }
-}
-
-/**
- * @openapi
- * components:
- *   schemas:
- *     MissingArgError:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Error name describing the error cause.
- *           example: 'MissingArgError'
- *         code:
- *           type: string
- *           description: Unique code associated with the error.
- *           example: '002'
- *         message:
- *           type: string
- *           description: Error message describing the error cause.
- *           pattern: "^Missing param: .+$"
- */
-export class MissingMessageTargetError extends FullError {
-  constructor() {
-    super('MissingMessageTargetError');
-    this.message = "Received message from other service, but couldn't find related api or socket";
-    this.name = 'MissingMessageTargetError';
-    this.status = 500;
   }
 }
 
@@ -349,15 +282,6 @@ export class UsernameAlreadyInUseError extends FullError {
     super('UsernameAlreadyInUseError');
     this.message = 'Selected username is already in use';
     this.name = 'UsernameAlreadyInUseError';
-    this.status = 400;
-  }
-}
-
-export class IncorrectCredentialsError extends FullError {
-  constructor(message?: string) {
-    super('IncorrectCredentialsError');
-    this.message = message ?? 'Incorrect credentials';
-    this.name = 'IncorrectCredentialsError';
     this.status = 400;
   }
 }

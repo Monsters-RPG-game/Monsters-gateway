@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IRegisterDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IRegisterDto } from './types.d.js';
 
 export default class RegisterDto implements IRegisterDto {
   email: string;

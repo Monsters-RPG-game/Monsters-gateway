@@ -1,9 +1,9 @@
-import type Broker from '../broker';
-import type Mysql from '../connections/mysql';
-import type Redis from '../connections/redis';
-import type WebsocketServer from '../connections/websocket';
-import type Router from '../structure';
-import type { JSONWebKey } from 'jose';
+import type Broker from '../connections/broker/index.js';
+import type Mysql from '../connections/mysql/index.js';
+import type Redis from '../connections/redis/index.js';
+import type WebsocketServer from '../connections/websocket/index.js';
+import type Router from '../structure/index.js';
+import type { JSONWebKeySet } from 'jose';
 
 export interface IState {
   broker: Broker;
@@ -11,7 +11,7 @@ export interface IState {
   router: Router;
   redis: Redis;
   mysql: Mysql;
-  keys: JSONWebKey[];
+  keys: JSONWebKeySet;
 }
 
 export interface IConfigInterface {

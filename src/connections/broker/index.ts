@@ -1,14 +1,13 @@
 import amqplib from 'amqplib';
-import Controller from './controller';
-import * as enums from '../../enums';
-import { InternalError } from '../../errors';
-import getConfig from '../../tools/configLoader';
-import Log from '../../tools/logger';
-import { generateRandomName } from '../../utils';
-import type Communicator from './controller';
-import type { EMessageTypes } from '../../enums';
-import type { IHealth } from '../../structure/modules/health/types';
-import type * as types from '../../types';
+import Controller from './controller.js';
+import * as enums from '../../enums/index.js';
+import { InternalError } from '../../errors/index.js';
+import getConfig from '../../tools/configLoader.js';
+import Log from '../../tools/logger/index.js';
+import { generateRandomName } from '../../utils/index.js';
+import type Communicator from './controller.js';
+import type { IHealth } from '../../structure/modules/health/types.d.js';
+import type * as types from '../../types/index.d.js';
 
 export default class Broker {
   private _closed: boolean = false;
@@ -64,9 +63,9 @@ export default class Broker {
     subTarget: T,
     resolve: (
       value:
-        | { type: EMessageTypes.Credentials | EMessageTypes.Send; payload: unknown }
+        | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-            type: EMessageTypes.Credentials | EMessageTypes.Send;
+            type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
             payload: unknown;
           }>,
     ) => void,
@@ -84,12 +83,15 @@ export default class Broker {
     this.closed = true;
     if (this._retryTimeout) clearTimeout(this._retryTimeout);
     this.cleanAll();
-    this._connection!.close()
-      .then(() => {
-        if (this._retryTimeout) clearTimeout(this._retryTimeout);
-        this.cleanAll();
-      })
-      .catch(() => undefined);
+    if (this._connection) {
+      this._connection
+        .close()
+        .then(() => {
+          if (this._retryTimeout) clearTimeout(this._retryTimeout);
+          this.cleanAll();
+        })
+        .catch(() => undefined);
+    }
   }
 
   getHealth(): IHealth {

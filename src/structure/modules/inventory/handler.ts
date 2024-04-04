@@ -1,10 +1,9 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type { IInventoryEntity } from './get/types';
-import type { EMessageTypes } from '../../../enums';
-import type { IUserBrokerInfo } from '../../../types';
-import type InventoryDropDto from '../../modules/inventory/drop/dto';
-import type InventoryUseDto from '../../modules/inventory/use/dto';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type { IInventoryEntity } from './get/types.d.js';
+import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type InventoryDropDto from '../../modules/inventory/drop/dto.js';
+import type InventoryUseDto from '../../modules/inventory/use/dto.js';
 
 export default class Inventory extends ReqHandler {
   async use(data: InventoryUseDto, userData: IUserBrokerInfo): Promise<void> {
@@ -16,7 +15,7 @@ export default class Inventory extends ReqHandler {
   }
 
   async get(userData: IUserBrokerInfo): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IInventoryEntity;
   }> {
     return (await this.sendReq(
@@ -25,7 +24,7 @@ export default class Inventory extends ReqHandler {
       enums.EMessagesTargets.GetUnread,
       userData,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IInventoryEntity;
     };
   }

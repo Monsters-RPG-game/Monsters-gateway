@@ -1,11 +1,11 @@
 import Provider from 'oidc-provider';
-import oidcClaims from './claims';
-import { getKeys as generateKeys } from './utils';
-import State from '../state';
-import getConfig from '../tools/configLoader';
-import Log from '../tools/logger';
-import type { ILoginKeys } from '../types';
-import type { JSONWebKey } from 'jose';
+import oidcClaims from './claims.js';
+import { getKeys as generateKeys } from './utils.js';
+import State from '../state.js';
+import getConfig from '../tools/configLoader.js';
+import Log from '../tools/logger/index.js';
+import type { ILoginKeys } from '../types/index.d.js';
+import type { JWK } from 'jose';
 import type { Configuration } from 'oidc-provider';
 
 export default class Oidc {
@@ -44,8 +44,10 @@ export default class Oidc {
     if (!keys || keys.length === 0) {
       const newKeys = await generateKeys(10);
       const now = new Date();
+      let keyId = 1;
       keys = newKeys.map((k) => {
         return {
+          id: keyId++,
           key: k,
           expiration: now,
         };
@@ -53,7 +55,7 @@ export default class Oidc {
       await State.mysql.addKeys(keys);
     }
 
-    State.keys = keys.map((e) => (typeof e.key === 'string' ? (JSON.parse(e.key) as JSONWebKey) : e.key));
+    State.keys = { keys: keys.map((e) => (typeof e.key === 'string' ? (JSON.parse(e.key) as JWK) : e.key)) };
     const clients = await State.mysql.getOidcClients();
     return oidcClaims(State.keys, clients);
   }

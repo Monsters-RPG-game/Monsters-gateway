@@ -1,20 +1,20 @@
 import WebsocketServer from '../../../src/connections/websocket';
-import Websocket from 'ws';
+import { WebSocketServer } from 'ws';
 import * as errors from '../../../src/errors';
 import type * as types from '../../../src/connections/websocket/types';
 
 export default class SocketServer extends WebsocketServer {
-  override get server(): Websocket.WebSocketServer {
+  override get server(): WebSocketServer {
     return this._server!;
   }
 
   override init(): void {
-    this._server = new Websocket.Server({
+    this._server = new WebSocketServer({
       noServer: true,
     });
     this.startListeners();
   }
-
+ 
   override close(): void {
     this.server.close();
 

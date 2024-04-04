@@ -1,17 +1,16 @@
-import * as enums from '../../../enums';
-import ReqHandler from '../../../tools/abstracts/reqHandler';
-import type { IProfileEntity } from './entity';
-import type { EMessageTypes } from '../../../enums';
-import type { IUserBrokerInfo } from '../../../types';
-import type AddProfileDto from '../../modules/profile/add/dto';
-import type GetProfileDto from '../../modules/profile/get/dto';
+import * as enums from '../../../enums/index.js';
+import ReqHandler from '../../../tools/abstracts/reqHandler.js';
+import type { IProfileEntity } from './entity.d.js';
+import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type AddProfileDto from '../../modules/profile/add/dto.js';
+import type GetProfileDto from '../../modules/profile/get/dto.js';
 
 export default class Profile extends ReqHandler {
   async get(
     data: GetProfileDto,
     userData: IUserBrokerInfo,
   ): Promise<{
-    type: EMessageTypes.Credentials | EMessageTypes.Send;
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IProfileEntity;
   }> {
     return (await this.sendReq(
@@ -21,7 +20,7 @@ export default class Profile extends ReqHandler {
       userData,
       data,
     )) as {
-      type: EMessageTypes.Credentials | EMessageTypes.Send;
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IProfileEntity;
     };
   }

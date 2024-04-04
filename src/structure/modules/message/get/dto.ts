@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IGetMessagesDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IGetMessagesDto } from './types.d.js';
 
 export default class GetMessagesDto implements IGetMessagesDto {
   page: number;

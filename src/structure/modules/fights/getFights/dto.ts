@@ -1,4 +1,4 @@
-import type { IGetFightDto } from './types';
+import type { IGetFightDto } from './types.d.js';
 
 export default class GetFightDto implements IGetFightDto {
   owner: string;

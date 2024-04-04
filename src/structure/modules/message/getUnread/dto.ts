@@ -1,5 +1,5 @@
-import Validation from '../../../../tools/validation';
-import type { IGetUnreadMessagesDto } from './types';
+import Validation from '../../../../tools/validation/index.js';
+import type { IGetUnreadMessagesDto } from './types.d.js';
 
 export default class GetUnreadMessagesDto implements IGetUnreadMessagesDto {
   page: number;
