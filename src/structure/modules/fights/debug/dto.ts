@@ -1,6 +1,22 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { ICreateFightDto, IFightStateTeam } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ICreateFightDto:
+ *       type: object
+ *       properties:
+ *         attacker:
+ *           type: string
+ *         teams:
+ *           type: array
+ *           items:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/IStateTeam'
+ */
 export default class CreateFightDto implements ICreateFightDto {
   teams: [IFightStateTeam[], IFightStateTeam[]] = [[], []];
   attacker: string;

@@ -1,6 +1,16 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IRemoveAccountDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IRemoveAccountDto:
+ *       type: object
+ *       properties:
+ *         password:
+ *           type: string
+ */
 export default class RemoveUserDto implements IRemoveAccountDto {
   id: string;
   password: string;

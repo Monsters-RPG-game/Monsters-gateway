@@ -1,6 +1,18 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IReadMessageDto } from './types.d.js';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IReadMessageDto:
+ *       type: object
+ *       properties:
+ *         chatId:
+ *           type: string
+ *         receiver:
+ *           type: string
+ */
 export default class ReadMessagesDto implements IReadMessageDto {
   chatId: string;
   receiver: string;
