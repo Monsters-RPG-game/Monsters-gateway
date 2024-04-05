@@ -63,7 +63,7 @@ export default class Redis {
   }
 
   async addOidc(target: string, id: string, value: unknown): Promise<void> {
-    await this.rooster.addToHash(target, id, JSON.stringify(value));
+    await this.rooster.addToHash(target, id, typeof value === 'string' ? value : JSON.stringify(value));
   }
 
   async addGrantId(target: string, id: string, value: string): Promise<void> {

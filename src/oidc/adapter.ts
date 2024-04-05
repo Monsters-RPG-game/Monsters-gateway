@@ -19,8 +19,16 @@ export default class Adapter implements OidcAdapter {
   }
 
   async upsert(id: string, payload: AdapterPayload, expiresIn?: number): Promise<void> {
-    if (this.name === 'Session') {
+    if (this.name === 'Session' && (!payload.state || payload.state.state !== undefined)) {
       await this.addUidIndex(payload.uid as string, payload.jti as string, payload.exp as number);
+
+      if (payload.authorizations) {
+        await Promise.allSettled(
+          Object.values(payload.authorizations).map(async (v) => {
+            await this.addGrandIdIndex(v.grantId as string, payload.jti as string, payload.exp as number);
+          }),
+        );
+      }
     }
     if (this.name === 'RefreshToken') {
       await this.addIndex(payload.accountId as string, id);
@@ -64,12 +72,23 @@ export default class Adapter implements OidcAdapter {
     const key = this.uidIndexKey(uid);
     const data = await State.redis.getOidcHash(key, uid);
     if (!data) return undefined;
-    return this.find(JSON.parse(data) as string);
+    return this.find(data);
   }
 
-  async revokeByGrantId(_grantId: string): Promise<void> {
-    Log.log('Find by uid', 'Not implemented');
-    return new Promise((resolve) => resolve(undefined));
+  async revokeByGrantId(grantId: string): Promise<void> {
+    const id = await State.redis.getOidcHash(this.grandIdIndexKey(grantId), grantId);
+    if (id) {
+      await State.redis.removeOidcElement(this.key(id));
+      if (this.name === 'AuthorizationCode') {
+        await State.redis.removeOidcElement(this.grandIdIndexKey(grantId));
+
+        const session = await State.redis.getOidcHash(`oidc:Session:${id}`, id);
+        if (session) {
+          const { uid } = JSON.parse(session) as AdapterPayload;
+          await State.redis.removeOidcElement(this.uidIndexKey(uid as string));
+        }
+      }
+    }
   }
 
   async consume(id: string): Promise<void> {
@@ -84,6 +103,12 @@ export default class Adapter implements OidcAdapter {
 
   private async addUidIndex(uid: string, target: string, exp: number): Promise<void> {
     const key = this.uidIndexKey(uid);
+    await State.redis.addOidc(key, uid, target);
+    await State.redis.setExpirationDate(key, exp);
+  }
+
+  private async addGrandIdIndex(uid: string, target: string, exp: number): Promise<void> {
+    const key = this.grandIdIndexKey(uid);
     await State.redis.addOidc(key, uid, target);
     await State.redis.setExpirationDate(key, exp);
   }
@@ -103,6 +128,10 @@ export default class Adapter implements OidcAdapter {
 
   private uidIndexKey(id: string): string {
     return `${this.prefix}UidIndex:${id}`;
+  }
+
+  private grandIdIndexKey(id: string): string {
+    return `${this.prefix}GrandIndex:${id}`;
   }
 
   private grantId(grant: string): string {
