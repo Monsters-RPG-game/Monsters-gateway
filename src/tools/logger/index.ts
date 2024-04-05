@@ -39,13 +39,11 @@ export default class Log {
 
   private static buildLog(color: () => string, type: enums.ELogTypes, message: unknown): void {
     console.info(`[${chalk.gray(Log.getDate())}] ${color()} ${Log.toString(message)}`);
-
-    if (type === enums.ELogTypes.Debug && process.env.NODE_ENV !== 'production') Log.saveLog(message, type);
+    Log.saveLog(message, type);
   }
 
   private static saveLog(message: unknown, type: enums.ELogTypes): void {
     const mess = typeof message !== 'string' ? JSON.stringify(message) : message;
-
     switch (type) {
       case enums.ELogTypes.Warn:
         errLogger.warn(mess);

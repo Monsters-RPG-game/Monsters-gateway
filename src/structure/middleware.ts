@@ -153,16 +153,21 @@ export default class Middleware {
       }),
     );
     const helmetDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
-    // delete helmetDirectives['form-action']; // Removed form-action on oidc v6. Was causing problems for chrome
+    const allowedUrls = [
+      Array.isArray(getConfig().corsOrigin) ? [...getConfig().corsOrigin] : getConfig().corsOrigin,
+    ].flat();
     app.use(
       helmet({
         contentSecurityPolicy: {
           useDefaults: false,
           directives: {
             ...helmetDirectives,
-            'form-action': ["'self'", getConfig().myAddress],
+            'form-action': ["'self'", ...allowedUrls],
             'script-src': ["'self'", "'unsafe-inline'"],
             'default-src': ["'self'", 'data:'],
+            'frame-ancestors': ["'self'", ...allowedUrls],
+            'frame-src': ["'self'", ...allowedUrls],
+            'connect-src': ["'self'", ...allowedUrls],
           },
         },
       }),
