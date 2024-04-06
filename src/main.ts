@@ -4,10 +4,21 @@ import Redis from './connections/redis/index.js';
 import WebsocketServer from './connections/websocket/index.js';
 import State from './state.js';
 import Router from './structure/index.js';
+import Liveness from './tools/liveness.js';
 import Log from './tools/logger/index.js';
 import type { IFullError } from './types/index.d.js';
 
 class App {
+  private _liveness: Liveness | undefined;
+
+  private get liveness(): Liveness | undefined {
+    return this._liveness;
+  }
+
+  private set liveness(value: Liveness | undefined) {
+    this._liveness = value;
+  }
+
   init(): void {
     this.handleInit().catch((err) => {
       const { stack, message } = err as IFullError;
@@ -15,6 +26,7 @@ class App {
       Log.error('Server', message, stack);
       Log.error('Server', JSON.stringify(err));
 
+      this.liveness?.close();
       return State.kill().catch((error) =>
         Log.error('Server', "Couldn't kill server", (error as Error).message, (error as Error).stack),
       );
@@ -40,6 +52,9 @@ class App {
     await router.init();
     socket.init();
     Log.log('Server', 'Server started');
+
+    this.liveness = new Liveness();
+    this.liveness.init();
   }
 }
 

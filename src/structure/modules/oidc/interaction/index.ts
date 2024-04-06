@@ -25,6 +25,7 @@ export default class UserRouter extends RouterFactory {
             uid,
             details: prompt.details,
             params,
+            frontUrl: interactionDetails.params?.redirect_uri,
           });
           return;
         case 'consent':
@@ -59,6 +60,7 @@ export default class UserRouter extends RouterFactory {
           uid,
           details: prompt.details,
           params,
+          frontUrl: interactionDetails.params?.redirect_uri,
         });
       }
     }
@@ -110,6 +112,7 @@ export default class UserRouter extends RouterFactory {
           uid,
           details: prompt.details,
           params,
+          frontUrl: interactionDetails.params?.redirect_uri,
         });
       }
     }
