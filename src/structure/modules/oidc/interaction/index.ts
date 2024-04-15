@@ -2,8 +2,8 @@ import LoginDto from './dto.js';
 import State from '../../../../state.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import Log from '../../../../tools/logger/index.js';
+import type { IUsersTokens } from '../../../../types/index.d.js';
 import type * as types from '../../../../types/index.d.js';
-import type ReqHandler from '../../../reqHandler.js';
 import type express from 'express';
 import type { InteractionResults } from 'oidc-provider';
 import { strict as assert } from 'node:assert';
@@ -68,10 +68,11 @@ export default class UserRouter extends RouterFactory {
 
   async post(req: express.Request, res: express.Response): Promise<void> {
     const { provider } = State;
+    const { reqHandler } = res.locals as IUsersTokens;
 
     try {
-      const data = new LoginDto(req.body as LoginDto);
-      const account = await (res.locals.reqHandler as ReqHandler).user.login(data, res.locals as types.IUsersTokens);
+      const data = new LoginDto(req.body as LoginDto, req.ip as string);
+      const account = await reqHandler.user.login(data, res.locals as types.IUsersTokens);
 
       (req.session as types.IUserSession).userId = account.payload.id;
       const details = await provider.interactionDetails(req, res);

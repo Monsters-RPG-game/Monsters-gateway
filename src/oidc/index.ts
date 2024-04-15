@@ -6,7 +6,7 @@ import getConfig from '../tools/configLoader.js';
 import Log from '../tools/logger/index.js';
 import type { ILoginKeys } from '../types/index.d.js';
 import type { JWK } from 'jose';
-import type { Configuration } from 'oidc-provider';
+import type { ClientMetadata, Configuration } from 'oidc-provider';
 
 export default class Oidc {
   async init(): Promise<Provider> {
@@ -57,6 +57,7 @@ export default class Oidc {
 
     State.keys = { keys: keys.map((e) => (typeof e.key === 'string' ? (JSON.parse(e.key) as JWK) : e.key)) };
     const clients = await State.mysql.getOidcClients();
-    return oidcClaims(State.keys, clients);
+    // #TODO This is stupid and temporary fix. Mysql package had huge vulnerability, which was fixed in updated package. For some reason, knex does not work with updated package and returns broken list of elements
+    return oidcClaims(State.keys, JSON.parse(JSON.stringify(clients)) as ClientMetadata[]);
   }
 }

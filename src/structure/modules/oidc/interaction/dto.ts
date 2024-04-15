@@ -22,11 +22,13 @@ import type { ILoginDto } from './types.d.js';
  */
 export default class LoginDto implements ILoginDto {
   login: string;
+  ip: string;
   password: string;
 
-  constructor(data: ILoginDto) {
+  constructor(data: ILoginDto, ip: string) {
     this.login = data.login;
     this.password = data.password;
+    this.ip = ip;
 
     this.validate();
   }
@@ -34,5 +36,6 @@ export default class LoginDto implements ILoginDto {
   validate(): void {
     new Validation(this.login, 'login').isDefined();
     new Validation(this.password, 'password').isDefined();
+    new Validation(this.ip, 'ip').isDefined();
   }
 }
