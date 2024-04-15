@@ -10,7 +10,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/main.js",
     "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=dev nodemon build/src/main.js'",
-    "start:testDev": "cross-env NODE_ENV=testDev TS_NODE_FILES=true TS_NODE_TRANSPILE_ONLY=true nodemon build/src/main.js",
+    "start:testDev": "cross-env NODE_ENV=testDev node build/src/main.js",
     "build": "tsc -p tsconfig.release.json && cp -r config build/config",
     "build:watch": "mkdir -p build && cp -r config build/config && tsc -w -p tsconfig.release.json",
     "lint": "cross-env NODE_ENV=development eslint . --ext .ts --fix",
