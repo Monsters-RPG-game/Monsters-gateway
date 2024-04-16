@@ -16,8 +16,16 @@ export default class Rooster {
     await this.client.hSet(target, key, value);
   }
 
+  async addToList(target: enums.ERedisTargets | string, value: string[]): Promise<void> {
+    await this.client.lPush(target, value);
+  }
+
   async setExpirationDate(target: enums.ERedisTargets | string, time: number): Promise<void> {
     await this.client.expire(target, time);
+  }
+
+  async getKeys(target: enums.ERedisTargets | string): Promise<string[]> {
+    return this.client.keys(target);
   }
 
   async getFromHash(data: { target: enums.ERedisTargets | string; value: string }): Promise<string | undefined> {
@@ -25,6 +33,11 @@ export default class Rooster {
     const exist = await this.checkElm(target);
     if (!exist) return undefined;
     return this.client.hGet(target, value);
+  }
+
+  async getAllFromList(target: enums.ERedisTargets | string): Promise<string[] | undefined> {
+    const amount = await this.client.lLen(target);
+    return this.client.lRange(target, 0, amount);
   }
 
   async removeFromHash(target: enums.ERedisTargets | string, value: string): Promise<void> {

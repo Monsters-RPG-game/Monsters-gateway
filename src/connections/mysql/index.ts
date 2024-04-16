@@ -1,6 +1,5 @@
 import knex from 'knex';
 import getConfig from '../../tools/configLoader.js';
-import type { ILoginKeys } from '../../types/index.d.js';
 import type { ClientMetadata } from 'oidc-provider';
 
 export default class Mysql {
@@ -39,15 +38,7 @@ export default class Mysql {
     }
   }
 
-  async getKeys(): Promise<ILoginKeys[]> {
-    return this.knex('keys').select();
-  }
-
   async getOidcClients(): Promise<ClientMetadata[]> {
     return this.knex('oidcClients').select();
-  }
-
-  async addKeys(keys: ILoginKeys[]): Promise<void> {
-    await this.knex('keys').insert(keys);
   }
 }

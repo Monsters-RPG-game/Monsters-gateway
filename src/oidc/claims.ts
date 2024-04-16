@@ -1,10 +1,10 @@
 import Adapter from './adapter.js';
 import findAccount from './user.js';
 import { EClaimsTTL } from '../enums/index.js';
-import type { JSONWebKeySet } from 'jose';
+import State from '../state.js';
 import type * as oidc from 'oidc-provider';
 
-const claims = (jwks: JSONWebKeySet, clients: oidc.ClientMetadata[]): oidc.Configuration => {
+const claims = (clients: oidc.ClientMetadata[]): oidc.Configuration => {
   return {
     adapter: Adapter,
 
@@ -74,7 +74,7 @@ const claims = (jwks: JSONWebKeySet, clients: oidc.ClientMetadata[]): oidc.Confi
     },
     expiresWithSession: (): boolean => false,
 
-    jwks,
+    jwks: State.keys,
 
     pkce: {
       methods: ['S256'],
