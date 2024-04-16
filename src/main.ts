@@ -49,6 +49,7 @@ class App {
     mysql.init();
     await broker.init();
     await redis.init();
+    await State.initKeys();
     await router.init();
     socket.init();
     Log.log('Server', 'Server started');

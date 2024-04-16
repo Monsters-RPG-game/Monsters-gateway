@@ -6,6 +6,7 @@ import Log from '../../tools/logger/index.js';
 import type { IProfileEntity } from '../../structure/modules/profile/entity.d.js';
 import type { IUserEntity } from '../../structure/modules/user/entity.d.js';
 import type { ICachedUser, IFullError } from '../../types/index.d.js';
+import type { JWK } from 'jose';
 import type { RedisClientType } from 'redis';
 
 export default class Redis {
@@ -98,6 +99,43 @@ export default class Redis {
       JSON.stringify(user),
     );
     await this.rooster.setExpirationDate(`${enums.ERedisTargets.CachedUser}:${user.account._id}`, 60000);
+  }
+
+  async addPrivateKeys(keys: JWK[]): Promise<void> {
+    const indexes = await this.rooster.getKeys(`${enums.ERedisTargets.PrivateKeys}:*`);
+    const highestNumber =
+      indexes.length === 0
+        ? '1'
+        : (
+            indexes
+              .map((i) => Number(i.split(':')[2]))
+              .sort((a, b) => {
+                if (a > b) return 1;
+                if (b > 1) return -1;
+                return 0;
+              })[indexes.length - 1]! + 1
+          ).toString();
+    const liveKey = `${enums.ERedisTargets.PrivateKeys}:${highestNumber}`;
+
+    await this.rooster.addToList(
+      liveKey,
+      keys.map((k) => JSON.stringify(k)),
+    );
+    await this.rooster.setExpirationDate(`${liveKey}`, 60 * 60 * 24 * 7);
+  }
+
+  /**
+   * Get private keys used to generate user keys
+   */
+  async getPrivateKeys(): Promise<JWK[]> {
+    const target = `${enums.ERedisTargets.PrivateKeys}`;
+    const indexes = await this.rooster.getKeys(`${target}:*`);
+    const keys = await Promise.all(
+      indexes.map((i) => {
+        return this.rooster.getAllFromList(i);
+      }),
+    );
+    return keys && keys.length > 0 ? keys.flat().map((k) => JSON.parse(k as string) as JWK) : [];
   }
 
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {

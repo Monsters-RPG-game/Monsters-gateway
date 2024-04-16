@@ -3,4 +3,5 @@ export enum ERedisTargets {
   AccountToRemove = 'accountToRemove',
   CachedUser = 'cachedUsers',
   Oidc = 'oidc',
+  PrivateKeys = 'privateKeys',
 }
