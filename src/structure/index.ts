@@ -40,6 +40,7 @@ export default class Router {
     State.provider = await new Oidc().init();
     this.initDocumentation();
     this.initMiddleware();
+    this.initWebsocket();
     this.initRouter();
     this.initServer();
     this.initSecuredRouter();
@@ -99,6 +100,13 @@ export default class Router {
    */
   private initOidc(): void {
     this.middleware.generateOidcMiddleware(this.app);
+  }
+
+  /**
+   * Init websocket upgrade route.
+   */
+  private initWebsocket(): void {
+    this.router.initWebsocket(this.app);
   }
 
   /**

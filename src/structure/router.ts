@@ -11,6 +11,7 @@ import initOidcRoutes from './modules/oidc/index.js';
 import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
 import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from './modules/user/index.js';
+import State from '../state.js';
 import type { Express, Router } from 'express';
 import type swaggerJsdoc from 'swagger-jsdoc';
 import fs from 'fs';
@@ -50,6 +51,14 @@ export default class AppRouter {
     initMessagesRoutes(this.router);
     initInventoryRoutes(this.router);
     initFightsRoutes(this.router);
+  }
+
+  initWebsocket(app: Express): void {
+    app.get('/ws', (req, _res) => {
+      State.socket.getServer().handleUpgrade(req, req.socket, Buffer.from(''), (socket) => {
+        State.socket.getServer().emit('connection', socket, req);
+      });
+    });
   }
 
   generateDocumentation(): void {
