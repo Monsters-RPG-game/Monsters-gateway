@@ -34,6 +34,7 @@ export interface ISocketInMessage {
 export interface ISocketUser {
   clients: ISocket[];
   userId: string;
+  retry: number;
 }
 
 export interface ISocketOutMessage {

@@ -16,6 +16,7 @@ export default class WebsocketServer {
   protected _server: WebSocketServer | null = null;
   private readonly _router: Router;
   private _users: types.ISocketUser[] = [];
+  private _heartbeat: NodeJS.Timer | undefined;
 
   constructor() {
     this._router = new Router();
@@ -33,6 +34,14 @@ export default class WebsocketServer {
     this._server = value;
   }
 
+  private get heartbeat(): NodeJS.Timer {
+    return this._heartbeat as NodeJS.Timer;
+  }
+
+  private set heartbeat(value: NodeJS.Timer) {
+    this._heartbeat = value;
+  }
+
   private get router(): Router {
     return this._router;
   }
@@ -43,6 +52,7 @@ export default class WebsocketServer {
     });
     Log.log('Socket', `Started socket on port ${getConfig().socketPort}`);
     this.startListeners();
+    this.startHeartbeat();
   }
 
   close(): void {
@@ -55,6 +65,10 @@ export default class WebsocketServer {
         this.userDisconnected(c);
       });
     });
+  }
+
+  getServer(): WebSocketServer {
+    return this.server;
   }
 
   startListeners(): void {
@@ -102,6 +116,7 @@ export default class WebsocketServer {
     this.initializeUser(ws);
 
     ws.on('message', (message: string) => this.errorWrapper(() => this.handleUserMessage(message, ws), ws));
+    ws.on('ping', () => this.errorWrapper(() => this.ping(ws), ws));
     ws.on('pong', () => this.errorWrapper(() => this.pong(ws), ws));
     ws.on('error', (error) => this.router.handleError(error as IFullError, ws));
     ws.on('close', () => this.userDisconnected(ws));
@@ -113,6 +128,22 @@ export default class WebsocketServer {
     } catch (err) {
       this.router.handleError(err as IFullError, ws);
     }
+  }
+
+  private startHeartbeat(): void {
+    this.heartbeat = setInterval(() => {
+      this.users.forEach((u) =>
+        u.clients.forEach((c) => {
+          if (u.retry >= 10) {
+            Log.warn('Websocket', `Client ${u.userId} not responding. Disconnecting`);
+            this.userDisconnected(c);
+          } else {
+            u.retry++;
+            c.ping();
+          }
+        }),
+      );
+    }, 5000);
   }
 
   private async validateUser(
@@ -183,11 +214,12 @@ export default class WebsocketServer {
         ...this.users[isAlreadyOnline],
         userId: this.users[isAlreadyOnline]!.userId,
         clients: [...this.users[isAlreadyOnline]!.clients, ws],
+        retry: this.users[isAlreadyOnline]!.retry,
       };
       return;
     }
 
-    this._users.push({ clients: [ws], userId: payload.accountId });
+    this._users.push({ clients: [ws], userId: payload.accountId, retry: 0 });
   }
 
   private initializeUser(ws: types.ISocket): void {
@@ -196,6 +228,8 @@ export default class WebsocketServer {
 
   private handleUserMessage(mess: string, ws: types.ISocket): void {
     let message: types.ISocketInMessage = { payload: undefined, subTarget: undefined!, target: undefined! };
+
+    if (mess.toString() === 'ping') return this.pong(ws);
 
     try {
       message = JSON.parse(mess) as types.ISocketInMessage;
@@ -211,8 +245,17 @@ export default class WebsocketServer {
     }
   }
 
-  private pong(ws: types.ISocket): void {
+  private ping(ws: types.ISocket): void {
     ws.pong();
+  }
+
+  private pong(ws: types.ISocket): void {
+    const index = this.users.findIndex((u) => u.userId === ws.userId);
+    if (index < 0) {
+      Log.error('Websocket', 'Received ping from connection, which is not registered in users object');
+    } else {
+      this.users[index]!.retry = 0;
+    }
   }
 
   private handleServerError(err: Error): void {
