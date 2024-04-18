@@ -15,7 +15,7 @@ export default class Liveness {
   init(): void {
     this.timer = setInterval(() => {
       this.updateProbe();
-    }, 1000);
+    }, 5000);
   }
 
   close(): void {

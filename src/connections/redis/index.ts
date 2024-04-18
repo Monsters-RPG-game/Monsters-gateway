@@ -108,7 +108,7 @@ export default class Redis {
         ? '1'
         : (
             indexes
-              .map((i) => Number(i.split(':')[2]))
+              .map((i) => Number(i.split(':')[1]))
               .sort((a, b) => {
                 if (a > b) return 1;
                 if (b > 1) return -1;
