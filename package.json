@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node src/main.js",
-    "start:dev": "cross-env NODE_ENV=dev tsx src/main.ts",
+    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=dev nodemon build/src/main.js'",
     "start:testDev": "cross-env NODE_ENV=testDev node src/main.js",
     "build": "tsc -p tsconfig.release.json && cp -r config build/config",
     "build:watch": "mkdir -p build && cp -r config build/config && tsc -w -p tsconfig.release.json",
@@ -77,6 +77,7 @@
     "@types/ws": "8.5.10",
     "@typescript-eslint/eslint-plugin": "7.7.1",
     "@typescript-eslint/parser": "7.7.1",
+    "concurrently": "8.2.2",
     "cross-env": "7.0.3",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
@@ -88,6 +89,7 @@
     "prettier": "3.2.5",
     "supertest": "6.3.4",
     "ts-jest": "29.1.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.2",
     "typescript": "5.4.5"
   }

@@ -7,6 +7,7 @@ import initHealthRoutes from './modules/health/index.js';
 import initInventoryRoutes from './modules/inventory/index.js';
 import initLogsRoutes from './modules/logs/index.js';
 import initMessagesRoutes from './modules/message/index.js';
+import initNpcRoutes from './modules/npc/index.js';
 import initOidcRoutes from './modules/oidc/index.js';
 import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
@@ -53,6 +54,7 @@ export default class AppRouter {
     initInventoryRoutes(this.router);
     initFightsRoutes(this.router);
     initStatsRoutes(this.router);
+    initNpcRoutes(this.router);
   }
 
   initWebsocket(app: Express): void {
