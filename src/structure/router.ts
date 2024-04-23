@@ -10,6 +10,7 @@ import initMessagesRoutes from './modules/message/index.js';
 import initOidcRoutes from './modules/oidc/index.js';
 import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
+import initStatsRoutes from './modules/stats/index.js';
 import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from './modules/user/index.js';
 import State from '../state.js';
 import type { Express, Router } from 'express';
@@ -51,6 +52,7 @@ export default class AppRouter {
     initMessagesRoutes(this.router);
     initInventoryRoutes(this.router);
     initFightsRoutes(this.router);
+    initStatsRoutes(this.router);
   }
 
   initWebsocket(app: Express): void {

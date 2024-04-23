@@ -3,6 +3,7 @@ export enum EUserMainTargets {
   User = 'user',
   Chat = 'chat',
   Party = 'party',
+  Stats = 'stats',
   Fight = 'fight',
   Profile = 'profile',
   Message = 'message',
@@ -63,4 +64,8 @@ export enum ECharacterStateTargets {
 export enum EBugReportTargets {
   AddBugReport = 'addBugReport',
   GetBugReport = 'getBugReport',
+}
+
+export enum EStatsTargets {
+  GetStats = 'getStats',
 }
