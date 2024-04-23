@@ -1,25 +1,26 @@
-import type { IUserBrokerInfo } from './user.d.js';
+import type { IUserBrokerInfo } from './user.js';
 import type * as types from '../connections/websocket/types/index.d.js';
 import type * as enums from '../enums/index.js';
-import type { IAddBugReport } from '../structure/modules/bugReport/add/types.d.js';
+import type { IAddBugReport } from '../structure/modules/bugReport/add/types.js';
 import type ChangeCharacterStatusDto from '../structure/modules/character/changeState/dto.js';
 import type AttackDto from '../structure/modules/fights/attack/dto.js';
 import type CreateFightDto from '../structure/modules/fights/debug/dto.js';
-import type { IGetFightDto } from '../structure/modules/fights/getFights/types.d.js';
-import type { IGetFightLogsDto } from '../structure/modules/fights/getLogs/types.d.js';
+import type { IGetFightDto } from '../structure/modules/fights/getFights/types.js';
+import type { IGetFightLogsDto } from '../structure/modules/fights/getLogs/types.js';
 import type InventoryDropDto from '../structure/modules/inventory/drop/dto.js';
 import type InventoryAddDto from '../structure/modules/inventory/use/dto.js';
 import type AddLogDto from '../structure/modules/logs/add/dto.js';
 import type GetLogDto from '../structure/modules/logs/get/dto.js';
 import type GetMessagesDto from '../structure/modules/message/get/dto.js';
 import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dto.js';
-import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.d.js';
+import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
 import type ReadMessagesDto from '../structure/modules/message/read/dto.js';
 import type SendMessagesDto from '../structure/modules/message/send/dto.js';
 import type LoginDto from '../structure/modules/oidc/interaction/dto.js';
 import type GetPartyDto from '../structure/modules/party/get/dto.js';
 import type AddProfileDto from '../structure/modules/profile/add/dto.js';
 import type GetProfileDto from '../structure/modules/profile/get/dto.js';
+import type GetStatsDto from '../structure/modules/stats/get/dto.js';
 import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
 import type UserDetailsDto from '../structure/modules/user/details/dto';
 import type RegisterDto from '../structure/modules/user/register/dto.js';
@@ -35,11 +36,16 @@ export type IRabbitSubTargets =
   | enums.EFightsTargets
   | enums.ECharacterStateTargets
   | enums.EBugReportTargets
+  | enums.EStatsTargets
   | enums.ELogTargets;
 
 export interface IProfileConnectionData {
   [enums.EProfileTargets.Get]: GetProfileDto;
   [enums.EProfileTargets.Create]: AddProfileDto;
+}
+
+export interface IStatsConnectionData {
+  [enums.EStatsTargets.GetStats]: GetStatsDto;
 }
 
 export interface IUserConnectionData {
@@ -105,6 +111,7 @@ export interface IRabbitConnectionData
     IChatConnectionData,
     ILogConnectionData,
     IFightConnectionData,
+    IStatsConnectionData,
     IBugReportConnectionData,
     IInventoryConnectionData {}
 
