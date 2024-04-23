@@ -1,6 +1,6 @@
 import type * as enums from '../enums/index.js';
-import type { IProfileEntity } from '../structure/modules/profile/entity.d.js';
-import type { IUserEntity } from '../structure/modules/user/entity.d.js';
+import type { IProfileEntity } from '../structure/modules/profile/entity.js';
+import type { IUserEntity } from '../structure/modules/user/entity.js';
 import type ReqHandler from '../structure/reqHandler.js';
 import type { Locals } from 'express';
 import type session from 'express-session';
