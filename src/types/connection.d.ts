@@ -1,7 +1,7 @@
 import type { IUserBrokerInfo } from './user.js';
 import type * as types from '../connections/websocket/types/index.d.js';
 import type * as enums from '../enums/index.js';
-import type { IAddBugReport } from '../structure/modules/bugReport/add/types.js';
+import type { IAddBugReportDto } from '../structure/modules/bugReport/add/types.js';
 import type ChangeCharacterStatusDto from '../structure/modules/character/changeState/dto.js';
 import type AttackDto from '../structure/modules/fights/attack/dto.js';
 import type CreateFightDto from '../structure/modules/fights/debug/dto.js';
@@ -16,6 +16,9 @@ import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dt
 import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
 import type ReadMessagesDto from '../structure/modules/message/read/dto.js';
 import type SendMessagesDto from '../structure/modules/message/send/dto.js';
+import type { IAddCharacterDto } from '../structure/modules/npc/add/types';
+import type { IGetCharacterDto } from '../structure/modules/npc/get/types';
+import type { IRemoveCharacterDto } from '../structure/modules/npc/remove/types';
 import type LoginDto from '../structure/modules/oidc/interaction/dto.js';
 import type GetPartyDto from '../structure/modules/party/get/dto.js';
 import type AddProfileDto from '../structure/modules/profile/add/dto.js';
@@ -37,6 +40,7 @@ export type IRabbitSubTargets =
   | enums.ECharacterStateTargets
   | enums.EBugReportTargets
   | enums.EStatsTargets
+  | enums.ENpcTargets
   | enums.ELogTargets;
 
 export interface IProfileConnectionData {
@@ -76,8 +80,14 @@ export interface IInventoryConnectionData {
 }
 
 export interface IBugReportConnectionData {
-  [enums.EBugReportTargets.AddBugReport]: IAddBugReport;
+  [enums.EBugReportTargets.AddBugReport]: IAddBugReportDto;
   [enums.EBugReportTargets.GetBugReport]: null;
+}
+
+export interface INpcConnectionData {
+  [enums.ENpcTargets.GetNpc]: IGetCharacterDto;
+  [enums.ENpcTargets.AddNpc]: IAddCharacterDto;
+  [enums.ENpcTargets.RemoveNpc]: IRemoveCharacterDto;
 }
 
 export interface IPartyConnectionData {
@@ -112,6 +122,7 @@ export interface IRabbitConnectionData
     ILogConnectionData,
     IFightConnectionData,
     IStatsConnectionData,
+    INpcConnectionData,
     IBugReportConnectionData,
     IInventoryConnectionData {}
 

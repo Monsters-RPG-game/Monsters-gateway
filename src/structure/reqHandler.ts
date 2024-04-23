@@ -5,6 +5,7 @@ import Fights from './modules/fights/handler.js';
 import Inventory from './modules/inventory/handler.js';
 import Log from './modules/logs/handler.js';
 import Message from './modules/message/handler.js';
+import Npc from './modules/npc/handler.js';
 import Party from './modules/party/handler.js';
 import Profile from './modules/profile/handler.js';
 import Stats from './modules/stats/handler.js';
@@ -17,6 +18,7 @@ import type * as types from '../types/index.d.js';
  * Handler to manage communication between services and user
  */
 export default class ReqHandler {
+  npc: Npc;
   log: Log;
   user: User;
   chat: Chat;
@@ -41,6 +43,7 @@ export default class ReqHandler {
       payload: unknown;
     }> => this.send(service, mainTarget, subTarget, userData, data);
 
+    this.npc = new Npc(enums.EServices.Users, action);
     this.log = new Log(enums.EServices.Users, action);
     this.user = new User(enums.EServices.Users, action);
     this.party = new Party(enums.EServices.Users, action);

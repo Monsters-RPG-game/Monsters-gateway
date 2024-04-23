@@ -7,15 +7,17 @@ import helmet from 'helmet';
 import GetProfileDto from './modules/profile/get/dto.js';
 import UserDetailsDto from './modules/user/details/dto.js';
 import ReqHandler from './reqHandler.js';
+import { EUserTypes } from '../enums/index.js';
 import * as errors from '../errors/index.js';
+import { NoPermission } from '../errors/index.js';
 import handleErr from '../errors/utils.js';
 import State from '../state.js';
 import getConfig from '../tools/configLoader.js';
 import Log from '../tools/logger/index.js';
 import errLogger from '../tools/logger/logger.js';
 import { validateToken } from '../tools/token.js';
-import type { IProfileEntity } from './modules/profile/entity.d.js';
-import type { IUserEntity } from './modules/user/entity.d.js';
+import type { IProfileEntity } from './modules/profile/entity.js';
+import type { IUserEntity } from './modules/user/entity.js';
 import type * as types from '../types/index.d.js';
 import type { Express } from 'express';
 
@@ -53,6 +55,13 @@ export default class Middleware {
 
   static setNoCache(_req: express.Request, res: express.Response, next: express.NextFunction): void {
     res.set('cache-control', 'no-store');
+    next();
+  }
+
+  static validateAdmin(_req: express.Request, res: express.Response, next: express.NextFunction): void {
+    const { user } = res.locals as types.IUsersTokens;
+
+    if (!user || user.type !== EUserTypes.Admin) throw new NoPermission();
     next();
   }
 

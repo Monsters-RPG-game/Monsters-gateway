@@ -357,6 +357,16 @@ export class NoPermissionToRemoveAccount extends FullError {
   }
 }
 
+export class NoPermission extends FullError {
+  constructor() {
+    super('NoPermission');
+    this.message = 'No permission';
+    this.name = 'NoPermission';
+    this.code = '022';
+    this.status = 400;
+  }
+}
+
 export class UserNotInFight extends FullError {
   constructor() {
     super('UserNotInFight');
