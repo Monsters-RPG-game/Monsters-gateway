@@ -7,6 +7,7 @@ import Log from './modules/logs/handler.js';
 import Message from './modules/message/handler.js';
 import Party from './modules/party/handler.js';
 import Profile from './modules/profile/handler.js';
+import Stats from './modules/stats/handler.js';
 import User from './modules/user/handler.js';
 import * as enums from '../enums/index.js';
 import State from '../state.js';
@@ -20,6 +21,7 @@ export default class ReqHandler {
   user: User;
   chat: Chat;
   party: Party;
+  stats: Stats;
   fights: Fights;
   profile: Profile;
   message: Message;
@@ -43,6 +45,7 @@ export default class ReqHandler {
     this.user = new User(enums.EServices.Users, action);
     this.party = new Party(enums.EServices.Users, action);
     this.chat = new Chat(enums.EServices.Messages, action);
+    this.stats = new Stats(enums.EServices.Users, action);
     this.fights = new Fights(enums.EServices.Fights, action);
     this.profile = new Profile(enums.EServices.Users, action);
     this.message = new Message(enums.EServices.Messages, action);
