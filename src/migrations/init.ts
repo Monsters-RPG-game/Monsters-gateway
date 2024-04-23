@@ -64,6 +64,11 @@ class DbInit {
   }
 }
 
-new DbInit().init().catch((err) => {
-  Log.error('Init migrations', 'Migration died. Incorrect db config ?', err);
-});
+new DbInit()
+  .init()
+  .then(() => {
+    Log.log('Init migrations', 'Created new database');
+  })
+  .catch((err) => {
+    Log.error('Init migrations', 'Migration died. Incorrect db config ?', err);
+  });

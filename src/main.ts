@@ -6,7 +6,7 @@ import State from './state.js';
 import Router from './structure/index.js';
 import Liveness from './tools/liveness.js';
 import Log from './tools/logger/index.js';
-import type { IFullError } from './types/index.d.js';
+import type { IFullError } from './types/index.js';
 
 class App {
   private _liveness: Liveness | undefined;
