@@ -1,6 +1,6 @@
 import RemoveCharacterDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
-import type { IRemoveCharacterDto } from './types';
+import type { IUpdateCharacterDto } from './types';
 import type * as types from '../../../../types/index.d.js';
 import type express from 'express';
 
@@ -9,9 +9,9 @@ export default class NpcRouter extends RouterFactory {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler } = locals;
 
-    const data = new RemoveCharacterDto(req.body as IRemoveCharacterDto);
+    const data = new RemoveCharacterDto(req.body as IUpdateCharacterDto);
 
-    await reqHandler.npc.remove(data, {
+    await reqHandler.npc.update(data, {
       userId: locals.userId,
       tempId: locals.tempId,
     });

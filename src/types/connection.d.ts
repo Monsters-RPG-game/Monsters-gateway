@@ -16,9 +16,10 @@ import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dt
 import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
 import type ReadMessagesDto from '../structure/modules/message/read/dto.js';
 import type SendMessagesDto from '../structure/modules/message/send/dto.js';
-import type { IAddCharacterDto } from '../structure/modules/npc/add/types';
-import type { IGetCharacterDto } from '../structure/modules/npc/get/types';
-import type { IRemoveCharacterDto } from '../structure/modules/npc/remove/types';
+import type { IAddCharacterDto } from '../structure/modules/npc/add/types.js';
+import type { IGetCharacterDto } from '../structure/modules/npc/get/types.js';
+import type { IRemoveCharacterDto } from '../structure/modules/npc/remove/types.js';
+import type { IUpdateCharacterDto } from '../structure/modules/npc/update/types.js';
 import type LoginDto from '../structure/modules/oidc/interaction/dto.js';
 import type GetPartyDto from '../structure/modules/party/get/dto.js';
 import type AddProfileDto from '../structure/modules/profile/add/dto.js';
@@ -88,6 +89,7 @@ export interface INpcConnectionData {
   [enums.ENpcTargets.GetNpc]: IGetCharacterDto;
   [enums.ENpcTargets.AddNpc]: IAddCharacterDto;
   [enums.ENpcTargets.RemoveNpc]: IRemoveCharacterDto;
+  [enums.ENpcTargets.UpdateNpc]: IUpdateCharacterDto;
 }
 
 export interface IPartyConnectionData {

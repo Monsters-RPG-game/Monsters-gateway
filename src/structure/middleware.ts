@@ -98,14 +98,15 @@ export default class Middleware {
     }
 
     try {
+      const { user } = res.locals as types.IUsersTokens;
       let { profile } = res.locals as types.IUsersTokens;
       if (!profile) {
-        const user = await Middleware.fetchUserProfile(res, (res.locals as types.IUsersTokens).userId as string);
+        const dbUser = await Middleware.fetchUserProfile(res, (res.locals as types.IUsersTokens).userId as string);
         // eslint-disable-next-line prefer-destructuring
-        profile = user.profile;
+        profile = dbUser.profile;
       }
 
-      if (!profile?.initialized) {
+      if (!profile?.initialized && user?.type !== EUserTypes.Admin) {
         throw new errors.ProfileNotInitialized();
       }
 

@@ -4,6 +4,7 @@ import type AddCharacterDto from './add/dto';
 import type { ICharacterEntity } from './entity';
 import type GetCharacterDto from './get/dto.js';
 import type RemoveCharacterDto from './remove/dto.js';
+import type UpdateCharacterDto from './update/dto';
 import type * as types from '../../../types/index.d.js';
 
 export default class User extends ReqHandler {
@@ -22,6 +23,10 @@ export default class User extends ReqHandler {
 
   async add(data: AddCharacterDto, userInfo: types.IUserBrokerInfo): Promise<void> {
     await this.sendReq(this.service, enums.EUserMainTargets.Npc, enums.ENpcTargets.AddNpc, userInfo, data);
+  }
+
+  async update(data: UpdateCharacterDto, userInfo: types.IUserBrokerInfo): Promise<void> {
+    await this.sendReq(this.service, enums.EUserMainTargets.Npc, enums.ENpcTargets.UpdateNpc, userInfo, data);
   }
 
   async remove(data: RemoveCharacterDto, userInfo: types.IUserBrokerInfo): Promise<void> {
