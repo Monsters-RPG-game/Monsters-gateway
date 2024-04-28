@@ -11,4 +11,5 @@ export interface IProfileEntity {
   inventory: string;
   party: string;
   state: ECharacterState;
+  stats: string;
 }

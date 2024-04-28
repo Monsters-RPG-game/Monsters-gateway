@@ -1,8 +1,8 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type * as getTypes from './get/types.d.js';
-import type { IUnreadMessage } from './getUnread/types.d.js';
-import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type * as getTypes from './get/types.js';
+import type { IUnreadMessage } from './getUnread/types.js';
+import type { IUserBrokerInfo } from '../../../types/index.js';
 import type GetMessagesDto from '../../modules/message/get/dto.js';
 import type GetUnreadMessagesDto from '../../modules/message/getUnread/dto.js';
 import type ReadMessagesDto from '../../modules/message/read/dto.js';

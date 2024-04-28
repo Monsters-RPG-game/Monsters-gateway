@@ -1,7 +1,7 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type { IProfileEntity } from './entity.d.js';
-import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type { IProfileEntity } from './entity.js';
+import type { IUserBrokerInfo } from '../../../types/index.js';
 import type AddProfileDto from '../../modules/profile/add/dto.js';
 import type GetProfileDto from '../../modules/profile/get/dto.js';
 

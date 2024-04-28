@@ -3,8 +3,8 @@ import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import State from '../../state.js';
 import Log from '../../tools/logger/index.js';
-import type * as types from './types/index.d.js';
-import type { IFullError } from '../../types/index.d.js';
+import type * as types from './types/index.js';
+import type { IFullError } from '../../types/index.js';
 
 export default class Router {
   private readonly _validator: Validation;

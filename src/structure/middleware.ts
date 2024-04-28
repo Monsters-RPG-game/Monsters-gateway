@@ -18,7 +18,7 @@ import errLogger from '../tools/logger/logger.js';
 import { validateToken } from '../tools/token.js';
 import type { IProfileEntity } from './modules/profile/entity.js';
 import type { IUserEntity } from './modules/user/entity.js';
-import type * as types from '../types/index.d.js';
+import type * as types from '../types/index.js';
 import type { Express } from 'express';
 
 export default class Middleware {

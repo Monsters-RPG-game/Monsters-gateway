@@ -5,7 +5,7 @@ import type { ICharacterEntity } from './entity';
 import type GetCharacterDto from './get/dto.js';
 import type RemoveCharacterDto from './remove/dto.js';
 import type UpdateCharacterDto from './update/dto';
-import type * as types from '../../../types/index.d.js';
+import type * as types from '../../../types/index.js';
 
 export default class User extends ReqHandler {
   async get(
@@ -13,11 +13,11 @@ export default class User extends ReqHandler {
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: ICharacterEntity;
+    payload: ICharacterEntity[];
   }> {
     return (await this.sendReq(this.service, enums.EUserMainTargets.Npc, enums.ENpcTargets.GetNpc, userInfo, data)) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: ICharacterEntity;
+      payload: ICharacterEntity[];
     };
   }
 

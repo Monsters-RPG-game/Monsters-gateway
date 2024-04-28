@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IGetCharacterDto } from './types.d.js';
+import type { IGetCharacterDto } from './types.js';
 import type { ENpcRace } from '../../../../enums';
 
 /**
@@ -30,10 +30,12 @@ import type { ENpcRace } from '../../../../enums';
 export default class GetCharacterDto implements IGetCharacterDto {
   race?: ENpcRace;
   lvl?: number;
+  id?: string[];
   page: number;
 
   constructor(data: IGetCharacterDto) {
     this.race = data.race;
+    this.id = data.id;
     this.lvl = data.lvl;
     this.page = data.page ?? 1;
 
@@ -43,5 +45,6 @@ export default class GetCharacterDto implements IGetCharacterDto {
   private validate(): void {
     if (this.lvl) new Validation(this.lvl, 'lvl').isDefined();
     if (this.race) new Validation(this.race, 'race').isDefined();
+    if (this.id) new Validation(this.id, 'id').isDefined();
   }
 }

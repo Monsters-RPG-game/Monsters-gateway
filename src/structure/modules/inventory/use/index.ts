@@ -1,7 +1,7 @@
 import InventoryUseDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
-import type { IUseItemDto } from './types.d.js';
-import type { IUsersTokens } from '../../../../types/index.d.js';
+import type { IUseItemDto } from './types.js';
+import type { IUsersTokens } from '../../../../types/index.js';
 import type express from 'express';
 
 export default class UserRouter extends RouterFactory {

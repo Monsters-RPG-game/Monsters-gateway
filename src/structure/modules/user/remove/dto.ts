@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IRemoveAccountDto } from './types.d.js';
+import type { IRemoveAccountDto } from './types.js';
 
 /**
  * @openapi

@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IAddProfileDto } from './types.d.js';
+import type { IAddProfileDto } from './types.js';
 import type { EUserRace } from '../../../../enums/index.js';
 
 /**

@@ -1,9 +1,9 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type AddLogDto from './add/dto.js';
-import type { ILogEntity } from './entity.d.js';
+import type { ILogEntity } from './entity.js';
 import type GetLogsDto from './get/dto.js';
-import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type { IUserBrokerInfo } from '../../../types/index.js';
 
 export default class Logs extends ReqHandler {
   async get(

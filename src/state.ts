@@ -5,7 +5,7 @@ import type Mysql from './connections/mysql/index.js';
 import type Redis from './connections/redis/index.js';
 import type WebsocketServer from './connections/websocket/index.js';
 import type Router from './structure/index.js';
-import type { IState } from './types/index.d.js';
+import type { IState } from './types/index.js';
 import type { JSONWebKeySet } from 'jose';
 import type Provider from 'oidc-provider';
 

@@ -308,6 +308,19 @@ export class NoUserWithProvidedName extends FullError {
   }
 }
 
+export class NoNpcWithProvidedId extends FullError {
+  constructor(ids?: string[]) {
+    super('NoNpcWithProvidedId');
+    this.message = ids
+      ? ids.length === 1
+        ? `Npc ${ids.join(', ')} does not exist`
+        : `Npcs ${ids.join(', ')} does not exist`
+      : 'No user with provided name';
+    this.name = 'NoUserWithProvidedName';
+    this.status = 400;
+  }
+}
+
 export class ProfileNotInitialized extends FullError {
   constructor() {
     super('ProfileNotInitialized');

@@ -2,8 +2,8 @@ import GetProfileDto from './dto.js';
 import { NoUserWithProvidedName } from '../../../../errors/index.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import UserDetailsDto from '../../user/details/dto.js';
-import type { IUsersTokens } from '../../../../types/index.d.js';
-import type { IProfileEntity } from '../entity.d.js';
+import type { IUsersTokens } from '../../../../types/index.js';
+import type { IProfileEntity } from '../entity.js';
 import type express from 'express';
 
 export default class GetProfileRouter extends RouterFactory {

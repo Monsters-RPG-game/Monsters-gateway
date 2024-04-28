@@ -1,8 +1,8 @@
 import GetMessagesDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import UserDetailsDto from '../../user/details/dto.js';
-import type * as types from './types.d.js';
-import type { IUsersTokens } from '../../../../types/index.d.js';
+import type * as types from './types.js';
+import type { IUsersTokens } from '../../../../types/index.js';
 import type express from 'express';
 
 export default class MessagesRouter extends RouterFactory {

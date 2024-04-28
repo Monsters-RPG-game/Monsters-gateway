@@ -1,5 +1,5 @@
 import Log from '../tools/logger/index.js';
-import type * as types from '../types/index.d.js';
+import type * as types from '../types/index.js';
 import type express from 'express';
 
 const handleErr = (err: types.IFullError, res: express.Response): void => {

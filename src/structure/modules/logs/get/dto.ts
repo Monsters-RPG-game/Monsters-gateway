@@ -1,4 +1,4 @@
-import type { IGetLogDto } from './types.d.js';
+import type { IGetLogDto } from './types.js';
 
 /**
  * @openapi

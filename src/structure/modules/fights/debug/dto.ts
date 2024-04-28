@@ -1,5 +1,6 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { ICreateFightDto, IFightStateTeam } from './types.d.js';
+import type { ICreateFightDto, IFightStateTeam } from './types.js';
+import type { IFightCharacterEntity } from '../../npc/entity';
 
 /**
  * @openapi
@@ -8,18 +9,16 @@ import type { ICreateFightDto, IFightStateTeam } from './types.d.js';
  *     ICreateFightDto:
  *       type: object
  *       properties:
- *         attacker:
- *           type: string
- *         teams:
+ *         team:
  *           type: array
  *           items:
  *             type: array
  *             items:
- *               $ref: '#/components/schemas/IStateTeam'
+ *               type: string
  */
 export default class CreateFightDto implements ICreateFightDto {
   teams: [IFightStateTeam[], IFightStateTeam[]] = [[], []];
-  attacker: string;
+  attacker: IFightCharacterEntity;
 
   constructor(body: ICreateFightDto) {
     this.teams = body.teams;

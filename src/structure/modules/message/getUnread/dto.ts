@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IGetUnreadMessagesDto } from './types.d.js';
+import type { IGetUnreadMessagesDto } from './types.js';
 
 /**
  * @openapi

@@ -19,8 +19,8 @@ export interface IFightTeam {
 }
 
 export interface IState {
-  initialized: { teams: IFightTeam[][] };
-  current: { teams: IFightTeam[][] };
+  initialized: { enemy: IStateTeam[]; attacker: IStateTeam[] };
+  current: { enemy: IStateTeam[]; attacker: IStateTeam[] };
 }
 
 export interface IFightEntity {
