@@ -3,12 +3,12 @@ import { EUserTypes } from '../../../../enums/index.js';
 import { NoPermission } from '../../../../errors/index.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import type { ENpcRace } from '../../../../enums';
-import type * as types from '../../../../types/index.d.js';
-import type { ICharacterEntity } from '../entity.d.js';
+import type * as types from '../../../../types/index.js';
+import type { ICharacterEntity } from '../entity.js';
 import type express from 'express';
 
 export default class UserRouter extends RouterFactory {
-  async get(req: express.Request, res: express.Response): Promise<ICharacterEntity> {
+  async get(req: express.Request, res: express.Response): Promise<ICharacterEntity[]> {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler, user } = locals;
 

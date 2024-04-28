@@ -1,7 +1,7 @@
 import RemoveCharacterDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import type { IRemoveCharacterDto } from './types';
-import type * as types from '../../../../types/index.d.js';
+import type * as types from '../../../../types/index.js';
 import type express from 'express';
 
 export default class NpcRouter extends RouterFactory {

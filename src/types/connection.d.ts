@@ -1,5 +1,5 @@
 import type { IUserBrokerInfo } from './user.js';
-import type * as types from '../connections/websocket/types/index.d.js';
+import type * as types from '../connections/websocket/types/index.js';
 import type * as enums from '../enums/index.js';
 import type { IAddBugReportDto } from '../structure/modules/bugReport/add/types.js';
 import type ChangeCharacterStatusDto from '../structure/modules/character/changeState/dto.js';

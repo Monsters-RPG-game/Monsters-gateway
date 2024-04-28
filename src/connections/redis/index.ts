@@ -3,9 +3,9 @@ import Rooster from './rooster.js';
 import * as enums from '../../enums/index.js';
 import getConfig from '../../tools/configLoader.js';
 import Log from '../../tools/logger/index.js';
-import type { IProfileEntity } from '../../structure/modules/profile/entity.d.js';
-import type { IUserEntity } from '../../structure/modules/user/entity.d.js';
-import type { ICachedUser, IFullError } from '../../types/index.d.js';
+import type { IProfileEntity } from '../../structure/modules/profile/entity.js';
+import type { IUserEntity } from '../../structure/modules/user/entity.js';
+import type { ICachedUser, IFullError } from '../../types/index.js';
 import type { JWK } from 'jose';
 import type { RedisClientType } from 'redis';
 

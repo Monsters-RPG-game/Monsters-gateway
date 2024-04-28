@@ -1,10 +1,12 @@
+import type { IFightCharacterEntity } from '../../npc/entity.js';
+
 export interface IFightStateTeam {
-  character: string;
+  character: IFightCharacterEntity;
 }
 
 export interface ICreateFightDto {
   teams: [IFightStateTeam[], IFightStateTeam[]];
-  attacker: string;
+  attacker: IFightCharacterEntity;
 }
 
 export interface ICreateFight {

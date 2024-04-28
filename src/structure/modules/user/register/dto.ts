@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IRegisterDto } from './types.d.js';
+import type { IRegisterDto } from './types.js';
 
 /**
  * @openapi

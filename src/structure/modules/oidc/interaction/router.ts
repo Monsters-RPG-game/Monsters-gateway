@@ -3,7 +3,7 @@ import handleErr from '../../../../errors/utils.js';
 import Log from '../../../../tools/logger/index.js';
 import Middleware from '../../../middleware.js';
 import limitRate from '../../../utils.js';
-import type * as types from '../../../../types/index.d.js';
+import type * as types from '../../../../types/index.js';
 
 const service = new Router();
 

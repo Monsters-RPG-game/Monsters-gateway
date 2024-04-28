@@ -2,10 +2,10 @@ import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type AttackDto from './attack/dto.js';
 import type CreateFightDto from './debug/dto.js';
-import type { IActionEntity, IFight, IFightLogsEntity } from './entity.d.js';
-import type { IGetFightDto } from './getFights/types.d.js';
-import type { IGetFightLogsDto } from './getLogs/types.d.js';
-import type * as types from '../../../types/index.d.js';
+import type { IActionEntity, IFight, IFightLogsEntity } from './entity.js';
+import type { IGetFightDto } from './getFights/types.js';
+import type { IGetFightLogsDto } from './getLogs/types.js';
+import type * as types from '../../../types/index.js';
 
 export default class Fight extends ReqHandler {
   async createFight(

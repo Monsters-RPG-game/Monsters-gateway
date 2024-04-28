@@ -1,4 +1,4 @@
-import type { IGetFightDto } from './types.d.js';
+import type { IGetFightDto } from './types.js';
 
 /**
  * @openapi

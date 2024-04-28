@@ -1,4 +1,4 @@
-import type { IGetMessageDto, IReadMessageDto } from './dto.d.js';
+import type { IGetMessageDto, IReadMessageDto } from './dto.js';
 import type * as enums from '../../../enums/index.js';
 import type ReqHandler from '../../../structure/reqHandler.js';
 import type { WebSocket } from 'ws';

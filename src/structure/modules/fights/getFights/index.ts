@@ -1,9 +1,9 @@
 import GetFightDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import UserDetailsDto from '../../user/details/dto.js';
-import type * as types from '../../../../types/index.d.js';
-import type { IUserEntity } from '../../user/entity.d.js';
-import type { IActionEntity, IFight, IFightLogsEntity, IFightTeam } from '../entity.d.js';
+import type * as types from '../../../../types/index.js';
+import type { IUserEntity } from '../../user/entity.js';
+import type { IFight } from '../entity.js';
 import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
@@ -32,89 +32,9 @@ export default class FightRouter extends RouterFactory {
         return {
           ...d,
           attacker: await this.findTarget(d.attacker, locals),
-          states: {
-            current: await this.prepareTeam(d.states.current, locals),
-            initialized: await this.prepareTeam(d.states.initialized, locals),
-          },
-          log: await this.prepareLogs(d.log.logs, locals),
         };
       }),
     );
-  }
-
-  private async prepareTeam(
-    data: {
-      teams: IFightTeam[][];
-    },
-    locals: types.IUsersTokens,
-  ): Promise<{ teams: IFightTeam[][] }> {
-    const { reqHandler } = locals;
-    const ids: string[] = data.teams
-      .map((t) => {
-        return t.map((team) => team.character);
-      })
-      .flat();
-
-    const users = (
-      await reqHandler.user.getDetails(
-        ids.map((id) => new UserDetailsDto({ id })),
-        {
-          userId: locals.userId,
-          tempId: locals.tempId,
-        },
-      )
-    ).payload;
-
-    // #TODO This code assumes that enemy will have existing profile ( will be another user ). This WILL NOT work for bots
-    return {
-      teams: data.teams.map((t) => {
-        return t.map((body) => {
-          return { ...body, character: users.find((u) => u._id === body.character)?.login as string };
-        });
-      }),
-    };
-  }
-
-  private async prepareLogs(
-    data: { phase: number; actions: IActionEntity[] }[],
-    locals: types.IUsersTokens,
-  ): Promise<IFightLogsEntity> {
-    const { reqHandler } = locals;
-    const ids: string[] = data
-      .map((l) => {
-        return l.actions
-          .map((a) => {
-            return [a.character, a.target];
-          })
-          .flat();
-      })
-      .flat();
-
-    const users = (
-      await reqHandler.user.getDetails(
-        ids.map((id) => new UserDetailsDto({ id })),
-        {
-          userId: locals.userId,
-          tempId: locals.tempId,
-        },
-      )
-    ).payload;
-
-    // #TODO This code assumes that enemy will have existing profile ( will be another user ). This WILL NOT work for bots
-    return {
-      logs: data.map((d) => {
-        return {
-          ...d,
-          actions: d.actions.map((a) => {
-            return {
-              ...a,
-              character: users.find((u) => u._id === a.character)?.login as string,
-              target: users.find((u) => u._id === a.target)?.login as string,
-            };
-          }),
-        };
-      }),
-    };
   }
 
   private async findTarget(target: string, locals: types.IUsersTokens): Promise<string> {

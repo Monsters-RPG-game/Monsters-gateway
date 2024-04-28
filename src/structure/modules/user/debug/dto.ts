@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IDebugGetAllUsersDto } from './types.d.js';
+import type { IDebugGetAllUsersDto } from './types.js';
 
 /**
  * @openapi

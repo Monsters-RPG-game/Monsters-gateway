@@ -1,6 +1,6 @@
 import { MissingArgError } from '../../../../errors/index.js';
 import Validation from '../../../../tools/validation/index.js';
-import type { IUserDetailsDto } from './types.d.js';
+import type { IUserDetailsDto } from './types.js';
 
 /**
  * @openapi

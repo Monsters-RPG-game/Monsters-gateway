@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IGetFightLogsDto } from './types.d.js';
+import type { IGetFightLogsDto } from './types.js';
 
 /**
  * @openapi

@@ -18,3 +18,9 @@ export interface ICharacterEntity {
   stats: IStatsEntity;
   party: string;
 }
+
+export interface IFightCharacterEntity {
+  _id: string;
+  lvl: number;
+  stats: IStatsEntity;
+}

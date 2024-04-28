@@ -1,4 +1,4 @@
-import type { IUsersTokens } from './user.d.js';
+import type { IUsersTokens } from './user.js';
 
 declare global {
   namespace express {

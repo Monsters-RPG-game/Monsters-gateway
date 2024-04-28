@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IAddBugReport } from './types.d.js';
+import type { IAddBugReport } from './types.js';
 
 /**
  * @openapi

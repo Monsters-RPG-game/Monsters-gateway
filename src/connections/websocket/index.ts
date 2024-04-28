@@ -7,9 +7,9 @@ import ReqHandler from '../../structure/reqHandler.js';
 import getConfig from '../../tools/configLoader.js';
 import Log from '../../tools/logger/index.js';
 import { validateToken } from '../../tools/token.js';
-import type * as types from './types/index.d.js';
+import type * as types from './types/index.js';
 import type { ESocketType } from '../../enums/index.js';
-import type { IFullError } from '../../types/index.d.js';
+import type { IFullError } from '../../types/index.js';
 import type { AdapterPayload } from 'oidc-provider';
 
 export default class WebsocketServer {

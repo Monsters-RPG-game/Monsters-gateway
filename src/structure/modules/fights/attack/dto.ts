@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IAttackDto } from './types.d.js';
+import type { IAttackDto } from './types.js';
 
 /**
  * @openapi

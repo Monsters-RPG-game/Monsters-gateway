@@ -3,10 +3,11 @@ import * as enums from '../../../../enums/index.js';
 import * as errors from '../../../../errors/index.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
-import UserDetailsDto from '../../user/details/dto.js';
-import type { ICreateFight, ICreateFightDto } from './types.d.js';
-import type * as types from '../../../../types/index.d.js';
-import type { IProfileEntity } from '../../profile/entity.d.js';
+import GetCharacterDto from '../../npc/get/dto.js';
+import CharacterStatsDto from '../../stats/get/dto.js';
+import type { ICreateFight, ICreateFightDto } from './types.js';
+import type * as types from '../../../../types/index.js';
+import type { IProfileEntity } from '../../profile/entity.js';
 import type express from 'express';
 
 export default class UserRouter extends RouterFactory {
@@ -14,31 +15,37 @@ export default class UserRouter extends RouterFactory {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler, user, profile } = locals;
 
-    const teams: ICreateFightDto = { teams: [[], []], attacker: profile?.user as string };
+    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined! };
     const body = req.body as ICreateFight;
 
     if (!body.team || body.team.length === 0) {
       throw new errors.ElementTooShortError('teams', 1);
     }
-    if (body.team.includes(user?.login as string)) throw new errors.ActionNotAllowed();
+    if (body.team.includes(user?._id as string)) throw new errors.ActionNotAllowed();
 
-    const preparedNames = body.team.map((character) => {
-      return new UserDetailsDto({ name: character });
+    const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile!.stats }), {
+      userId: locals.userId,
+      tempId: locals.tempId,
     });
-    const users = await reqHandler.user.getDetails(preparedNames, {
+    teams.attacker = {
+      _id: user!._id,
+      lvl: profile!.lvl,
+      stats: attackerStats.payload,
+    };
+    const enemies = await reqHandler.npc.get(new GetCharacterDto({ page: 0, id: body.team }), {
       userId: locals.userId,
       tempId: locals.tempId,
     });
 
-    if (users.payload.length !== body.team.length) {
-      const dbUsers = users.payload.map((u) => u.login);
-      const nonExistingUsers = body.team.filter((u) => !dbUsers.includes(u));
-      throw new errors.NoUserWithProvidedName(nonExistingUsers);
+    if (enemies.payload.length !== body.team.length) {
+      const dbEnemies = enemies.payload.map((u) => u._id);
+      const nonExistingUsers = body.team.filter((u) => !dbEnemies.includes(u));
+      throw new errors.NoNpcWithProvidedId(nonExistingUsers);
     }
 
-    users.payload.forEach((u) => {
+    enemies.payload.forEach((u) => {
       teams.teams[1].push({
-        character: u._id,
+        character: u,
       });
     });
 

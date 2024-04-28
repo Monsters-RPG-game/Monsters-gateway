@@ -78,6 +78,7 @@
       "inventory": "6465b8bb0466b9fe1f766225",
       "party": "64649e334e19dfa5f70fd7ba",
       "state": "map",
+      "stats": "64649e344e19dfa5f75fd7db",
       "_id": "64649e334e19dfa5f70fd7bd"
     },
     {
@@ -93,6 +94,7 @@
       "inventory": "6465b8bb0466b9fe1f766229",
       "party": "64649e334e19dfa5f70fd7c1",
       "state": "map",
+      "stats": "64649e344e19dfa5f73fd7db",
       "_id": "64649e334e19dfa5f70fd7c3"
     },
     {
@@ -108,6 +110,7 @@
       "inventory": "6465b8bb0466b9fe1f76622b",
       "party": "64649e334e19dfa5f70fd7c7",
       "state": "map",
+      "stats": "64649e344e19dfa5f72fd7db",
       "_id": "64649e334e19dfa5f70fd7c9"
     },
     {
@@ -123,6 +126,7 @@
       "inventory": "6465b8bb0466b9fe1f76622d",
       "party": "64649e344e19dfa5f70fd7cd",
       "state": "map",
+      "stats": "64649e344e19dfa5f71fd7db",
       "_id": "64649e344e19dfa5f70fd7cf"
     },
     {
@@ -138,6 +142,7 @@
       "inventory": "6465b8bb0466b9fe1f76622f",
       "party": "64649e344e19dfa5f70fd7d3",
       "state": "map",
+      "stats": "64649e344e19dfa5f71fd7db",
       "_id": "64649e344e19dfa5f70fd7d5"
     },
     {
@@ -153,6 +158,7 @@
       "inventory": "6465b8bb0466b9fe1f766231",
       "party": "64649e344e19dfa5f70fd7d9",
       "state": "map",
+      "stats": "64649e344e19dfa5f70fd7dc",
       "_id": "64649e344e19dfa5f70fd7db"
     },
     {
@@ -168,6 +174,7 @@
       "inventory": "6465b8bb0466b9fe1f766233",
       "party": "64649e344e19dfa5f70fd7df",
       "state": "map",
+      "stats": "64649e344e19dfa5f71fd7db",
       "_id": "64649e344e19dfa5f70fd7e1"
     }
   ],
@@ -373,6 +380,57 @@
     {
       "name": "Old shield",
       "_id": "6465bf53ff5c803a5dabe2e9"
+    }
+  ],
+  "stats": [
+    {
+      "_id": "64649e344e19dfa5f75fd7db",
+      "owner": "63e55edbe8a800060941121d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f73fd7db",
+      "owner": "63e55edbe8a800060941121e",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f72fd7db",
+      "owner": "63e55edbe8a800060941123d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941124d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941125d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f70fd7dc",
+      "owner": "63e55edbe8a800060941126d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941127d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1
     }
   ]
 }

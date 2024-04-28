@@ -1,7 +1,7 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type { IInventoryEntity } from './get/types.d.js';
-import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type { IInventoryEntity } from './get/types.js';
+import type { IUserBrokerInfo } from '../../../types/index.js';
 import type InventoryDropDto from '../../modules/inventory/drop/dto.js';
 import type InventoryUseDto from '../../modules/inventory/use/dto.js';
 

@@ -1,8 +1,8 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type DebugGetAllUsersDto from './debug/dto.js';
-import type { IUserEntity } from './entity.d.js';
-import type * as types from '../../../types/index.d.js';
+import type { IUserEntity } from './entity.js';
+import type * as types from '../../../types/index.js';
 import type LoginDto from '../../modules/oidc/interaction/dto.js';
 import type UserDetailsDto from '../../modules/user/details/dto.js';
 import type RegisterDto from '../../modules/user/register/dto.js';

@@ -2,7 +2,7 @@ import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import Log from '../../tools/logger/index.js';
 import { generateTempId } from '../../utils/index.js';
-import type * as types from '../../types/index.d.js';
+import type * as types from '../../types/index.js';
 import type amqplib from 'amqplib';
 
 export default class Communicator {

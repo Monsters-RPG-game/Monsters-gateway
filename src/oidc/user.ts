@@ -1,6 +1,6 @@
 import UserDetailsDto from '../structure/modules/user/details/dto.js';
 import ReqHandler from '../structure/reqHandler.js';
-import type { IUserEntity } from '../structure/modules/user/entity.d.js';
+import type { IUserEntity } from '../structure/modules/user/entity.js';
 import type { Account, AccountClaims, KoaContextWithOIDC } from 'oidc-provider';
 
 class UserAccount implements Account {

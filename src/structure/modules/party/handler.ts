@@ -1,7 +1,7 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type { IPartyEntity } from './get/types.d.js';
-import type { IUserBrokerInfo } from '../../../types/index.d.js';
+import type { IPartyEntity } from './get/types.js';
+import type { IUserBrokerInfo } from '../../../types/index.js';
 import type GetPartyDto from '../../modules/party/get/dto.js';
 
 export default class Party extends ReqHandler {

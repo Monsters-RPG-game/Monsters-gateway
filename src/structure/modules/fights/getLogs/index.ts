@@ -1,7 +1,7 @@
 import GetFightLogsDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
-import type * as types from '../../../../types/index.d.js';
-import type { IFightLogsEntity } from '../entity.d.js';
+import type * as types from '../../../../types/index.js';
+import type { IFightLogsEntity } from '../entity.js';
 import type express from 'express';
 
 export default class FightRouter extends RouterFactory {

@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IGetPartyDto } from './types.d.js';
+import type { IGetPartyDto } from './types.js';
 
 /**
  * @openapi

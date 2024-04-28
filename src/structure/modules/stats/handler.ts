@@ -2,7 +2,7 @@ import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type { IStatsEntity } from './entity.js';
 import type CharacterStatsDto from './get/dto';
-import type * as types from '../../../types/index.d.js';
+import type * as types from '../../../types/index.js';
 
 export default class User extends ReqHandler {
   async get(

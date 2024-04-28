@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IUseItemDto } from './types.d.js';
+import type { IUseItemDto } from './types.js';
 
 /**
  * @openapi

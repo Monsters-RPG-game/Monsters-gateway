@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { ISendMessageDto } from './types.d.js';
+import type { ISendMessageDto } from './types.js';
 
 /**
  * @openapi
