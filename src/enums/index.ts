@@ -8,4 +8,5 @@ export * from './targets.js';
 export * from './users.js';
 export * from './fights.js';
 export * from './npc.js';
+export * from './map.js';
 export * from './log.js';

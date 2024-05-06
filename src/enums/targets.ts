@@ -1,4 +1,5 @@
 export enum EUserMainTargets {
+  Map = 'map',
   Npc = 'npc',
   Log = 'log',
   User = 'user',
@@ -11,6 +12,7 @@ export enum EUserMainTargets {
   BugReport = 'bugReport',
   Inventory = 'inventory',
   CharacterState = 'characterState',
+  CharacterLocation = 'characterLocation',
 }
 
 export enum EUserTargets {
@@ -39,6 +41,12 @@ export enum EMessagesTargets {
   GetUnread = 'getUnread',
 }
 
+export enum EMapTargets {
+  Create = 'createMap',
+  Get = 'getMap',
+  Update = 'updateMap',
+}
+
 export enum EChatTargets {
   Send = 'sendChatMessage',
   Get = 'getChatMessage',
@@ -52,6 +60,12 @@ export enum EFightsTargets {
   Leave = 'leave',
   GetLogs = 'getLogs',
   GetFights = 'getFights',
+}
+
+export enum ECharacterLocationTargets {
+  Create = 'createCharacterLocation',
+  Get = 'getCharacterLocation',
+  Change = 'changeCharacterLocation',
 }
 
 export enum EPartyTargets {

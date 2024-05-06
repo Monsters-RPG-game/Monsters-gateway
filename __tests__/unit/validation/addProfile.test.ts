@@ -15,7 +15,7 @@ describe('Profile - add', () => {
         const clone = structuredClone(addProfile);
         delete clone.race;
 
-        const func = () => new AddProfileDto(clone);
+        const func = () => new AddProfileDto(clone, 'fakeMap');
 
         expect(func).toThrow(new errors.MissingArgError('race'));
       });
@@ -24,7 +24,7 @@ describe('Profile - add', () => {
 
   describe('Should pass', () => {
     it(`Add profile`, () => {
-      const func = () => new AddProfileDto(addProfile);
+      const func = () => new AddProfileDto(addProfile, 'fakeMap');
       expect(func).not.toThrow();
     });
   });

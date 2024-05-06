@@ -1,9 +1,11 @@
 import BugReport from './modules/bugReport/handler.js';
 import CharacterState from './modules/character/handler.js';
+import CharacterLocation from './modules/characterLocation/handler.js';
 import Chat from './modules/chat/handler.js';
 import Fights from './modules/fights/handler.js';
 import Inventory from './modules/inventory/handler.js';
 import Log from './modules/logs/handler.js';
+import Map from './modules/maps/handler.js';
 import Message from './modules/message/handler.js';
 import Npc from './modules/npc/handler.js';
 import Party from './modules/party/handler.js';
@@ -18,6 +20,7 @@ import type * as types from '../types/index.js';
  * Handler to manage communication between services and user
  */
 export default class ReqHandler {
+  map: Map;
   npc: Npc;
   log: Log;
   user: User;
@@ -30,6 +33,7 @@ export default class ReqHandler {
   inventory: Inventory;
   bugReport: BugReport;
   characterState: CharacterState;
+  characterLocation: CharacterLocation;
 
   constructor() {
     const action = <T extends types.IRabbitSubTargets>(
@@ -43,6 +47,7 @@ export default class ReqHandler {
       payload: unknown;
     }> => this.send(service, mainTarget, subTarget, userData, data);
 
+    this.map = new Map(enums.EServices.Maps, action);
     this.npc = new Npc(enums.EServices.Users, action);
     this.log = new Log(enums.EServices.Users, action);
     this.user = new User(enums.EServices.Users, action);
@@ -55,6 +60,7 @@ export default class ReqHandler {
     this.inventory = new Inventory(enums.EServices.Users, action);
     this.bugReport = new BugReport(enums.EServices.Users, action);
     this.characterState = new CharacterState(enums.EServices.Users, action);
+    this.characterLocation = new CharacterLocation(enums.EServices.Maps, action);
   }
 
   private async send<T extends types.IRabbitSubTargets>(

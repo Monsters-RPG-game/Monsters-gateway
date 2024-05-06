@@ -75,6 +75,9 @@ export default class Communicator {
       case enums.EServices.Fights:
         channel.sendToQueue(enums.EAmqQueues.Fights, Buffer.from(JSON.stringify(body)), { persistent: true });
         return;
+      case enums.EServices.Maps:
+        channel.sendToQueue(enums.EAmqQueues.Maps, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
       default:
         throw new Error('Unknown message target');
     }
@@ -93,7 +96,7 @@ export default class Communicator {
       case enums.EMessageTypes.Send:
         return this.send(payload.payload as string, payload.target, target.resolve);
       default:
-        throw new Error('Unknown message target');
+        throw new Error('Unknown message type');
     }
   }
 

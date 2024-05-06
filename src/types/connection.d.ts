@@ -3,6 +3,9 @@ import type * as types from '../connections/websocket/types/index.js';
 import type * as enums from '../enums/index.js';
 import type { IAddBugReportDto } from '../structure/modules/bugReport/add/types.js';
 import type ChangeCharacterStatusDto from '../structure/modules/character/changeState/dto.js';
+import type { IChangeCharacterLocationDto } from '../structure/modules/characterLocation/change/types';
+import type { ICreateCharacterLocationDto } from '../structure/modules/characterLocation/create/types';
+import type { IGetCharacterLocationDto } from '../structure/modules/characterLocation/get/types';
 import type AttackDto from '../structure/modules/fights/attack/dto.js';
 import type CreateFightDto from '../structure/modules/fights/debug/dto.js';
 import type { IGetFightDto } from '../structure/modules/fights/getFights/types.js';
@@ -11,6 +14,9 @@ import type InventoryDropDto from '../structure/modules/inventory/drop/dto.js';
 import type InventoryAddDto from '../structure/modules/inventory/use/dto.js';
 import type AddLogDto from '../structure/modules/logs/add/dto.js';
 import type GetLogDto from '../structure/modules/logs/get/dto.js';
+import type { ICreateMapDto } from '../structure/modules/maps/create/types.js';
+import type { IGetMapDto } from '../structure/modules/maps/get/types.js';
+import type { IUpdateMapDto } from '../structure/modules/maps/update/types';
 import type GetMessagesDto from '../structure/modules/message/get/dto.js';
 import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dto.js';
 import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
@@ -41,6 +47,8 @@ export type IRabbitSubTargets =
   | enums.ECharacterStateTargets
   | enums.EBugReportTargets
   | enums.EStatsTargets
+  | enums.EMapTargets
+  | enums.ECharacterLocationTargets
   | enums.ENpcTargets
   | enums.ELogTargets;
 
@@ -85,6 +93,18 @@ export interface IBugReportConnectionData {
   [enums.EBugReportTargets.GetBugReport]: null;
 }
 
+export interface IMapConnectionData {
+  [enums.EMapTargets.Create]: ICreateMapDto;
+  [enums.EMapTargets.Get]: IGetMapDto;
+  [enums.EMapTargets.Update]: IUpdateMapDto;
+}
+
+export interface ICharacterLocationConnectionData {
+  [enums.ECharacterLocationTargets.Create]: ICreateCharacterLocationDto;
+  [enums.ECharacterLocationTargets.Get]: IGetCharacterLocationDto;
+  [enums.ECharacterLocationTargets.Change]: IChangeCharacterLocationDto;
+}
+
 export interface INpcConnectionData {
   [enums.ENpcTargets.GetNpc]: IGetCharacterDto;
   [enums.ENpcTargets.AddNpc]: IAddCharacterDto;
@@ -126,6 +146,8 @@ export interface IRabbitConnectionData
     IStatsConnectionData,
     INpcConnectionData,
     IBugReportConnectionData,
+    IMapConnectionData,
+    ICharacterLocationConnectionData,
     IInventoryConnectionData {}
 
 export type IRabbitTargets = enums.EMessageTypes | enums.EUserMainTargets;
