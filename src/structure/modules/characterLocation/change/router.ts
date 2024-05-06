@@ -7,22 +7,22 @@ const service = new Router();
 
 /**
  * @openapi
- * /users/register:
- *   post:
+ * /location:
+ *   patch:
  *     tags:
- *       - user
- *     description: Register user
+ *      - location
+ *     description: Move character on map
  *     security: []
  *     requestBody:
- *       description: Request body for user registration
+ *       description: Request body for moving character
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ICreateMapDto'
+ *             $ref: '#/components/schemas/IChangeCharacterLocationDto'
  *     responses:
  *       200:
- *         description: Success. User registered.
+ *         description: Success
  *       400:
  *         description: Bad request.
  *         content:
@@ -32,11 +32,17 @@ const service = new Router();
  *                 - $ref: '#/components/schemas/NoDataProvidedError'
  *                 - $ref: '#/components/schemas/MissingArgError'
  *                 - $ref: '#/components/schemas/IncorrectArgError'
+ *       401:
+ *         description: User not logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
  */
-service.router.post('/register', limitRate, async (req, res) => {
+service.router.patch('/', limitRate, async (req, res) => {
   try {
-    await service.post(req, res);
-    res.status(200).send();
+    const data = await service.change(req, res);
+    res.status(200).send({ data });
   } catch (err) {
     handleErr(err as types.IFullError, res);
   }

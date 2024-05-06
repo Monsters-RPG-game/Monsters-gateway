@@ -57,6 +57,10 @@ describe('Profiles - add', () => {
         });
         fakeBroker.actions.push({
           shouldFail: false,
+          returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
+        });
+        fakeBroker.actions.push({
+          shouldFail: false,
           returns: { payload: { _id: fakeUser._id, initialized: false }, target: enums.EMessageTypes.Send },
         });
 
@@ -118,9 +122,16 @@ describe('Profiles - add', () => {
       });
       fakeBroker.actions.push({
         shouldFail: false,
+        returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
+      });
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
+      });
+      fakeBroker.actions.push({
+        shouldFail: false,
         returns: { payload: { _id: fakeUser._id, initialized: false }, target: enums.EMessageTypes.Send },
       });
-
       const res = await supertest(app)
         .post('/profile')
         .auth(accessToken2.key, { type: 'bearer' })
