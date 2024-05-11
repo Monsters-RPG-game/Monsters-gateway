@@ -2,8 +2,12 @@ import Validation from './validation.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import State from '../../state.js';
+import ChangeCharacterLocationDto from '../../structure/modules/characterLocation/change/dto.js';
+import GetCharacterLocationDto from '../../structure/modules/characterLocation/get/dto.js';
 import Log from '../../tools/logger/index.js';
 import type * as types from './types/index.js';
+import type { IChangeCharacterLocationDto } from '../../structure/modules/characterLocation/change/types.js';
+import type { IGetCharacterLocationDto } from '../../structure/modules/characterLocation/get/types.js';
 import type { IFullError } from '../../types/index.js';
 
 export default class Router {
@@ -29,6 +33,19 @@ export default class Router {
         return this.getMessage(message.payload as types.IGetMessageBody, ws);
       case enums.EMessageSubTargets.GetUnread:
         return this.getUnread(message.payload as types.IGetMessageBody, ws);
+      default:
+        return this.handleError(new errors.IncorrectTargetError(), ws);
+    }
+  }
+
+  handleMovementMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
+    this.validator.preValidate(message);
+
+    switch (message.subTarget) {
+      case enums.EMovementSubTargets.Move:
+        return this.moveCharacter(message.payload as IChangeCharacterLocationDto, ws);
+      case enums.EMovementSubTargets.Get:
+        return this.getCharacterLocation(message.payload as IGetCharacterLocationDto, ws);
       default:
         return this.handleError(new errors.IncorrectTargetError(), ws);
     }
@@ -68,6 +85,39 @@ export default class Router {
       })
       .catch((err) => {
         Log.error('Socket send message error', err);
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+      });
+  }
+
+  private getCharacterLocation(data: IGetCharacterLocationDto, ws: types.ISocket): void {
+    const payload = new GetCharacterLocationDto(data);
+
+    ws.reqHandler.characterLocation
+      .get(payload, { userId: ws.userId, tempId: '' })
+      .then((callback) => {
+        ws.send(
+          JSON.stringify({
+            type: enums.ESocketType.Success,
+            payload: { data: callback.payload },
+          } as types.ISocketOutMessage),
+        );
+      })
+      .catch((err) => {
+        Log.error('Socket read message error', err);
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+      });
+  }
+
+  private moveCharacter(data: IChangeCharacterLocationDto, ws: types.ISocket): void {
+    const payload = new ChangeCharacterLocationDto(data);
+
+    ws.reqHandler.characterLocation
+      .change(payload, { userId: ws.userId, tempId: '' })
+      .then(() => {
+        ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
+      })
+      .catch((err) => {
+        Log.error('Socket read message error', err);
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }

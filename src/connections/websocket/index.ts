@@ -240,6 +240,8 @@ export default class WebsocketServer {
     switch (message.target) {
       case enums.ESocketTargets.Chat:
         return this.router.handleChatMessage(message, ws);
+      case enums.ESocketTargets.Movement:
+        return this.router.handleMovementMessage(message, ws);
       default:
         return this.router.handleError(new errors.IncorrectTargetError(), ws);
     }
