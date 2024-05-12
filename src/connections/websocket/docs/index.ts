@@ -172,6 +172,87 @@
  *                $ref: '#/components/schemas/UnauthorizedError'
  */
 
+/**
+ * @openapi
+ * /location - move:
+ *   get:
+ *     tags:
+ *      - location
+ *     description: Move character on map
+ *     security: []
+ *     requestBody:
+ *       description: Request body for moving character
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/IChangeCharacterLocationDto'
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/NoDataProvidedError'
+ *                 - $ref: '#/components/schemas/MissingArgError'
+ *                 - $ref: '#/components/schemas/IncorrectArgError'
+ *       401:
+ *         description: User not logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ */
+
+/**
+ * @openapi
+ * /location - get:
+ *   get:
+ *     tags:
+ *       - location
+ *     description: Get character location
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: character
+ *         required: false
+ *         schema:
+ *           type: string
+ *     security: []
+ *     responses:
+ *       200:
+ *         description: Success. Get character location back in request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   $ref: '#/components/schemas/IMapEntity'
+ *       400:
+ *         description: Bad request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - $ref: '#/components/schemas/NoDataProvidedError'
+ *                 - $ref: '#/components/schemas/MissingArgError'
+ *                 - $ref: '#/components/schemas/IncorrectArgError'
+ *       401:
+ *         description: User not logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedError'
+ */
+
 // Entities
 
 /**
@@ -228,85 +309,4 @@
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/IDetailedMessageBody'
- */
-
-/**
- * @openapi
- * /location:
- *   get:
- *     tags:
- *      - location
- *     description: Move character on map
- *     security: []
- *     requestBody:
- *       description: Request body for moving character
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/IChangeCharacterLocationDto'
- *     responses:
- *       200:
- *         description: Success
- *       400:
- *         description: Bad request.
- *         content:
- *           application/json:
- *             schema:
- *               oneOf:
- *                 - $ref: '#/components/schemas/NoDataProvidedError'
- *                 - $ref: '#/components/schemas/MissingArgError'
- *                 - $ref: '#/components/schemas/IncorrectArgError'
- *       401:
- *         description: User not logged in
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UnauthorizedError'
- */
-
-/**
- * @openapi
- * /location:
- *   get:
- *     tags:
- *       - location
- *     description: Get character location
- *     parameters:
- *       - in: query
- *         name: id
- *         required: false
- *         schema:
- *           type: string
- *       - in: query
- *         name: character
- *         required: false
- *         schema:
- *           type: string
- *     security: []
- *     responses:
- *       200:
- *         description: Success. Get character location back in request.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   $ref: '#/components/schemas/IMapEntity'
- *       400:
- *         description: Bad request.
- *         content:
- *           application/json:
- *             schema:
- *               oneOf:
- *                 - $ref: '#/components/schemas/NoDataProvidedError'
- *                 - $ref: '#/components/schemas/MissingArgError'
- *                 - $ref: '#/components/schemas/IncorrectArgError'
- *       401:
- *         description: User not logged in
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UnauthorizedError'
  */

@@ -1,7 +1,6 @@
 import { NoDataProvidedError } from '../../../../errors/index.js';
 import Validation from '../../../../tools/validation/index.js';
 import type { IUpdateMapFields, IUpdateMapDto } from './types.js';
-import type { IMapEntity } from '../get/types.js';
 
 /**
  * @openapi
@@ -19,71 +18,49 @@ import type { IMapEntity } from '../get/types.js';
  *         width:
  *           type: number
  *           required: false
+ *         remove:
+ *           type: boolean
+ *           require: false
  *         fields:
  *           type: array
  *           required: false
  *           items:
- *             type: object
- *             properties:
- *               x:
- *                 type: number
- *                 required: false
- *               y:
- *                 type: number
- *                 required: false
- *               type:
- *                 type: string
- *                 required: false
- *                 schema:
- *                   oneOf:
- *                     - field
- *                     - woods
- *               access:
- *                 type: object
- *                 required: false
- *                 properties:
- *                   top:
- *                     type: boolean
- *                     required: false
- *                   left:
- *                     type: boolean
- *                     required: false
- *                   right:
- *                     type: boolean
- *                     required: false
- *                   bottom:
- *                     type: boolean
- *                     required: false
+ *             type: number
  */
 export default class UpdateMapDto implements IUpdateMapDto {
-  id: string;
-  map: Partial<
-    IMapEntity & {
-      fields?: IUpdateMapFields[];
-    }
-  > = {};
+  _id: string;
+  name?: string;
+  remove?: boolean;
+  fields?: IUpdateMapFields[];
+  height?: number;
+  width?: number;
 
-  constructor(data: Partial<Omit<IMapEntity, '_id'>>, _id: string) {
-    this.id = _id;
-    this.map.name = data.name;
-    this.map.height = data.height;
-    this.map.width = data.width;
-    this.map.fields = data.fields;
+  constructor(data: Omit<IUpdateMapDto, 'id'>, id: string) {
+    this._id = id;
+    this.remove = data.remove;
+    this.fields = data.fields;
+    this.width = data.width;
+    this.height = data.height;
 
     this.validate();
   }
 
   private validate(): void {
     if (
-      (!this.map.name && this.map.height === undefined && this.map.width === undefined && !this.map.fields) ||
-      (this.map.fields?.length ?? 0) <= 0
+      !this.name &&
+      this.height === undefined &&
+      !this.remove &&
+      this.width === undefined &&
+      (!this.fields || this.fields.length === 0)
     ) {
       throw new NoDataProvidedError();
     }
 
-    new Validation(this.id, 'id').isDefined();
-    if (this.map.name) new Validation(this.map.name, 'name').isDefined();
-    if (this.map.height) new Validation(this.map.height, 'height').isDefined();
-    if (this.map.width) new Validation(this.map.width, 'width').isDefined();
+    new Validation(this._id, 'id').isDefined();
+    if (this.name) new Validation(this.name, 'name').isDefined();
+    if (this.height) new Validation(this.height, 'height').isDefined();
+    if (this.width) new Validation(this.width, 'width').isDefined();
+    if (this.fields) new Validation(this.fields, 'fields').isDefined();
+    if (this.remove) new Validation(this.remove, 'remove').isDefined();
   }
 }
