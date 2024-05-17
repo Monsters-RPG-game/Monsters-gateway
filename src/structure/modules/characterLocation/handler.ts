@@ -7,14 +7,23 @@ import type { ICharacterLocationEntity } from './get/types.js';
 import type { IUserBrokerInfo } from '../../../types/index.js';
 
 export default class CharacterLocation extends ReqHandler {
-  async change(data: ChangeCharacterLocationDto, userData: IUserBrokerInfo): Promise<void> {
-    await this.sendReq(
+  async change(
+    data: ChangeCharacterLocationDto,
+    userData: IUserBrokerInfo,
+  ): Promise<{
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: { attack: boolean };
+  }> {
+    return (await this.sendReq(
       this.service,
       enums.EUserMainTargets.CharacterLocation,
       enums.ECharacterLocationTargets.Change,
       userData,
       data,
-    );
+    )) as {
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: { attack: boolean };
+    };
   }
 
   async create(

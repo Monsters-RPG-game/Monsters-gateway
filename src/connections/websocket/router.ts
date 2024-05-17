@@ -2,12 +2,18 @@ import Validation from './validation.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import State from '../../state.js';
+import ChangeCharacterStatusDto from '../../structure/modules/character/changeState/dto.js';
 import ChangeCharacterLocationDto from '../../structure/modules/characterLocation/change/dto.js';
 import GetCharacterLocationDto from '../../structure/modules/characterLocation/get/dto.js';
+import CreateFightDto from '../../structure/modules/fights/debug/dto.js';
+import GetCharacterDto from '../../structure/modules/npc/get/dto.js';
+import CharacterStatsDto from '../../structure/modules/stats/get/dto.js';
 import Log from '../../tools/logger/index.js';
 import type * as types from './types/index.js';
 import type { IChangeCharacterLocationDto } from '../../structure/modules/characterLocation/change/types.js';
 import type { IGetCharacterLocationDto } from '../../structure/modules/characterLocation/get/types.js';
+import type { ICreateFightDto } from '../../structure/modules/fights/debug/types.js';
+import type { IProfileEntity } from '../../structure/modules/profile/entity.js';
 import type { IFullError } from '../../types/index.js';
 
 export default class Router {
@@ -40,6 +46,7 @@ export default class Router {
 
   handleMovementMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
     this.validator.preValidate(message);
+    this.validator.validateCanMove(ws);
 
     switch (message.subTarget) {
       case enums.EMovementSubTargets.Move:
@@ -113,13 +120,65 @@ export default class Router {
 
     ws.reqHandler.characterLocation
       .change(payload, { userId: ws.userId, tempId: '' })
-      .then(() => {
-        ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
+      .then((cb) => {
+        if (cb.payload.attack) {
+          this.attackEnemy(ws)
+            .then((state) => {
+              // #TODO This is temporary. Add some kind of system, which will update profile better, that this
+              ws.profile!.state = state.state.state as enums.ECharacterState;
+              ws.send(JSON.stringify({ ...state, type: enums.ESocketType.Success } as types.ISocketOutMessage));
+            })
+            .catch((err) => {
+              Log.error('Socket read message error', err);
+              ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+            });
+        } else {
+          ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
+        }
       })
       .catch((err) => {
         Log.error('Socket read message error', err);
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
+  }
+
+  private async attackEnemy(ws: types.ISocket): Promise<{ state: Partial<IProfileEntity> }> {
+    const { reqHandler, userId, profile } = ws;
+
+    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined! };
+
+    const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile!.stats }), {
+      userId,
+      tempId: '',
+    });
+    teams.attacker = {
+      _id: userId,
+      lvl: profile!.lvl,
+      stats: attackerStats.payload,
+    };
+    const enemies = await reqHandler.npc.get(new GetCharacterDto({ page: 0, race: enums.ENpcRace.Troll, lvl: 2 }), {
+      userId,
+      tempId: '',
+    });
+
+    enemies.payload.forEach((u) => {
+      teams.teams[1].push({
+        character: u,
+      });
+    });
+
+    const data = new CreateFightDto(teams);
+    await reqHandler.fights.createFight(data, {
+      userId,
+      tempId: '',
+    });
+    const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Fight });
+    const stateUpdate = await reqHandler.characterState.changeState(characterState, {
+      userId,
+      tempId: '',
+    });
+
+    return { state: stateUpdate };
   }
 
   private readMessage(data: types.IReadMessageBody, ws: types.ISocket): void {

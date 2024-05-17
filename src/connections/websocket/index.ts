@@ -3,6 +3,7 @@ import Router from './router.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import State from '../../state.js';
+import GetProfileDto from '../../structure//modules/profile/get/dto.js';
 import ReqHandler from '../../structure/reqHandler.js';
 import getConfig from '../../tools/configLoader.js';
 import Log from '../../tools/logger/index.js';
@@ -203,6 +204,17 @@ export default class WebsocketServer {
     }
 
     ws.userId = payload.accountId;
+    const user = await State.redis.getCachedUser(payload.accountId);
+    if (user) {
+      ws.profile = user.profile;
+    } else {
+      ws.profile = (
+        await ws.reqHandler.profile.get(new GetProfileDto(payload.accountId), {
+          userId: payload.accountId,
+          tempId: '',
+        })
+      ).payload;
+    }
 
     const isAlreadyOnline = this.users.findIndex((u) => {
       return u.userId === payload.accountId;
