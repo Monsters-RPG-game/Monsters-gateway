@@ -14,6 +14,7 @@
     "ecmaVersion": "latest"
   },
   "plugins": [
+    "import",
     "@typescript-eslint",
     "eslint-plugin-prettier",
     "@typescript-eslint/eslint-plugin"
@@ -60,6 +61,7 @@
     ],
     "import/no-cycle": 2,
     "import/prefer-default-export": 2,
+    "import/no-absolute-path": 2,
     "import/no-extraneous-dependencies": 2,
     "import/no-unresolved": 0,
     "import/order": [

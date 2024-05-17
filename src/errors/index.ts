@@ -389,3 +389,13 @@ export class UserNotInFight extends FullError {
     this.status = 400;
   }
 }
+
+export class UserCannotMove extends FullError {
+  constructor() {
+    super('UserCannotMove');
+    this.message = 'User cannot move';
+    this.name = 'UserCannotMove';
+    this.code = '025';
+    this.status = 400;
+  }
+}

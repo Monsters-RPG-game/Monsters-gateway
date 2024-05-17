@@ -1,6 +1,7 @@
 import type { IGetMessageDto, IReadMessageDto } from './dto.js';
 import type * as enums from '../../../enums/index.js';
 import type ReqHandler from '../../../structure/reqHandler.js';
+import type { IProfileEntity } from 'structure/modules/profile/entity.js';
 import type { WebSocket } from 'ws';
 
 export interface ISendMessageDto {
@@ -19,6 +20,7 @@ export interface ISocketPayload {
 export interface ISocket extends WebSocket {
   userId: string;
   reqHandler: ReqHandler;
+  profile: IProfileEntity | undefined;
 }
 
 export interface ISocketSubTargets {
@@ -40,6 +42,7 @@ export interface ISocketUser {
 export interface ISocketOutMessage {
   type: enums.ESocketType;
   payload: unknown;
+  state?: Partial<IProfileEntity>;
 }
 
 export interface ISocketSendMessageBody {

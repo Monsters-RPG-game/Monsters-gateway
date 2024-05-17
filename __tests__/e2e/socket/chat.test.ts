@@ -114,6 +114,16 @@ describe('Socket - chat', () => {
     });
 
     it(`Get message from db`, async () => {
+      // #TODO First message here should return user profile, which is not used in this req, so I've added empty object. Its late....
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: {
+          payload: {},
+          target: EMessageTypes.Send,
+        },
+      });
+
+
       fakeBroker.actions.push({
         shouldFail: false,
         returns: {
@@ -137,6 +147,15 @@ describe('Socket - chat', () => {
     });
 
     it(`Read chat`, async () => {
+      // #TODO First message here should return user profile, which is not used in this req, so I've added empty object. Its late....
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: {
+          payload: {},
+          target: EMessageTypes.Send,
+        },
+      });
+
       fakeBroker.actions.push({
         shouldFail: false,
         returns: {
@@ -193,11 +212,28 @@ describe('Socket - chat', () => {
       });
 
       const userMessage3 = (await client2.sendAsyncMessage(getUnread, { timeout: 100 })) as ISocketOutMessage;
+      console.log('message')
+      console.log(JSON.stringify(userMessage3))
       expect(Object.keys(userMessage3?.payload as Record<string, string>).length).toEqual(0);
       client2.disconnect();
     });
 
     it(`Get with details`, async () => {
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: {
+          payload: [
+            {
+              _id: fakeUser._id,
+              login: fakeUser.login,
+              verified: false,
+              type: enums.EUserTypes.User,
+            },
+          ],
+          target: enums.EMessageTypes.Send,
+        },
+      });
+
       fakeBroker.actions.push({
         shouldFail: false,
         returns: {
@@ -218,6 +254,20 @@ describe('Socket - chat', () => {
 
       const userMessage = (await client2.sendAsyncMessage(getMessage, { timeout: 100 })) as ISocketOutMessage;
       expect(Object.keys((userMessage?.payload as Record<string, string>) ?? {}).length).toBeGreaterThan(0);
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: {
+          payload: [
+            {
+              _id: fakeUser._id,
+              login: fakeUser.login,
+              verified: false,
+              type: enums.EUserTypes.User,
+            },
+          ],
+          target: enums.EMessageTypes.Send,
+        },
+      });
 
       fakeBroker.actions.push({
         shouldFail: false,
