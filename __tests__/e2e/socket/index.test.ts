@@ -40,10 +40,29 @@ describe('Socket - generic tests', () => {
     client2Options = {
       headers: { Authorization: `Bearer ${loginToken2.key}` },
     };
- 
+
     // Well. ESM borked plenty of stuff for reasons unknown to me...
     server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
     client = server.createClient();
+    fakeBroker.actions.push({
+      shouldFail: false,
+      returns: {
+        payload: [
+          {
+            _id: fakeUser._id,
+            login: fakeUser.login,
+            verified: false,
+            type: enums.EUserTypes.User,
+          },
+        ],
+        target: enums.EMessageTypes.Send,
+      },
+    });
+    fakeBroker.actions.push({
+      shouldFail: false,
+      returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+    });
+
     await client.connect(clientOptions);
   });
 
@@ -55,6 +74,25 @@ describe('Socket - generic tests', () => {
   describe('Should throw', () => {
     describe('Not logged in', () => {
       it(`User not logged in`, async () => {
+        fakeBroker.actions.push({
+          shouldFail: false,
+          returns: {
+            payload: [
+              {
+                _id: fakeUser._id,
+                login: fakeUser.login,
+                verified: false,
+                type: enums.EUserTypes.User,
+              },
+            ],
+            target: enums.EMessageTypes.Send,
+          },
+        });
+        fakeBroker.actions.push({
+          shouldFail: false,
+          returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+        });
+
         const client2 = server.createClient();
         await client2.connect();
 
@@ -185,6 +223,25 @@ describe('Socket - generic tests', () => {
 
   describe('Should pass', () => {
     it(`Message sent`, async () => {
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: {
+          payload: [
+            {
+              _id: fakeUser._id,
+              login: fakeUser.login,
+              verified: false,
+              type: enums.EUserTypes.User,
+            },
+          ],
+          target: enums.EMessageTypes.Send,
+        },
+      });
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+      });
+
       const client2 = server.createClient();
       await client2.connect(client2Options);
 

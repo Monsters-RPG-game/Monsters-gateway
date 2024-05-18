@@ -4,12 +4,14 @@ import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import State from '../../state.js';
 import GetProfileDto from '../../structure//modules/profile/get/dto.js';
+import UserDetailsDto from '../../structure/modules/user/details/dto.js';
 import ReqHandler from '../../structure/reqHandler.js';
 import getConfig from '../../tools/configLoader.js';
 import Log from '../../tools/logger/index.js';
 import { validateToken } from '../../tools/token.js';
 import type * as types from './types/index.js';
 import type { ESocketType } from '../../enums/index.js';
+import type { IUserEntity } from '../../structure/modules/user/entity.js';
 import type { IFullError } from '../../types/index.js';
 import type { AdapterPayload } from 'oidc-provider';
 
@@ -208,12 +210,31 @@ export default class WebsocketServer {
     if (user) {
       ws.profile = user.profile;
     } else {
-      ws.profile = (
+      const account = (
+        await ws.reqHandler.user.getDetails([new UserDetailsDto({ id: payload.accountId })], {
+          userId: payload.accountId,
+          tempId: '',
+        })
+      ).payload[0] as IUserEntity;
+      const profile = (
         await ws.reqHandler.profile.get(new GetProfileDto(payload.accountId), {
           userId: payload.accountId,
           tempId: '',
         })
       ).payload;
+
+      if (!profile || !account) {
+        Log.error(
+          'Token validation',
+          'User tried to log in using token, that got validated, but there is no user or profile related to token. Is token fake ?',
+        );
+        ws.close(1000, unauthorizedErrorMessage);
+        return;
+      }
+
+      await State.redis.addCachedUser({ account, profile });
+
+      ws.profile = profile;
     }
 
     const isAlreadyOnline = this.users.findIndex((u) => {
