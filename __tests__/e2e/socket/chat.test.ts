@@ -114,15 +114,24 @@ describe('Socket - chat', () => {
     });
 
     it(`Get message from db`, async () => {
-      // #TODO First message here should return user profile, which is not used in this req, so I've added empty object. Its late....
       fakeBroker.actions.push({
         shouldFail: false,
         returns: {
-          payload: {},
-          target: EMessageTypes.Send,
+          payload: [
+            {
+              _id: fakeUser._id,
+              login: fakeUser.login,
+              verified: false,
+              type: enums.EUserTypes.User,
+            },
+          ],
+          target: enums.EMessageTypes.Send,
         },
       });
-
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+      });
 
       fakeBroker.actions.push({
         shouldFail: false,
@@ -147,13 +156,23 @@ describe('Socket - chat', () => {
     });
 
     it(`Read chat`, async () => {
-      // #TODO First message here should return user profile, which is not used in this req, so I've added empty object. Its late....
       fakeBroker.actions.push({
         shouldFail: false,
         returns: {
-          payload: {},
-          target: EMessageTypes.Send,
+          payload: [
+            {
+              _id: fakeUser._id,
+              login: fakeUser.login,
+              verified: false,
+              type: enums.EUserTypes.User,
+            },
+          ],
+          target: enums.EMessageTypes.Send,
         },
+      });
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
       });
 
       fakeBroker.actions.push({
@@ -233,6 +252,11 @@ describe('Socket - chat', () => {
           target: enums.EMessageTypes.Send,
         },
       });
+      fakeBroker.actions.push({
+        shouldFail: false,
+        returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+      });
+
 
       fakeBroker.actions.push({
         shouldFail: false,
