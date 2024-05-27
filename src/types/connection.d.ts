@@ -12,8 +12,6 @@ import type { IGetFightDto } from '../structure/modules/fights/getFights/types.j
 import type { IGetFightLogsDto } from '../structure/modules/fights/getLogs/types.js';
 import type InventoryDropDto from '../structure/modules/inventory/drop/dto.js';
 import type InventoryAddDto from '../structure/modules/inventory/use/dto.js';
-import type AddLogDto from '../structure/modules/logs/add/dto.js';
-import type GetLogDto from '../structure/modules/logs/get/dto.js';
 import type { ICreateMapDto } from '../structure/modules/maps/create/types.js';
 import type { IGetMapDto } from '../structure/modules/maps/get/types.js';
 import type { IUpdateMapDto } from '../structure/modules/maps/update/types';
@@ -49,8 +47,7 @@ export type IRabbitSubTargets =
   | enums.EStatsTargets
   | enums.EMapTargets
   | enums.ECharacterLocationTargets
-  | enums.ENpcTargets
-  | enums.ELogTargets;
+  | enums.ENpcTargets;
 
 export interface IProfileConnectionData {
   [enums.EProfileTargets.Get]: GetProfileDto;
@@ -67,11 +64,6 @@ export interface IUserConnectionData {
   [enums.EUserTargets.Register]: RegisterDto;
   [enums.EUserTargets.Remove]: RemoveUserDto;
   [enums.EUserTargets.DebugGetAll]: DebugGetAllUsersDto;
-}
-
-export interface ILogConnectionData {
-  [enums.ELogTargets.GetLog]: GetLogDto;
-  [enums.ELogTargets.AddLog]: AddLogDto;
 }
 
 export interface IFightConnectionData {
@@ -136,19 +128,18 @@ export interface IChatConnectionData {
 
 export interface IRabbitConnectionData
   extends IUserConnectionData,
-    IProfileConnectionData,
-    IPartyConnectionData,
-    ICharacterStateConnectionData,
-    IMessageConnectionData,
-    IChatConnectionData,
-    ILogConnectionData,
-    IFightConnectionData,
-    IStatsConnectionData,
-    INpcConnectionData,
-    IBugReportConnectionData,
-    IMapConnectionData,
-    ICharacterLocationConnectionData,
-    IInventoryConnectionData {}
+  IProfileConnectionData,
+  IPartyConnectionData,
+  ICharacterStateConnectionData,
+  IMessageConnectionData,
+  IChatConnectionData,
+  IFightConnectionData,
+  IStatsConnectionData,
+  INpcConnectionData,
+  IBugReportConnectionData,
+  IMapConnectionData,
+  ICharacterLocationConnectionData,
+  IInventoryConnectionData { }
 
 export type IRabbitTargets = enums.EMessageTypes | enums.EUserMainTargets;
 
@@ -168,9 +159,9 @@ export type ICommunicationQueue = Record<
       value:
         | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-            type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-            payload: unknown;
-          }>,
+          type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+          payload: unknown;
+        }>,
     ) => void;
     reject: (reason?: unknown) => void;
     target: enums.EServices;
