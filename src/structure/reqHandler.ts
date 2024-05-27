@@ -4,7 +4,6 @@ import CharacterLocation from './modules/characterLocation/handler.js';
 import Chat from './modules/chat/handler.js';
 import Fights from './modules/fights/handler.js';
 import Inventory from './modules/inventory/handler.js';
-import Log from './modules/logs/handler.js';
 import Map from './modules/maps/handler.js';
 import Message from './modules/message/handler.js';
 import Npc from './modules/npc/handler.js';
@@ -22,7 +21,6 @@ import type * as types from '../types/index.js';
 export default class ReqHandler {
   map: Map;
   npc: Npc;
-  log: Log;
   user: User;
   chat: Chat;
   party: Party;
@@ -49,7 +47,6 @@ export default class ReqHandler {
 
     this.map = new Map(enums.EServices.Maps, action);
     this.npc = new Npc(enums.EServices.Users, action);
-    this.log = new Log(enums.EServices.Users, action);
     this.user = new User(enums.EServices.Users, action);
     this.party = new Party(enums.EServices.Users, action);
     this.chat = new Chat(enums.EServices.Messages, action);
