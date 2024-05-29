@@ -5,6 +5,7 @@ import initBugReportRoutes from './modules/bugReport/index.js';
 import initFightsRoutes from './modules/fights/index.js';
 import initHealthRoutes from './modules/health/index.js';
 import initInventoryRoutes from './modules/inventory/index.js';
+import initMapRoutes from './modules/maps/index.js';
 import initMessagesRoutes from './modules/message/index.js';
 import initNpcRoutes from './modules/npc/index.js';
 import initOidcRoutes from './modules/oidc/index.js';
@@ -53,6 +54,7 @@ export default class AppRouter {
     initFightsRoutes(this.router);
     initStatsRoutes(this.router);
     initNpcRoutes(this.router);
+    initMapRoutes(this.router);
   }
 
   initWebsocket(app: Express): void {
