@@ -3,7 +3,7 @@ import * as errors from '../../../src/errors';
 import { IRemoveAccountDto } from '../../../src/structure/modules/user/remove/types';
 import RemoveUserDto from '../../../src/structure/modules/user/remove/dto';
 
-describe('Fights - attack', () => {
+describe('User - remove', () => {
   const data: IRemoveAccountDto = {
     password: 'somepassword',
   };
@@ -33,7 +33,7 @@ describe('Fights - attack', () => {
   });
 
   describe('Should pass', () => {
-    it('Attack', () => {
+    it('Remove', () => {
       const clone = structuredClone(data);
       try {
         new RemoveUserDto(clone, name);
