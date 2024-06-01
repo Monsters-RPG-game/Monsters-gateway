@@ -46,10 +46,10 @@ export default class Router {
 
   handleMovementMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
     this.validator.preValidate(message);
-    this.validator.validateCanMove(ws);
 
     switch (message.subTarget) {
       case enums.EMovementSubTargets.Move:
+        this.validator.validateCanMove(ws);
         return this.moveCharacter(message.payload as IChangeCharacterLocationDto, ws);
       case enums.EMovementSubTargets.Get:
         return this.getCharacterLocation(message.payload as IGetCharacterLocationDto, ws);
@@ -105,7 +105,7 @@ export default class Router {
         ws.send(
           JSON.stringify({
             type: enums.ESocketType.Success,
-            payload: { data: callback.payload },
+            payload: callback.payload,
           } as types.ISocketOutMessage),
         );
       })

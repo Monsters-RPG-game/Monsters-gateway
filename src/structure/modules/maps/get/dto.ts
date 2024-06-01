@@ -30,7 +30,7 @@ export default class GetMapDto implements IGetMapDto {
   }
 
   private validate(): void {
-    if (!this.id) new Validation(this.id, 'id').isDefined();
-    if (!this.name) new Validation(this.name, 'name').isDefined();
+    if (!this.name) new Validation(this.id, 'id').isDefined();
+    if (!this.id) new Validation(this.name, 'name').isDefined();
   }
 }

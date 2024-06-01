@@ -1,7 +1,7 @@
 import GetMapDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
-import type { IMapEntity } from './types.js';
 import type { IUsersTokens } from '../../../../types/index.js';
+import type { IMapEntity } from '../entity.js';
 import type express from 'express';
 
 export default class MessagesRouter extends RouterFactory {

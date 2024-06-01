@@ -1,5 +1,6 @@
 import Router from './index.js';
 import handleErr from '../../../../errors/utils.js';
+import Middleware from '../../../../structure/middleware.js';
 import limitRate from '../../../utils.js';
 import type * as types from '../../../../types/index.js';
 
@@ -39,7 +40,7 @@ const service = new Router();
  *             schema:
  *               $ref: '#/components/schemas/UnauthorizedError'
  */
-service.router.post('/', limitRate, async (req, res) => {
+service.router.post('/', limitRate, Middleware.validateAdmin, async (req, res) => {
   try {
     const data = await service.create(req, res);
     res.status(200).send({ data });

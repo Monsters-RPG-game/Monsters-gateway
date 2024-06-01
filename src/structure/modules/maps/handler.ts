@@ -1,8 +1,8 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type CreateMapDto from './create/dto.js';
+import type { IMapEntity } from './entity.js';
 import type GetMapsDto from './get/dto.js';
-import type { IMapEntity } from './get/types.js';
 import type UpdateMapDto from './update/dto.js';
 import type { IUserBrokerInfo } from '../../../types/index.js';
 

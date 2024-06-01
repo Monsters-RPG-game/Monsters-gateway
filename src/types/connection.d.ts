@@ -128,18 +128,18 @@ export interface IChatConnectionData {
 
 export interface IRabbitConnectionData
   extends IUserConnectionData,
-  IProfileConnectionData,
-  IPartyConnectionData,
-  ICharacterStateConnectionData,
-  IMessageConnectionData,
-  IChatConnectionData,
-  IFightConnectionData,
-  IStatsConnectionData,
-  INpcConnectionData,
-  IBugReportConnectionData,
-  IMapConnectionData,
-  ICharacterLocationConnectionData,
-  IInventoryConnectionData { }
+    IProfileConnectionData,
+    IPartyConnectionData,
+    ICharacterStateConnectionData,
+    IMessageConnectionData,
+    IChatConnectionData,
+    IFightConnectionData,
+    IStatsConnectionData,
+    INpcConnectionData,
+    IBugReportConnectionData,
+    IMapConnectionData,
+    ICharacterLocationConnectionData,
+    IInventoryConnectionData {}
 
 export type IRabbitTargets = enums.EMessageTypes | enums.EUserMainTargets;
 
@@ -159,9 +159,9 @@ export type ICommunicationQueue = Record<
       value:
         | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-          type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-          payload: unknown;
-        }>,
+            type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+            payload: unknown;
+          }>,
     ) => void;
     reject: (reason?: unknown) => void;
     target: enums.EServices;
