@@ -3,6 +3,7 @@ import type { ENpcRace } from '../../../enums';
 export interface ICharacterStats {
   intelligence: number;
   strength: number;
+  hp: number;
 }
 
 export interface IStatsEntity extends ICharacterStats {

@@ -4,4 +4,5 @@ export interface IStatsEntity {
   initialized: boolean;
   intelligence: number;
   strength: number;
+  hp: number;
 }
