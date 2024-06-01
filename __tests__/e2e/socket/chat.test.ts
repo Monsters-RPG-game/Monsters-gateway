@@ -10,7 +10,7 @@ import { FakeBroker } from '../../utils/mocks';
 import { IFullError } from '../../../src/types';
 import type { IClient } from 'moc-socket';
 import MocSocket from 'moc-socket';
-import { UnauthorizedError } from '../../../src/errors';
+import { AwaitingAuthorizationError } from '../../../src/errors';
 import Utils from '../../utils/utils';
 import { IFullMessageEntity } from '../../../src/structure/modules/message/get/types';
 import { IUserEntity } from '../../../src/structure/modules/user/entity';
@@ -87,7 +87,7 @@ describe('Socket - chat', () => {
 
       it(`User not logged in`, async () => {
         await client2.connect();
-        const target = new UnauthorizedError();
+        const target = new AwaitingAuthorizationError();
 
         await utils.sleep(200);
         const [message] = client2.getLastMessages() as ISocketOutMessage[];

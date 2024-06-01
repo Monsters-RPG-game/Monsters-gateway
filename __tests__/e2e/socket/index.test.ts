@@ -101,7 +101,7 @@ describe('Socket - generic tests', () => {
         const message = (client2.getLastMessages() as ISocketOutMessage[])[0] as ISocketOutMessage;
 
         const { name } = message.payload as IFullError;
-        const targetErr = new errors.UnauthorizedError();
+        const targetErr = new errors.AwaitingAuthorizationError();
 
         expect(name).toEqual(targetErr.name);
         client2.disconnect();
