@@ -1,4 +1,5 @@
 import { ECharacterState } from '../../../../enums/index.js';
+import State from '../../../../state.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
 import type * as types from '../../../../types/index.js';
@@ -20,6 +21,7 @@ export default class UserRouter extends RouterFactory {
       tempId: locals.tempId,
     });
 
+    State.socket.updateState(locals.userId as string);
     return { state: stateUpdate };
   }
 }

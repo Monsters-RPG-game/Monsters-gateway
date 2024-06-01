@@ -1,6 +1,7 @@
 import CreateFightDto from './dto.js';
 import * as enums from '../../../../enums/index.js';
 import * as errors from '../../../../errors/index.js';
+import State from '../../../../state.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
 import GetCharacterDto from '../../npc/get/dto.js';
@@ -60,6 +61,7 @@ export default class UserRouter extends RouterFactory {
       tempId: locals.tempId,
     });
 
+    State.socket.updateState(locals.userId as string);
     return { state: stateUpdate };
   }
 }

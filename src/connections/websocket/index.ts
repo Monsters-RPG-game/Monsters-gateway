@@ -98,6 +98,23 @@ export default class WebsocketServer {
     return exist !== undefined;
   }
 
+  updateState(userId: string): void {
+    const user = this.users.find((u) => u.userId === userId);
+    if (user) {
+      State.redis
+        .getCachedUser(userId)
+        .then((cache) => {
+          user.clients.forEach((c) => {
+            if (cache) c.profile = cache.profile;
+          });
+        })
+        .catch((err) => {
+          Log.error('User cache', err);
+          throw new Error('Cannot find user cache');
+        });
+    }
+  }
+
   protected userDisconnected(ws: types.ISocket): void {
     if (!ws.userId) return;
     this._users = this.users.filter((u) => {
@@ -269,6 +286,8 @@ export default class WebsocketServer {
     } catch (err) {
       return this.router.handleError(new errors.IncorrectBodyTypeError(), ws);
     }
+
+    Log.log('Socket', 'Got new message', message);
 
     switch (message.target) {
       case enums.ESocketTargets.Chat:
