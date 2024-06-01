@@ -223,7 +223,7 @@ export default class Middleware {
           typeof req.body === 'object' &&
           Object.keys(req.body as Record<string, string>).length > 0
         ) {
-          if (req.path.includes('interaction') || req.path.includes('register')) {
+          if (req.path.includes('interaction') || req.path.includes('register') || req.path.includes('remove')) {
             logBody.body = { ...(req.body as Record<string, string>) };
 
             if (logBody.body.password) {
