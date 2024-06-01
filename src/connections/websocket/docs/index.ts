@@ -22,12 +22,12 @@
 
 /**
  * @openapi
- *  /ws - get messages:
+ *  /ws chat - get messages:
  *    get:
  *      security:
  *        - bearerAuth: []
  *      tags:
- *        - websocket
+ *        - chat
  *      description: Request to get user chat messages
  *      requestBody:
  *        description: Request body getting user messages
@@ -53,12 +53,12 @@
 
 /**
  * @openapi
- *  /ws - read message:
+ *  /ws chat - read message:
  *    get:
  *      security:
  *        - bearerAuth: []
  *      tags:
- *        - websocket
+ *        - chat
  *      description: Read message.
  *      requestBody:
  *        description: Request body read user chat message
@@ -85,12 +85,12 @@
 
 /**
  * @openapi
- *  /ws - get unread:
+ *  /ws chat - get unread:
  *    get:
  *      security:
  *        - bearerAuth: []
  *      tags:
- *        - websocket
+ *        - chat
  *      description: Get unread chat message.
  *      requestBody:
  *        description: Request body to get unread messages
@@ -116,12 +116,12 @@
 
 /**
  * @openapi
- *  /ws - get detailed:
+ *  /ws chat - get detailed:
  *    get:
  *      security:
  *        - bearerAuth: []
  *      tags:
- *        - websocket
+ *        - chat
  *      description: Get chat messages from 1 conversion with details.
  *      requestBody:
  *        description: Request body to get detailed messages
@@ -147,12 +147,12 @@
 
 /**
  * @openapi
- *  /ws - send:
+ *  /ws chat - send:
  *    get:
  *      security:
  *        - bearerAuth: []
  *      tags:
- *        - websocket
+ *        - chat
  *      description: Get chat message.
  *      requestBody:
  *        description: Request body to send message
@@ -174,7 +174,7 @@
 
 /**
  * @openapi
- * /location - move:
+ * /ws location - move:
  *   get:
  *     tags:
  *      - location
@@ -209,7 +209,7 @@
 
 /**
  * @openapi
- * /location - get:
+ * /ws location - get:
  *   get:
  *     tags:
  *       - location
