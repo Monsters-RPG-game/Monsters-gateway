@@ -399,3 +399,13 @@ export class UserCannotMove extends FullError {
     this.status = 400;
   }
 }
+
+export class AwaitingAuthorizationError extends FullError {
+  constructor() {
+    super('AwaitingAuthorizationError');
+    this.message = 'User not authrized. Waiting for authorization';
+    this.name = 'AwaitingAuthorizationError';
+    this.code = '026';
+    this.status = 403;
+  }
+}

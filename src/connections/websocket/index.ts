@@ -123,23 +123,24 @@ export default class WebsocketServer {
   }
 
   protected onUserConnected(ws: types.ISocket, cookies: string | undefined, header: string | undefined): void {
-    this.validateUser(ws, { cookies, header }).catch((err) => {
-      Log.error("Couldn't validate user token in websocket", err);
-      ws.close(
-        1000,
-        JSON.stringify({
-          type: enums.ESocketType.Error,
-          payload: new errors.UnauthorizedError(),
-        }),
-      );
-    });
-    this.initializeUser(ws);
-
-    ws.on('message', (message: string) => this.errorWrapper(() => this.handleUserMessage(message, ws), ws));
-    ws.on('ping', () => this.errorWrapper(() => this.ping(ws), ws));
-    ws.on('pong', () => this.errorWrapper(() => this.pong(ws), ws));
-    ws.on('error', (error) => this.router.handleError(error as IFullError, ws));
-    ws.on('close', () => this.userDisconnected(ws));
+    this.preValidateUser(ws, { cookies, header })
+      .then(() => {
+        ws.on('message', (message: string) => this.errorWrapper(() => this.handleUserMessage(message, ws), ws));
+        ws.on('ping', () => this.errorWrapper(() => this.ping(ws), ws));
+        ws.on('pong', () => this.errorWrapper(() => this.pong(ws), ws));
+        ws.on('error', (error) => this.router.handleError(error as IFullError, ws));
+        ws.on('close', () => this.userDisconnected(ws));
+      })
+      .catch((err) => {
+        Log.error("Couldn't validate user token in websocket", err);
+        ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
+      });
   }
 
   protected errorWrapper(callback: () => void, ws: types.ISocket): void {
@@ -166,7 +167,7 @@ export default class WebsocketServer {
     }, 5000);
   }
 
-  private async validateUser(
+  private async preValidateUser(
     ws: types.ISocket,
     auth: {
       cookies: string | undefined;
@@ -198,11 +199,26 @@ export default class WebsocketServer {
     }
 
     if (!access) {
-      ws.close(1000, unauthorizedErrorMessage);
-      return;
+      Log.error('Websocket', 'Client connected without providing login token');
+      ws.ttl = setTimeout(() => {
+        ws.close(1000, unauthorizedErrorMessage);
+      }, 2000);
+      ws.send(
+        JSON.stringify({
+          type: enums.ESocketType.Error,
+          payload: new errors.AwaitingAuthorizationError(),
+        } as types.ISocketOutMessage),
+      );
+    } else {
+      await this.validateUser(ws, access);
     }
+  }
 
+  private async validateUser(ws: types.ISocket, access: string): Promise<void> {
     const payload = await validateToken(access);
+    ws.validated = true;
+    this.initializeUser(ws);
+    if (ws.ttl) clearTimeout(ws.ttl);
 
     if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'testDev') {
       const cachedToken = await State.redis.getOidcHash(`oidc:AccessToken:${payload.jti}`, payload.jti);
@@ -245,12 +261,17 @@ export default class WebsocketServer {
           'Token validation',
           'User tried to log in using token, that got validated, but there is no user or profile related to token. Is token fake ?',
         );
-        ws.close(1000, unauthorizedErrorMessage);
+        ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
         return;
       }
 
       await State.redis.addCachedUser({ account, profile });
-
       ws.profile = profile;
     }
 
@@ -288,6 +309,39 @@ export default class WebsocketServer {
     }
 
     Log.log('Socket', 'Got new message', message);
+
+    if (!ws.validated) {
+      if (message.target !== enums.ESocketTargets.Authorization) {
+        return ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
+      }
+      const key = message.payload as { key: string | undefined };
+      if (!key?.key) {
+        return ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
+      }
+
+      this.validateUser(ws, key.key).catch(() => {
+        return ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
+      });
+      return undefined;
+    }
 
     switch (message.target) {
       case enums.ESocketTargets.Chat:
