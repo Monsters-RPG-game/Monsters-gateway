@@ -13,9 +13,12 @@
  *           type: number
  *         strength:
  *           type: number
+ *         hp:
+ *           type: number
  *       required:
  *         - _id
  *         - owner
  *         - intelligence
  *         - strength
+ *         - hp
  */
