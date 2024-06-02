@@ -23,9 +23,9 @@
     "migrate:init": "node src/migrations/init.js",
     "migrate:latest": "npx knex --knexfile src/migrations/index.js migrate:latest",
     "migrate:rollback": "npx knex --knexfile src/migrations/index.js migrate:rollback",
-    "migrate:init:dev": "cross-env NODE_ENV=dev tsx src/migrations/init.ts",
-    "migrate:latest:dev": "cross-env NODE_ENV=dev npx knex --knexfile src/migrations/index.ts migrate:latest",
-    "migrate:rollback:dev": "cross-env NODE_ENV=dev npx knex --knexfile src/migrations/index.ts migrate:rollback"
+    "migrate:init:dev": "cross-env NODE_ENV=dev tsx build/src/migrations/init.js",
+    "migrate:latest:dev": "cross-env NODE_ENV=dev npx knex --knexfile build/src/migrations/index.js migrate:latest",
+    "migrate:rollback:dev": "cross-env NODE_ENV=dev npx knex --knexfile build/src/migrations/index.js migrate:rollback"
   },
   "lint-staged": {
     "*.ts": [
