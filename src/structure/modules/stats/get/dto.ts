@@ -27,7 +27,7 @@ export default class CharacterStatsDto implements ICharacterStatsDto {
   }
 
   validate(): void {
-    if (this.id) new Validation(this.id, 'id').isDefined();
+    if (!this.character || this.id) new Validation(this.id, 'id').isDefined();
     if (this.character) {
       new Validation(this.character, 'character').isDefined();
       new Validation(this.lvl, 'lvl').isDefined();
