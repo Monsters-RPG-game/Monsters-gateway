@@ -1,3 +1,5 @@
 export interface ICharacterStatsDto {
-  id: string;
+  id?: string;
+  character?: string;
+  lvl?: number;
 }

@@ -9,7 +9,11 @@ export default class GetStatsRouter extends RouterFactory {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler } = locals;
 
-    const data = new CharacterStatsDto({ id: req.query.id as string });
+    const data = new CharacterStatsDto({
+      id: req.query.id as string,
+      character: req.query.character as string,
+      lvl: parseInt(req.query.lvl as string),
+    });
     return (
       await reqHandler.stats.get(data, {
         userId: locals.userId,

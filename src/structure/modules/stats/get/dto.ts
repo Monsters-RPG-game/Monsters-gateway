@@ -14,15 +14,23 @@ import type { ICharacterStatsDto } from './types.js';
  *          type: string
  */
 export default class CharacterStatsDto implements ICharacterStatsDto {
-  id: string;
+  id?: string;
+  character?: string;
+  lvl?: number;
 
   constructor(data: ICharacterStatsDto) {
     this.id = data.id;
+    this.character = data.character;
+    this.lvl = data.lvl;
 
     this.validate();
   }
 
   validate(): void {
-    new Validation(this.id, 'id').isDefined();
+    if (!this.character || this.id) new Validation(this.id, 'id').isDefined();
+    if (this.character) {
+      new Validation(this.character, 'character').isDefined();
+      new Validation(this.lvl, 'lvl').isDefined();
+    }
   }
 }
