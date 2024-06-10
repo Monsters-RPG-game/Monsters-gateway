@@ -28,11 +28,14 @@ import type LoginDto from '../structure/modules/oidc/interaction/dto.js';
 import type GetPartyDto from '../structure/modules/party/get/dto.js';
 import type AddProfileDto from '../structure/modules/profile/add/dto.js';
 import type GetProfileDto from '../structure/modules/profile/get/dto.js';
+import type AddSingleSkillDto from '../structure/modules/singleSkill/add/dto.js';
 import type GetStatsDto from '../structure/modules/stats/get/dto.js';
 import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
 import type UserDetailsDto from '../structure/modules/user/details/dto';
 import type RegisterDto from '../structure/modules/user/register/dto.js';
 import type RemoveUserDto from '../structure/modules/user/remove/dto.js';
+import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
+import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileTargets
@@ -45,6 +48,8 @@ export type IRabbitSubTargets =
   | enums.ECharacterStateTargets
   | enums.EBugReportTargets
   | enums.EStatsTargets
+  | enums.ESkillsTargets
+  | enums.ESingleSkillTargets
   | enums.EMapTargets
   | enums.ECharacterLocationTargets
   | enums.ENpcTargets;
@@ -108,6 +113,15 @@ export interface IPartyConnectionData {
   [enums.EPartyTargets.Get]: GetPartyDto;
 }
 
+export interface ISkillsConnectionData {
+  [enums.ESkillsTargets.GetSkills]: GetSkillsDto;
+}
+
+export interface ISingleSkillConnectionData {
+  [enums.ESingleSkillTargets.GetSingleSkill]: GetSingleSkillDto;
+  [enums.ESingleSkillTargets.AddSingleSkill]: AddSingleSkillDto;
+}
+
 export interface ICharacterStateConnectionData {
   [enums.ECharacterStateTargets.ChangeState]: ChangeCharacterStatusDto;
 }
@@ -137,6 +151,8 @@ export interface IRabbitConnectionData
     IStatsConnectionData,
     INpcConnectionData,
     IBugReportConnectionData,
+    ISkillsConnectionData,
+    ISingleSkillConnectionData,
     IMapConnectionData,
     ICharacterLocationConnectionData,
     IInventoryConnectionData {}

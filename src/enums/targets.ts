@@ -8,6 +8,8 @@ export enum EUserMainTargets {
   Stats = 'stats',
   Fight = 'fight',
   Profile = 'profile',
+  Skills = 'skills',
+  SingleSkill = 'singleSkill',
   Message = 'message',
   BugReport = 'bugReport',
   Inventory = 'inventory',
@@ -45,6 +47,15 @@ export enum EMapTargets {
   Create = 'createMap',
   Get = 'getMap',
   Update = 'updateMap',
+}
+
+export enum ESkillsTargets {
+  GetSkills = 'getSkills',
+}
+
+export enum ESingleSkillTargets {
+  GetSingleSkill = 'getSkill',
+  AddSingleSkill = 'addSingleSkill',
 }
 
 export enum EChatTargets {

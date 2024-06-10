@@ -11,6 +11,8 @@ import initNpcRoutes from './modules/npc/index.js';
 import initOidcRoutes from './modules/oidc/index.js';
 import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
+import initSingleSkillRoutes from './modules/singleSkill/index.js';
+import initSkillsRoutes from './modules/skills/index.js';
 import initStatsRoutes from './modules/stats/index.js';
 import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from './modules/user/index.js';
 import State from '../state.js';
@@ -51,6 +53,8 @@ export default class AppRouter {
     initPartyRoutes(this.router);
     initMessagesRoutes(this.router);
     initInventoryRoutes(this.router);
+    initSkillsRoutes(this.router);
+    initSingleSkillRoutes(this.router);
     initFightsRoutes(this.router);
     initStatsRoutes(this.router);
     initNpcRoutes(this.router);
