@@ -137,6 +137,7 @@ describe('Profiles - add', () => {
         .auth(accessToken2.key, { type: 'bearer' })
         .send({ ...addProfile });
 
+        console.log('aaa',res.body)
       expect(res.status).toEqual(200);
     });
   });
