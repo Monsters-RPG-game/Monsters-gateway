@@ -15,6 +15,7 @@ export interface ICharacterEntity {
   name: string;
   race: ENpcRace;
   lvl: number;
+  exp: number;
   inventory: string;
   stats: IStatsEntity;
   party: string;
