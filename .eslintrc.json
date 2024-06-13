@@ -18,7 +18,8 @@
     "check-file",
     "@typescript-eslint",
     "eslint-plugin-prettier",
-    "@typescript-eslint/eslint-plugin"
+    "@typescript-eslint/eslint-plugin",
+    "sort-class-members"
   ],
   "extends": [
     "eslint-config-prettier",
@@ -53,7 +54,7 @@
     "check-file/folder-match-with-fex": [
       2,
       {
-        "*.test.{js,ts}": "**/__tests__/"
+        "*.test.{js,ts}": "**/__tests__/**"
       }
     ],
     "check-file/filename-naming-convention": [
@@ -217,6 +218,50 @@
     "require-jsdoc": 2,
     "require-unicode-regexp": 2,
     "require-yield": 2,
+    "sort-class-members/sort-class-members": [
+      2,
+      {
+        "order": [
+          "[public-static-property]",
+          "[protected-static-property]",
+          "[private-static-property]",
+
+          "[public-property]",
+          "[protected-property]",
+          "[private-property]",
+
+          "constructor",
+
+          {
+            "type": "method",
+            "name": "/^get.+$/",
+            "sort": "alphabetical"
+          },
+          {
+            "type": "method",
+            "name": "/^set.+$/",
+            "sort": "alphabetical"
+          },
+
+          "[public-method]",
+          "[protected-method]",
+          "[private-method]"
+        ],
+        "groups": {
+          "getterSetterPair": [
+            {
+              "type": "method",
+              "name": "/^get.+$/"
+            },
+            {
+              "type": "method",
+              "name": "/^set.+$/"
+            }
+          ]
+        },
+        "accessorPairPositioning": "getThenSet"
+      }
+    ],
     "spaced-comment": 2,
     "strict": 2,
     "semi": 2,

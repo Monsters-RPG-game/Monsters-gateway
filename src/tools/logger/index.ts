@@ -8,7 +8,7 @@ import * as enums from '../../enums/index.js';
 export default class Log {
   static error(target: string, ...messages: unknown[]): void {
     messages.forEach((m) => {
-      Log.buildLog(() => chalk.red(`Log.ERROR: ${target}`), enums.ELogTypes.Warn, m);
+      Log.buildLog(() => chalk.red(`Log.ERROR: ${target}`), enums.ELogTypes.Error, m);
     });
   }
 
@@ -43,7 +43,8 @@ export default class Log {
   }
 
   private static saveLog(message: unknown, type: enums.ELogTypes): void {
-    const mess = typeof message !== 'string' ? JSON.stringify(message) : message;
+    const mess = typeof message !== 'string' ? JSON.stringify(message, null, 2) : message;
+
     switch (type) {
       case enums.ELogTypes.Warn:
         errLogger.warn(mess);
@@ -66,6 +67,6 @@ export default class Log {
   }
 
   private static toString(message: unknown): string {
-    return typeof message !== 'string' ? JSON.stringify(message) : message;
+    return typeof message !== 'string' ? JSON.stringify(message, null, 2) : message;
   }
 }
