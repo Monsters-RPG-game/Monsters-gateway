@@ -20,24 +20,21 @@ export default class Rooster {
     await this.client.lPush(target, value);
   }
 
-  async setExpirationDate(target: enums.ERedisTargets | string, time: number): Promise<void> {
-    await this.client.expire(target, time);
+  async getAllFromList(target: enums.ERedisTargets | string): Promise<string[] | undefined> {
+    const amount = await this.client.lLen(target);
+    return this.client.lRange(target, 0, amount);
   }
-
-  async getKeys(target: enums.ERedisTargets | string): Promise<string[]> {
-    return this.client.keys(target);
-  }
-
   async getFromHash(data: { target: enums.ERedisTargets | string; value: string }): Promise<string | undefined> {
     const { target, value } = data;
     const exist = await this.checkElm(target);
     if (!exist) return undefined;
     return this.client.hGet(target, value);
   }
-
-  async getAllFromList(target: enums.ERedisTargets | string): Promise<string[] | undefined> {
-    const amount = await this.client.lLen(target);
-    return this.client.lRange(target, 0, amount);
+  async getKeys(target: enums.ERedisTargets | string): Promise<string[]> {
+    return this.client.keys(target);
+  }
+  async setExpirationDate(target: enums.ERedisTargets | string, time: number): Promise<void> {
+    await this.client.expire(target, time);
   }
 
   async removeFromHash(target: enums.ERedisTargets | string, value: string): Promise<void> {
