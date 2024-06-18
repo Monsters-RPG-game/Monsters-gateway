@@ -19,25 +19,6 @@ export default class Fight extends ReqHandler {
     await this.sendReq(this.service, enums.EUserMainTargets.Fight, enums.EFightsTargets.Leave, userInfo, data);
   }
 
-  async getLogs(
-    data: IGetFightLogsDto,
-    userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IFightLogsEntity;
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.Fight,
-      enums.EFightsTargets.GetLogs,
-      userInfo,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IFightLogsEntity;
-    };
-  }
-
   async getFights(
     data: IGetFightDto,
     userInfo: types.IUserBrokerInfo,
@@ -54,6 +35,24 @@ export default class Fight extends ReqHandler {
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IFight[];
+    };
+  }
+  async getLogs(
+    data: IGetFightLogsDto,
+    userInfo: types.IUserBrokerInfo,
+  ): Promise<{
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: IFightLogsEntity;
+  }> {
+    return (await this.sendReq(
+      this.service,
+      enums.EUserMainTargets.Fight,
+      enums.EFightsTargets.GetLogs,
+      userInfo,
+      data,
+    )) as {
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: IFightLogsEntity;
     };
   }
 

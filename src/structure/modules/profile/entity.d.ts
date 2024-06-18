@@ -6,7 +6,7 @@ export interface IProfileEntity {
   race: EUserRace;
   friends: string[];
   lvl: number;
-  exp: number[];
+  exp: number;
   initialized: boolean;
   inventory: string;
   party: string;

@@ -38,6 +38,29 @@ export default class Redis {
     }
   }
 
+  async getAccountToRemove(target: string): Promise<string | undefined> {
+    return this.rooster.getFromHash({ target: `${enums.ERedisTargets.AccountToRemove}:${target}`, value: target });
+  }
+  async getCachedUser(id: string): Promise<ICachedUser | undefined> {
+    const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
+    return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
+  }
+  async getOidcHash(target: string, id: string): Promise<string | undefined> {
+    return this.rooster.getFromHash({ target, value: id });
+  }
+  /**
+   * Get private keys used to generate user keys
+   */
+  async getPrivateKeys(): Promise<JWK[]> {
+    const target = `${enums.ERedisTargets.PrivateKeys}`;
+    const indexes = await this.rooster.getKeys(`${target}:*`);
+    const keys = await Promise.all(
+      indexes.map((i) => {
+        return this.rooster.getAllFromList(i);
+      }),
+    );
+    return keys && keys.length > 0 ? keys.flat().map((k) => JSON.parse(k as string) as JWK) : [];
+  }
   async setExpirationDate(target: enums.ERedisTargets | string, ttl: number): Promise<void> {
     await this.rooster.setExpirationDate(target, ttl);
   }
@@ -53,10 +76,6 @@ export default class Redis {
   async addAccountToRemove(target: string): Promise<void> {
     await this.rooster.addToHash(`${enums.ERedisTargets.AccountToRemove}:${target}`, target, target);
     return this.setExpirationDate(`${enums.ERedisTargets.AccountToRemove}:${target}`, 60 * 60);
-  }
-
-  async getAccountToRemove(target: string): Promise<string | undefined> {
-    return this.rooster.getFromHash({ target: `${enums.ERedisTargets.AccountToRemove}:${target}`, value: target });
   }
 
   async removeAccountToRemove(target: string): Promise<void> {
@@ -86,10 +105,6 @@ export default class Redis {
       account: value.account ? { ...parsedUser.account, ...value.account } : parsedUser.account,
       profile: value.profile ? { ...parsedUser.profile, ...value.profile } : parsedUser.profile,
     });
-  }
-
-  async getOidcHash(target: string, id: string): Promise<string | undefined> {
-    return this.rooster.getFromHash({ target, value: id });
   }
 
   async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
@@ -122,25 +137,6 @@ export default class Redis {
       keys.map((k) => JSON.stringify(k)),
     );
     await this.rooster.setExpirationDate(`${liveKey}`, 60 * 60 * 24 * 7);
-  }
-
-  /**
-   * Get private keys used to generate user keys
-   */
-  async getPrivateKeys(): Promise<JWK[]> {
-    const target = `${enums.ERedisTargets.PrivateKeys}`;
-    const indexes = await this.rooster.getKeys(`${target}:*`);
-    const keys = await Promise.all(
-      indexes.map((i) => {
-        return this.rooster.getAllFromList(i);
-      }),
-    );
-    return keys && keys.length > 0 ? keys.flat().map((k) => JSON.parse(k as string) as JWK) : [];
-  }
-
-  async getCachedUser(id: string): Promise<ICachedUser | undefined> {
-    const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
-    return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
   }
 
   private initClient(): void {

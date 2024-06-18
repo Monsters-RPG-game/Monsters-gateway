@@ -34,6 +34,7 @@ import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
 import type UserDetailsDto from '../structure/modules/user/details/dto';
 import type RegisterDto from '../structure/modules/user/register/dto.js';
 import type RemoveUserDto from '../structure/modules/user/remove/dto.js';
+import type AddExpDto from 'structure/modules/profile/addExp/dto.js';
 import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
 import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
 
@@ -57,6 +58,7 @@ export type IRabbitSubTargets =
 export interface IProfileConnectionData {
   [enums.EProfileTargets.Get]: GetProfileDto;
   [enums.EProfileTargets.Create]: AddProfileDto;
+  [enums.EProfileTargets.AddExp]: AddExpDto;
 }
 
 export interface IStatsConnectionData {

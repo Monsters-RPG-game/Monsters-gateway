@@ -9,9 +9,7 @@ export default class SkillsRouter extends RouterFactory {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler } = locals;
 
-    console.log('asda')
     const data = new GetSkillsDto(req.query.id as string);
-console.log('------')
     return (
       await reqHandler.skills.get(data, {
         userId: locals.userId,

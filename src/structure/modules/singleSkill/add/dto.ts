@@ -1,6 +1,6 @@
-import type { ESkillsType } from 'enums/skills.js';
 import Validation from '../../../../tools/validation/index.js';
 import type { IAddSingleSkillDto } from './types';
+import type { ESkillsType, ESkillTarget } from 'enums/skills.js';
 
 /**
  * @openapi
@@ -18,10 +18,12 @@ export default class AddSingleSkillDto implements IAddSingleSkillDto {
   name: string;
   power: number;
   type: ESkillsType;
+  target: ESkillTarget;
   constructor(data: IAddSingleSkillDto) {
     this.name = data.name;
     this.power = data.power;
     this.type = data.type;
+    this.target = data.target;
     this.validate();
   }
 
@@ -29,5 +31,6 @@ export default class AddSingleSkillDto implements IAddSingleSkillDto {
     new Validation(this.name, 'name').isDefined();
     new Validation(this.power, 'power').isDefined();
     new Validation(this.type, 'type').isDefined();
+    new Validation(this.target, 'target').isDefined();
   }
 }

@@ -28,6 +28,7 @@ export enum EUserTargets {
 export enum EProfileTargets {
   Create = 'createProfile',
   Get = 'getProfile',
+  AddExp = 'addExp',
 }
 
 export enum EItemsTargets {
