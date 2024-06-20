@@ -52,6 +52,7 @@ export enum EMapTargets {
 
 export enum ESkillsTargets {
   GetSkills = 'getSkills',
+  AddSkills = 'addSkills',
 }
 
 export enum ESingleSkillTargets {

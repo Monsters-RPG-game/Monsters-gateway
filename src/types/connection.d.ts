@@ -36,6 +36,7 @@ import type RegisterDto from '../structure/modules/user/register/dto.js';
 import type RemoveUserDto from '../structure/modules/user/remove/dto.js';
 import type AddExpDto from 'structure/modules/profile/addExp/dto.js';
 import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
+import type AddSkillsDto from 'structure/modules/skills/add/dto.js';
 import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
 
 export type IRabbitSubTargets =
@@ -117,6 +118,7 @@ export interface IPartyConnectionData {
 
 export interface ISkillsConnectionData {
   [enums.ESkillsTargets.GetSkills]: GetSkillsDto;
+  [enums.ESkillsTargets.AddSkills]: AddSkillsDto;
 }
 
 export interface ISingleSkillConnectionData {
