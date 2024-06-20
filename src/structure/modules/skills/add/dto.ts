@@ -5,18 +5,20 @@ import type { IAddSkillsDto } from './types.js';
  * @openapi
  * components:
  *   schemas:
- *     IAddSkillsDto:
+ *     IGetSkillsDto:
  *     parameters:
- *       - in: body
- *         name: userId
+ *       - in: query
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
  */
 export default class AddSkillsDto implements IAddSkillsDto {
   owner: string;
+  singleSkillId: string;
 
   constructor(data: IAddSkillsDto) {
+    this.singleSkillId = data.singleSkillId;
     this.owner = data.owner;
 
     this.validate();
@@ -24,5 +26,6 @@ export default class AddSkillsDto implements IAddSkillsDto {
 
   private validate(): void {
     new Validation(this.owner, 'owner').isDefined();
+    new Validation(this.singleSkillId, 'singleSkillId').isDefined();
   }
 }

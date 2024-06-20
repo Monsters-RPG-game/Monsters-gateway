@@ -1,8 +1,8 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type AddSkillsDto from './add/dto.js';
 import type { ISkillsEntity } from './entity.js';
 import type { IUserBrokerInfo } from '../../../types/index.js';
+import type AddSkillsDto from '../../modules/skills/add/dto.js';
 import type GetSkillsDto from '../../modules/skills/get/dto.js';
 
 export default class Skills extends ReqHandler {

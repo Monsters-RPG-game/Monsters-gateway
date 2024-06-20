@@ -5,9 +5,9 @@ import type * as types from '../../../../types/index.js';
 
 const service = new Router();
 
-service.router.post('/', limitRate, async (req, res) => {
+service.router.post('/profile', limitRate, async (req, res) => {
   try {
-    const data = await service.add(req, res);
+    const data = await service.addToProfile(req, res);
     res.status(200).send({ data });
   } catch (err) {
     handleErr(err as types.IFullError, res);
