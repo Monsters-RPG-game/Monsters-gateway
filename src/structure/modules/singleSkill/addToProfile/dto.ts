@@ -1,23 +1,6 @@
 import Validation from '../../../../tools/validation/index.js';
 import type { IAddToProfileDto } from './types';
 
-/**
- * @openapi
- * components:
- *   schemas:
- *     IAddToProfileDto:
- *     parameters:
- *       - in: body
- *         name:profileId
- *         required: true
- *         schema:
- *           type: string
- *       - in: body
- *         name:singleSkillId
- *         required: true
- *         schema:
- *           type: string
- */
 export default class AddToProfileDto implements IAddToProfileDto {
   profileId: string;
   singleSkillId: string;
