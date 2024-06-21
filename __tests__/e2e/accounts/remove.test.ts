@@ -27,6 +27,7 @@ describe('Remove', () => {
   const fakeProfile = {
     ...fakeData.profiles[0],
     initialized: true,
+    skills:"63e55edbe8a800060941121d",
     state: enums.ECharacterState.Fight,
   } as IProfileEntity;
 
