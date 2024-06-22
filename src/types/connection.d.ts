@@ -29,7 +29,6 @@ import type GetPartyDto from '../structure/modules/party/get/dto.js';
 import type AddProfileDto from '../structure/modules/profile/add/dto.js';
 import type GetProfileDto from '../structure/modules/profile/get/dto.js';
 import type AddSingleSkillDto from '../structure/modules/singleSkill/add/dto.js';
-import type AddToProfileDto from '../structure/modules/singleSkill/addToProfile/dto.js';
 import type GetStatsDto from '../structure/modules/stats/get/dto.js';
 import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
 import type UserDetailsDto from '../structure/modules/user/details/dto';
@@ -125,7 +124,6 @@ export interface ISkillsConnectionData {
 export interface ISingleSkillConnectionData {
   [enums.ESingleSkillTargets.GetSingleSkill]: GetSingleSkillDto;
   [enums.ESingleSkillTargets.AddSingleSkill]: AddSingleSkillDto;
-  [enums.ESingleSkillTargets.AddToProfile]: AddToProfileDto;
 }
 
 export interface ICharacterStateConnectionData {
