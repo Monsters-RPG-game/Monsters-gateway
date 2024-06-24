@@ -17,6 +17,7 @@ describe('Fights - attack', () => {
     ...fakeData.profiles[0],
     initialized: true,
     state: enums.ECharacterState.Fight,
+    skills:"63e55edbe8a800060941121d"
   } as IProfileEntity;
   let accessToken: IFakeOidcKey;
 
