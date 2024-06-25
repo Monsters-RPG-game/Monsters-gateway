@@ -55,7 +55,7 @@
     "useDefineForClassFields": false
   },
   "include": [
-    "src", "__tests__"
+    "src"
   ],
   "ts-node": {
     "esm": true,
