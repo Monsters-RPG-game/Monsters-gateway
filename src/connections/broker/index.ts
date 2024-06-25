@@ -18,11 +18,11 @@ export default class Broker {
   private _services: {
     [key in types.IAvailableServices]: { timeout: NodeJS.Timeout | null; retries: number; dead: boolean };
   } = {
-    [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
-    [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
-    [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
-    [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
-  };
+      [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
+      [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
+      [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
+      [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
+    };
   private readonly _controller: Controller;
   private _channel: amqplib.Channel | null = null;
   private _queueName: string | undefined = undefined;
@@ -66,9 +66,9 @@ export default class Broker {
       value:
         | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-            type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-            payload: unknown;
-          }>,
+          type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+          payload: unknown;
+        }>,
     ) => void,
     reject: (reason?: unknown) => void,
     userData: types.IUserBrokerInfo,
@@ -114,7 +114,7 @@ export default class Broker {
     return new Promise((resolve, reject) => {
       if (this._connectionTries++ > Number(enums.ERabbit.RetryLimit)) {
         Log.error('Rabbit', 'Gave up connecting to rabbit. Is rabbit dead?');
-        return;
+        throw new Error('Gave up connecting to rabbit. Is rabbit dead?');
       }
 
       amqplib
