@@ -1,6 +1,6 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IAddSingleSkillDto } from './types';
-import type { ESkillsType, ESkillTarget } from 'enums/skills.js';
+import type { IAddSingleSkillDto } from './types.js';
+import type { ESkillsType, ESkillTarget } from '../../../../enums/skills.js';
 
 /**
  * @openapi

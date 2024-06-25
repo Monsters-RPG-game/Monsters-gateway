@@ -1,5 +1,5 @@
 import { NoDataProvidedError } from '../../../../errors/index.js';
-import Validation from '../../../../tools/validation/index.js';
+import Validation, { isDefined } from '../../../../tools/validation/index.js';
 import type { IUpdateMapFields, IUpdateMapDto } from './types.js';
 
 /**
@@ -28,7 +28,8 @@ import type { IUpdateMapFields, IUpdateMapDto } from './types.js';
  *             type: number
  */
 export default class UpdateMapDto implements IUpdateMapDto {
-  _id: string;
+  @isDefined
+  accessor _id: string;
   name?: string;
   remove?: boolean;
   fields?: IUpdateMapFields[];

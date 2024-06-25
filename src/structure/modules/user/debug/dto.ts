@@ -1,4 +1,4 @@
-import Validation from '../../../../tools/validation/index.js';
+import { isDefined } from '../../../../tools/validation/index.js';
 import type { IDebugGetAllUsersDto } from './types.js';
 
 /**
@@ -14,15 +14,10 @@ import type { IDebugGetAllUsersDto } from './types.js';
  *             type: number
  */
 export default class DebugGetAllUsersDto implements IDebugGetAllUsersDto {
-  page: number;
+  @isDefined
+  accessor page: number;
 
   constructor(page: number) {
     this.page = page;
-
-    this.validate();
-  }
-
-  validate(): void {
-    new Validation(this.page, 'page').isDefined().isNumber();
   }
 }

@@ -1,4 +1,4 @@
-import Mysql from '../../../src/connections/mysql';
+import Mysql from '../../../src/connections/mysql/index.js';
 import { ClientMetadata } from 'oidc-provider';
 
 export default class FakeMysql extends Mysql {

@@ -1,10 +1,10 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type AddCharacterDto from './add/dto';
-import type { ICharacterEntity } from './entity';
+import type AddCharacterDto from './add/dto.js';
+import type { ICharacterEntity } from './entity.js';
 import type GetCharacterDto from './get/dto.js';
 import type RemoveCharacterDto from './remove/dto.js';
-import type UpdateCharacterDto from './update/dto';
+import type UpdateCharacterDto from './update/dto.js';
 import type * as types from '../../../types/index.js';
 
 export default class User extends ReqHandler {

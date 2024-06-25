@@ -36,7 +36,8 @@ export default class MessagesRouter extends RouterFactory {
     await reqHandler.message.send(
       new SendMessagesDto(
         {
-          ...data,
+          body: data.body,
+          sender: data.receiver,
           receiver: receiver?._id,
         },
         locals.userId!,

@@ -1,4 +1,4 @@
-import type { IMapLayer, IMapObjectLayer, IMapProperties, IMapTilesets } from './types';
+import type { IMapLayer, IMapObjectLayer, IMapProperties, IMapTilesets } from './types.d.ts';
 
 export interface IMapEntity {
   _id: string;

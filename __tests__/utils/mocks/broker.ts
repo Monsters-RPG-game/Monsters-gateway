@@ -1,8 +1,9 @@
-import Broker from '../../../src/connections/broker';
-import type * as types from '../../../src/types/connection';
-import * as enums from '../../../src/enums';
-import { EMessageTypes } from '../../../src/enums';
-import { IBrokerAction } from '../../types';
+import Broker from '../../../src/connections/broker/index.js';
+import type * as types from '../../../src/types/connection.js';
+import * as enums from '../../../src/enums/connection.js';
+import { EMessageTypes } from '../../../src/enums/connection.js';
+import { IBrokerAction } from '../../types/broker.js';
+import { EUserTypes } from '../../../src/enums/index.js';
 
 export default class FakeBroker extends Broker {
   private _actions: IBrokerAction[] = [];
@@ -26,15 +27,15 @@ export default class FakeBroker extends Broker {
       value:
         | { type: EMessageTypes.Credentials | EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-            type: EMessageTypes.Credentials | EMessageTypes.Send;
-            payload: unknown;
-          }>,
+          type: EMessageTypes.Credentials | EMessageTypes.Send;
+          payload: unknown;
+        }>,
     ) => void,
     reject: (reason?: unknown) => void,
     _locals: {
       tempId: string;
       userId: string | undefined;
-      type: enums.EUserTypes;
+      type: EUserTypes;
     },
     _service: enums.EServices,
     _payload?: types.IRabbitConnectionData[T],

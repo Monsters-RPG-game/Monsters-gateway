@@ -1,6 +1,6 @@
-import Validation from '../../../../tools/validation/index.js';
+import Validation, { isDefined } from '../../../../tools/validation/index.js';
 import type { IGetCharacterDto } from './types.js';
-import type { ENpcRace } from '../../../../enums';
+import type { ENpcRace } from '../../../../enums/index.js';
 
 /**
  * @openapi
@@ -31,7 +31,8 @@ export default class GetCharacterDto implements IGetCharacterDto {
   race?: ENpcRace;
   lvl?: number;
   id?: string[];
-  page: number;
+  @isDefined
+  accessor page: number;
 
   constructor(data: IGetCharacterDto) {
     this.race = data.race;

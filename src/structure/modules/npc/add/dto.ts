@@ -1,6 +1,6 @@
-import Validation from '../../../../tools/validation/index.js';
-import type { IAddCharacterDto } from './types';
-import type { ENpcRace } from '../../../../enums';
+import { isDefined } from '../../../../tools/validation/index.js';
+import type { IAddCharacterDto } from './types.js';
+import type { ENpcRace } from '../../../../enums/index.js';
 
 /**
  * @openapi
@@ -27,21 +27,16 @@ import type { ENpcRace } from '../../../../enums';
  *           type: number
  */
 export default class AddCharacterDto implements IAddCharacterDto {
-  name: string;
-  race: ENpcRace;
-  lvl: number;
+  @isDefined
+  accessor name: string;
+  @isDefined
+  accessor race: ENpcRace;
+  @isDefined
+  accessor lvl: number;
 
   constructor(data: IAddCharacterDto) {
     this.name = data.name;
     this.lvl = data.lvl;
     this.race = data.race;
-
-    this.validate();
-  }
-
-  private validate(): void {
-    new Validation(this.lvl, 'lvl').isDefined();
-    new Validation(this.name, 'name').isDefined();
-    new Validation(this.race, 'race').isDefined();
   }
 }

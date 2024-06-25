@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import * as errors from '../../../src/errors';
-import AddBugReport from '../../../src/structure/modules/bugReport/add/dto';
-import type { IAddBugReport } from '../../../src/structure/modules/bugReport/add/types';
+import * as errors from '../../../src/errors/index.js';
+import AddBugReport from '../../../src/structure/modules/bugReport/add/dto.js';
+import type { IAddBugReport } from '../../../src/structure/modules/bugReport/add/types.js';
 
 describe('BugReport - add', () => {
   const data: IAddBugReport = {

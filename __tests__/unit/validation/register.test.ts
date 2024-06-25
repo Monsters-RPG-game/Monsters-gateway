@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import * as errors from '../../../src/errors';
-import * as types from '../../types';
-import RegisterDto from '../../../src/structure/modules/user/register/dto';
+import * as errors from '../../../src/errors/index.js';
+import * as types from '../../types/index.js';
+import RegisterDto from '../../../src/structure/modules/user/register/dto.js';
 
 describe('Register', () => {
   const register: types.IRegisterDto = {

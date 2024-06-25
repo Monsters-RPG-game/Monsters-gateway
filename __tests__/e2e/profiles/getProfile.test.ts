@@ -1,17 +1,17 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
-import { IFullError } from '../../../src/types';
+import { IFullError } from '../../../src/types/index.js';
 import supertest from 'supertest';
 import fakeData from '../../fakeData.json';
-import type { IProfileEntity } from '../../types';
-import * as types from '../../types';
-import { IFakeOidcKey } from '../../types';
-import * as enums from '../../../src/enums';
-import { EUserTypes } from '../../../src/enums';
-import State from '../../../src/state';
-import { FakeBroker } from '../../utils/mocks';
-import * as errors from '../../../src/errors';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { fakeAccessToken } from '../../utils';
+import type { IProfileEntity } from '../../types/index.js';
+import * as types from '../../types/index.js';
+import { IFakeOidcKey } from '../../types/index.js';
+import * as enums from '../../../src/enums/index.js';
+import { EUserTypes } from '../../../src/enums/index.js';
+import State from '../../../src/state.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import * as errors from '../../../src/errors/index.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { fakeAccessToken } from '../../utils/index.js';
 
 describe('Profiles = get', () => {
   const fakeBroker = State.broker as FakeBroker;

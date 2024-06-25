@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IGetSingleSkillDto } from './types';
+import type { IGetSingleSkillDto } from './types.js';
 
 /**
  * @openapi

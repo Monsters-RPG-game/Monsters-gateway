@@ -1,19 +1,17 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import supertest from 'supertest';
-import * as enums from '../../../src/enums';
+import * as enums from '../../../src/enums/index.js';
 import fakeData from '../../fakeData.json';
-// import type { IProfileEntity } from '../../types';
-import * as types from '../../types';
-import { IFakeOidcKey } from '../../types';
-import State from '../../../src/state';
-import { FakeBroker } from '../../utils/mocks';
-import { fakeAccessToken } from '../../utils';
-import { IAddExpDto } from '../../../src/structure/modules/profile/addExp/types';
+import * as types from '../../types/index.js';
+import State from '../../../src/state.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import { fakeAccessToken } from '../../utils/index.js';
+import type { IAddExpDto } from '../../../src/structure/modules/profile/addExp/types.js';
 
 describe('Profiles - addExp', () => {
   const fakeBroker = State.broker as FakeBroker;
-  let accessToken: IFakeOidcKey;
+  let accessToken: types.IFakeOidcKey;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeProfile = fakeData.profiles[0] as types.IProfileEntity;
 

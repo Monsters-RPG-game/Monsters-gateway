@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2022",
+    "module": "Node16",
     "types": [
       "node",
       "jest"
     ],
-    "lib": [
-      "ES2022",
-      "ESNext"
-    ],
+    "lib": ["ES2022"],
     "allowJs": false,
     "allowImportingTsExtensions": false,
     "allowSyntheticDefaultImports": true,
@@ -20,17 +17,16 @@
     "declaration": false,
     "declarationMap": false,
     "downlevelIteration": true,
-    "emitDecoratorMetadata": true,
+    "emitDecoratorMetadata": false,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": false,
-    "experimentalDecorators": true,
+    "experimentalDecorators": false,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": false,
+    "importHelpers": true,
     "incremental": true,
     "inlineSources": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "moduleResolution": "Node",
     "noEmit": false,
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
@@ -56,10 +52,16 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "sourceMap": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": false
   },
   "include": [
-    "src"
-  ]
+    "src", "__tests__"
+  ],
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
+  }
 }
 

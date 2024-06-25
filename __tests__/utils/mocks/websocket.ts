@@ -1,7 +1,7 @@
-import WebsocketServer from '../../../src/connections/websocket';
+import WebsocketServer from '../../../src/connections/websocket/index.js';
 import { WebSocketServer } from 'ws';
-import * as errors from '../../../src/errors';
-import type * as types from '../../../src/connections/websocket/types';
+import * as errors from '../../../src/errors/index.js';
+import type * as types from '../../../src/connections/websocket/types/index.js';
 
 export default class SocketServer extends WebsocketServer {
   override get server(): WebSocketServer {
@@ -14,7 +14,7 @@ export default class SocketServer extends WebsocketServer {
     });
     this.startListeners();
   }
- 
+
   override close(): void {
     this.server.close();
 

@@ -1,4 +1,4 @@
-import { IFakeOidcKey } from '../types';
+import type { IFakeOidcKey } from '../types/index.js';
 
 // At this point, I have no idea how to manually generate login tokens for tests.
 export const fakeAccessToken = (accountId: string, keyNumber: number): IFakeOidcKey => {

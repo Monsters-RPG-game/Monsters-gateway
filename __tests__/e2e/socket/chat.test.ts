@@ -1,25 +1,26 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/globals';
-import State from '../../../src/state';
-import SocketServer from '../../utils/mocks/websocket';
-import * as enums from '../../../src/enums';
-import { EMessageSubTargets, EMessageTypes } from '../../../src/enums';
-import { ESocketType } from '../../../src/enums';
+import State from '../../../src/state.js';
+import SocketServer from '../../utils/mocks/websocket.js';
+import * as enums from '../../../src/enums/index.js';
+import { EMessageSubTargets, EMessageTypes } from '../../../src/enums/index.js';
+import { ESocketType } from '../../../src/enums/index.js';
 import fakeData from '../../fakeData.json';
-import { ISocketInMessage, ISocketOutMessage } from '../../../src/connections/websocket/types';
-import { FakeBroker } from '../../utils/mocks';
-import { IFullError } from '../../../src/types';
+import type { ISocketInMessage, ISocketOutMessage } from '../../../src/connections/websocket/types/index.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import { IFullError } from '../../../src/types/index.js';
 import type { IClient } from 'moc-socket';
 import MocSocket from 'moc-socket';
-import { AwaitingAuthorizationError } from '../../../src/errors';
-import Utils from '../../utils/utils';
-import { IFullMessageEntity } from '../../../src/structure/modules/message/get/types';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { fakeAccessToken } from '../../utils';
+import { AwaitingAuthorizationError } from '../../../src/errors/index.js';
+import Utils from '../../utils/utils.js';
+import { IFullMessageEntity } from '../../../src/structure/modules/message/get/types.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { fakeAccessToken } from '../../utils/index.js';
 
 describe('Socket - chat', () => {
   const fakeBroker = State.broker as FakeBroker;
   const utils = new Utils();
-  let server: MocSocket;
+  // @ts-ignore
+  let server: MocSocket.default;
   let client: IClient;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
@@ -66,7 +67,8 @@ describe('Socket - chat', () => {
     };
 
     // Well. ESM borked plenty of stuff for reasons unknown to me...
-    server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
+    // @ts-ignore
+    server = new MocSocket.default((State.socket as SocketServer).server);
     client = server.createClient();
 
     await client.connect(clientOptions);
