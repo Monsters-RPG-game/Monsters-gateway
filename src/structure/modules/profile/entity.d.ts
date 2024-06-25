@@ -12,4 +12,5 @@ export interface IProfileEntity {
   party: string;
   state: ECharacterState;
   stats: string;
+  skills: string;
 }
