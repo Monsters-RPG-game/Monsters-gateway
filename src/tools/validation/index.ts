@@ -95,3 +95,43 @@ export default class Validation {
     return this;
   }
 }
+
+/**
+ * Validate if element is typeof string
+ * Require param: any
+ */
+export function isDefined<T, V>(
+  target: ClassAccessorDecoratorTarget<T, V>,
+  context: ClassAccessorDecoratorContext<T, V> & {
+    name: string;
+    private: boolean;
+    static: boolean;
+  },
+): Partial<ClassAccessorDecoratorTarget<T, V>> {
+  return {
+    set(this: T, v: V): void {
+      if (v === undefined || v === null) throw new errors.MissingArgError(context.name);
+      target.set.call(this, v);
+    },
+  };
+}
+
+/**
+ * Validate if element is typeof number
+ * Require param: any
+ */
+export function isNumber<T, V>(
+  target: ClassAccessorDecoratorTarget<T, V>,
+  context: ClassAccessorDecoratorContext<T, V> & {
+    name: string;
+    private: boolean;
+    static: boolean;
+  },
+): Partial<ClassAccessorDecoratorTarget<T, V>> {
+  return {
+    set(this: T, v: V): void {
+      if (typeof v !== 'number') throw new errors.IncorrectArgError(`${context.name} should be number`);
+      target.set.call(this, v);
+    },
+  };
+}

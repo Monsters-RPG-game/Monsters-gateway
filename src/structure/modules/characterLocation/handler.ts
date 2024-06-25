@@ -1,7 +1,7 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
 import type ChangeCharacterLocationDto from './change/dto.js';
-import type CreateCharacterLocationDto from './create/dto';
+import type CreateCharacterLocationDto from './create/dto.js';
 import type GetCharacterLocationDto from './get/dto.js';
 import type { ICharacterLocationEntity } from './get/types.js';
 import type { IUserBrokerInfo } from '../../../types/index.js';

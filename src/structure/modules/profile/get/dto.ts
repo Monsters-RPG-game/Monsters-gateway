@@ -1,4 +1,4 @@
-import Validation from '../../../../tools/validation/index.js';
+import { isDefined } from '../../../../tools/validation/index.js';
 import type { IGetProfileDto } from './types.js';
 
 /**
@@ -14,15 +14,10 @@ import type { IGetProfileDto } from './types.js';
  *           type: string
  */
 export default class GetProfileDto implements IGetProfileDto {
-  id: string;
+  @isDefined
+  accessor id: string;
 
   constructor(id: string) {
     this.id = id;
-
-    this.validate();
-  }
-
-  private validate(): void {
-    new Validation(this.id, 'id').isDefined();
   }
 }

@@ -1,17 +1,15 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
-// import * as types from '../../types';
 import supertest from 'supertest';
-import * as enums from '../../../src/enums';
+import * as enums from '../../../src/enums/index.js';
 import fakeData from '../../fakeData.json';
-import State from '../../../src/state';
-import { FakeBroker } from '../../utils/mocks';
-import { EMessageTypes } from '../../../src/enums';
-import { IRemoveAccountDto } from '../../../src/structure/modules/user/remove/types';
-import { IFakeOidcKey, IProfileEntity } from '../../types';
-import { fakeAccessToken } from '../../utils';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { IFullError } from '../../../src/types';
-// import { beforeEach } from 'node:test';
+import State from '../../../src/state.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import { EMessageTypes } from '../../../src/enums/index.js';
+import { IRemoveAccountDto } from '../../../src/structure/modules/user/remove/types.js';
+import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
+import { fakeAccessToken } from '../../utils/index.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IFullError } from '../../../src/types/index.js';
 
 describe('Remove', () => {
   const { app } = State.router;

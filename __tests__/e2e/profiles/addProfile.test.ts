@@ -1,16 +1,16 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
-import { IFullError } from '../../../src/types';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
+import { IFullError } from '../../../src/types/index.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import supertest from 'supertest';
-import * as enums from '../../../src/enums';
-import { EUserTypes } from '../../../src/enums';
+import * as enums from '../../../src/enums/index.js';
+import { EUserTypes } from '../../../src/enums/index.js';
 import fakeData from '../../fakeData.json';
-import * as types from '../../types';
-import { IFakeOidcKey } from '../../types';
-import State from '../../../src/state';
-import { MissingArgError } from '../../../src/errors';
-import { FakeBroker } from '../../utils/mocks';
-import { fakeAccessToken } from '../../utils';
+import * as types from '../../types/index.js';
+import { IFakeOidcKey } from '../../types/index.js';
+import State from '../../../src/state.js';
+import { MissingArgError } from '../../../src/errors/index.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import { fakeAccessToken } from '../../utils/index.js';
 
 describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
@@ -137,7 +137,7 @@ describe('Profiles - add', () => {
         .auth(accessToken2.key, { type: 'bearer' })
         .send({ ...addProfile });
 
-        console.log('aaa',res.body)
+      console.log('aaa', res.body)
       expect(res.status).toEqual(200);
     });
   });

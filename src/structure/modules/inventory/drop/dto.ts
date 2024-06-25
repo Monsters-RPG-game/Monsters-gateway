@@ -1,4 +1,4 @@
-import Validation from '../../../../tools/validation/index.js';
+import { isDefined } from '../../../../tools/validation/index.js';
 import type { IDropItemDto } from './types.js';
 
 /**
@@ -25,18 +25,13 @@ import type { IDropItemDto } from './types.js';
  *           type: string
  */
 export default class InventoryDropDto implements IDropItemDto {
-  itemId: string;
-  amount: number;
+  @isDefined
+  accessor itemId: string;
+  @isDefined
+  accessor amount: number;
 
   constructor(body: IDropItemDto) {
     this.itemId = body.itemId;
     this.amount = body.amount;
-
-    this.validate();
-  }
-
-  validate(): void {
-    new Validation(this.itemId, 'itemId').isDefined();
-    new Validation(this.amount, 'amount').isDefined();
   }
 }

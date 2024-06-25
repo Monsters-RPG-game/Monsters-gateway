@@ -1,8 +1,8 @@
-import Redis from '../../../src/connections/redis';
-import type { IUserEntity } from '../../../src/structure/modules/user/entity';
-import type { IProfileEntity } from '../../../src/structure/modules/profile/entity';
-import type { ICachedUser } from '../../../src/types';
-import * as enums from '../../../src/enums';
+import Redis from '../../../src/connections/redis/index.js';
+import type { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import type { IProfileEntity } from '../../../src/structure/modules/profile/entity.js';
+import type { ICachedUser } from '../../../src/types/index.js';
+import * as enums from '../../../src/enums/index.js';
 import type { AdapterPayload } from 'oidc-provider';
 
 export default class FakeRedis extends Redis {

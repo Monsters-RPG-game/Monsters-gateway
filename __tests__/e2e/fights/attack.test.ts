@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
-import * as enums from '../../../src/enums';
-import { MissingArgError } from '../../../src/errors';
-import State from '../../../src/state';
-import { IAttackDto } from '../../../src/structure/modules/fights/attack/types';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { IFullError } from '../../../src/types';
+import * as enums from '../../../src/enums/index.js';
+import { MissingArgError } from '../../../src/errors/index.js';
+import State from '../../../src/state.js';
+import { IAttackDto } from '../../../src/structure/modules/fights/attack/types.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import fakeData from '../../fakeData.json';
-import { IFakeOidcKey, IProfileEntity } from '../../types';
-import { fakeAccessToken } from '../../utils';
+import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
+import { fakeAccessToken } from '../../utils/index.js';
+import { IFullError } from '../../../src/types/errors.js';
 
 describe('Fights - attack', () => {
   const fakeTarget = fakeData.users[0]!._id;
