@@ -7,6 +7,7 @@ import ChangeCharacterLocationDto from '../../structure/modules/characterLocatio
 import GetCharacterLocationDto from '../../structure/modules/characterLocation/get/dto.js';
 import CreateFightDto from '../../structure/modules/fights/debug/dto.js';
 import GetCharacterDto from '../../structure/modules/npc/get/dto.js';
+import GetDetailedSkillsDto from '../../structure/modules/skills/getDetailed/dto.js';
 import CharacterStatsDto from '../../structure/modules/stats/get/dto.js';
 import Log from '../../tools/logger/index.js';
 import type * as types from './types/index.js';
@@ -145,15 +146,18 @@ export default class Router {
   private async attackEnemy(ws: types.ISocket): Promise<{ state: Partial<IProfileEntity> }> {
     const { reqHandler, userId, profile } = ws;
 
+    if (!profile) throw new errors.ProfileNotFound();
     const teams: ICreateFightDto = { teams: [[], []], attacker: undefined! };
 
-    const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile!.stats }), {
+    const skills = await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), { userId, tempId: '' });
+
+    const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile.stats }), {
       userId,
       tempId: '',
     });
     teams.attacker = {
       _id: userId,
-      lvl: profile!.lvl,
+      lvl: profile.lvl,
       stats: attackerStats.payload,
     };
     const enemies = await reqHandler.npc.get(new GetCharacterDto({ page: 0, race: enums.ENpcRace.Troll, lvl: 2 }), {

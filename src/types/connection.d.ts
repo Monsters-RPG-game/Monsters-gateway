@@ -38,6 +38,7 @@ import type AddExpDto from 'structure/modules/profile/addExp/dto.js';
 import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
 import type AddSkillsDto from 'structure/modules/skills/add/dto.js';
 import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
+import type GetDetailedSkillsDto from 'structure/modules/skills/getDetailed/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileTargets
@@ -119,6 +120,7 @@ export interface IPartyConnectionData {
 export interface ISkillsConnectionData {
   [enums.ESkillsTargets.GetSkills]: GetSkillsDto;
   [enums.ESkillsTargets.AddSkills]: AddSkillsDto;
+  [enums.ESkillsTargets.GetDetailedSkills]: GetDetailedSkillsDto;
 }
 
 export interface ISingleSkillConnectionData {
