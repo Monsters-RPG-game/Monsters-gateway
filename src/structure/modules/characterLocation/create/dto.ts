@@ -1,9 +1,8 @@
-import Validation, { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { ICreateCharacterLocationDto } from './types.js';
 
 export default class CreateCharacterLocationDto implements ICreateCharacterLocationDto {
-  @isDefined
-  accessor character: string;
+  character: string;
   x?: number;
   y?: number;
   map?: string;
@@ -18,6 +17,7 @@ export default class CreateCharacterLocationDto implements ICreateCharacterLocat
   }
 
   private validate(): void {
+    new Validation(this.character, 'character').isDefined();
     if (this.x) new Validation(this.x, 'x').isDefined();
     if (this.y) new Validation(this.y, 'y').isDefined();
     if (this.map) new Validation(this.map, 'map').isDefined();

@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IRegisterDto } from './types.js';
 
 /**
@@ -25,16 +25,21 @@ import type { IRegisterDto } from './types.js';
  *           description: Password should contain at least 1 digit, 6 letters, 1 uppercase letter, and 1 lowercase letter.
  */
 export default class RegisterDto implements IRegisterDto {
-  @isDefined
-  accessor email: string;
-  @isDefined
-  accessor login: string;
-  @isDefined
-  accessor password: string;
+  email: string;
+  login: string;
+  password: string;
 
   constructor(data: IRegisterDto) {
     this.email = data.email?.trim();
     this.login = data.login?.trim();
     this.password = data.password;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.email, 'email').isDefined();
+    new Validation(this.login, 'login').isDefined();
+    new Validation(this.password, 'password').isDefined();
   }
 }

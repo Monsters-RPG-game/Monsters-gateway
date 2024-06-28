@@ -1,4 +1,4 @@
-import Validation, { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { ICreateMapDto } from './types.js';
 import type { IMapLayer, IMapObjectLayer, IMapProperties, IMapTilesets } from '../types.js';
 
@@ -164,35 +164,22 @@ import type { IMapLayer, IMapObjectLayer, IMapProperties, IMapTilesets } from '.
  *           type: number
  */
 export default class CreateMapDto implements ICreateMapDto {
-  @isDefined
-  accessor name: string;
-  @isDefined
-  accessor nextlayerid: number;
-  @isDefined
-  accessor nextobjectid: number;
-  @isDefined
-  accessor orientation: string;
-  @isDefined
-  accessor renderorder: string;
-  @isDefined
-  accessor tiledversion: string;
-  @isDefined
-  accessor tileheight: number;
-  @isDefined
-  accessor tilewidth: number;
-  @isDefined
-  accessor type: string;
-  @isDefined
-  accessor version: number;
-  @isDefined
-  accessor width: number;
-  @isDefined
-  accessor height: number;
-  @isDefined
-  accessor infinite: boolean;
-  tilesets: IMapTilesets[];
-  properties: IMapProperties[];
+  name: string;
   layers: IMapLayer[] | IMapObjectLayer[];
+  nextlayerid: number;
+  nextobjectid: number;
+  orientation: string;
+  properties: IMapProperties[];
+  renderorder: string;
+  tiledversion: string;
+  tileheight: number;
+  tilesets: IMapTilesets[];
+  tilewidth: number;
+  type: string;
+  version: number;
+  width: number;
+  height: number;
+  infinite: boolean;
 
   constructor(data: ICreateMapDto) {
     this.name = data.name;
@@ -216,6 +203,20 @@ export default class CreateMapDto implements ICreateMapDto {
   }
 
   private validate(): void {
+    new Validation(this.name, 'name').isDefined();
+    new Validation(this.nextlayerid, 'nextlayerid').isDefined();
+    new Validation(this.nextobjectid, 'nextobjectid').isDefined();
+    new Validation(this.orientation, 'orientation').isDefined();
+    new Validation(this.renderorder, 'renderorder').isDefined();
+    new Validation(this.tiledversion, 'tiledversion').isDefined();
+    new Validation(this.tileheight, 'tileheight').isDefined();
+    new Validation(this.tilewidth, 'tilewidth').isDefined();
+    new Validation(this.type, 'type').isDefined();
+    new Validation(this.version, 'version').isDefined();
+    new Validation(this.width, 'width').isDefined();
+    new Validation(this.width, 'height').isDefined();
+    new Validation(this.infinite, 'infinite').isDefined();
+
     new Validation(this.layers, 'layers').isDefined();
     this.layers.forEach((l: IMapLayer | IMapObjectLayer) => {
       new Validation(l.x, 'x').isDefined();

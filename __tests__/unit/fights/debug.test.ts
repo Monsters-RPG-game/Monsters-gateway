@@ -36,7 +36,7 @@ describe('Fights - debug', () => {
           try {
             new CreateFightDto(clone);
           } catch (err) {
-            expect(err).toEqual(new errors.MissingArgError('teams'));
+            expect(err).toEqual(new errors.IncorrectArgTypeError('teams should be array'));
           }
         });
 
