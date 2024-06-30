@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "Node16",
+    "target": "ESNext",
+    "module": "ESNext",
     "types": [
       "node",
       "jest"
@@ -27,6 +27,7 @@
     "inlineSources": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    "moduleResolution": "Node",
     "noEmit": false,
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
