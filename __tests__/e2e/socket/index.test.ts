@@ -6,7 +6,8 @@ import type { ISocketInMessage, ISocketOutMessage } from '../../../src/connectio
 import State from '../../../src/state.js';
 import * as errors from '../../../src/errors/index.js';
 import SocketServer from '../../utils/mocks/websocket.js';
-import MocSocket, { IClient } from 'moc-socket';
+import type { IClient } from 'moc-socket';
+import MocSocket from 'moc-socket';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { IFullError } from '../../../src/types/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
