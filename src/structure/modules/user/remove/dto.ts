@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IRemoveAccountDto } from './types.js';
 
 /**
@@ -12,13 +12,18 @@ import type { IRemoveAccountDto } from './types.js';
  *           type: string
  */
 export default class RemoveUserDto implements IRemoveAccountDto {
-  @isDefined
-  accessor id: string;
-  @isDefined
-  accessor password: string;
+  id: string;
+  password: string;
 
   constructor(data: IRemoveAccountDto, name: string) {
     this.password = data.password;
     this.id = name;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.id, 'id').isDefined();
+    new Validation(this.password, 'password').isDefined();
   }
 }

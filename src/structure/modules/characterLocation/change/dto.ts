@@ -1,4 +1,4 @@
-import Validation, { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IChangeCharacterLocationDto } from './types.js';
 
 /**
@@ -17,10 +17,8 @@ import type { IChangeCharacterLocationDto } from './types.js';
  *           required: false
  */
 export default class ChangeCharacterLocationDto implements IChangeCharacterLocationDto {
-  @isDefined
-  accessor x: number;
-  @isDefined
-  accessor y: number;
+  x: number;
+  y: number;
   map?: string;
 
   constructor(data: IChangeCharacterLocationDto) {
@@ -32,6 +30,8 @@ export default class ChangeCharacterLocationDto implements IChangeCharacterLocat
   }
 
   private validate(): void {
+    new Validation(this.x, 'x').isDefined();
+    new Validation(this.y, 'y').isDefined();
     if (this.map) new Validation(this.map, 'map').isDefined();
   }
 }

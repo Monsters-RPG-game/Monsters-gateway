@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { ISendMessageDto } from './types.js';
 
 /**
@@ -14,16 +14,21 @@ import type { ISendMessageDto } from './types.js';
  *           type: string
  */
 export default class SendMessagesDto implements ISendMessageDto {
-  @isDefined
-  accessor body: string;
-  @isDefined
-  accessor receiver: string;
-  @isDefined
-  accessor sender: string;
+  body: string;
+  receiver: string;
+  sender: string;
 
   constructor(body: ISendMessageDto, sender: string) {
     this.body = body.body;
     this.receiver = body.receiver;
     this.sender = sender;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.body, 'body').isDefined();
+    new Validation(this.receiver, 'receiver').isDefined();
+    new Validation(this.sender, 'sender').isDefined();
   }
 }

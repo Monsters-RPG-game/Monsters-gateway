@@ -1,4 +1,4 @@
-import Validation, { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IGetCharacterDto } from './types.js';
 import type { ENpcRace } from '../../../../enums/index.js';
 
@@ -31,8 +31,7 @@ export default class GetCharacterDto implements IGetCharacterDto {
   race?: ENpcRace;
   lvl?: number;
   id?: string[];
-  @isDefined
-  accessor page: number;
+  page: number;
 
   constructor(data: IGetCharacterDto) {
     this.race = data.race;

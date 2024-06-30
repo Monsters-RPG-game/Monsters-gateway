@@ -1,4 +1,4 @@
-import Validation, { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { ICreateFightDto, IFightStateTeam } from './types.js';
 import type { IFightCharacterEntity } from '../../npc/entity.js';
 
@@ -17,10 +17,8 @@ import type { IFightCharacterEntity } from '../../npc/entity.js';
  *               type: string
  */
 export default class CreateFightDto implements ICreateFightDto {
-  @isDefined
-  accessor teams: [IFightStateTeam[], IFightStateTeam[]] = [[], []];
-  @isDefined
-  accessor attacker: IFightCharacterEntity;
+  teams: [IFightStateTeam[], IFightStateTeam[]] = [[], []];
+  attacker: IFightCharacterEntity;
 
   constructor(body: ICreateFightDto) {
     this.teams = body.teams;
@@ -31,6 +29,7 @@ export default class CreateFightDto implements ICreateFightDto {
 
   validate(): void {
     new Validation(this.teams, 'teams').isArray().minElements(2).maxElements(2);
+    new Validation(this.attacker, 'attacker').isDefined();
 
     this.teams.forEach((t) => {
       new Validation(t, 'team').isArray();

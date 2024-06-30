@@ -6,7 +6,8 @@ import type { ISocketInMessage, ISocketOutMessage } from '../../../src/connectio
 import State from '../../../src/state.js';
 import * as errors from '../../../src/errors/index.js';
 import SocketServer from '../../utils/mocks/websocket.js';
-import MocSocket, { IClient } from 'moc-socket';
+import type { IClient } from 'moc-socket';
+import MocSocket from 'moc-socket';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { IFullError } from '../../../src/types/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
@@ -15,8 +16,7 @@ import { fakeAccessToken } from '../../utils/index.js';
 describe('Socket - generic tests', () => {
   const fakeBroker = State.broker as FakeBroker;
   const utils = new Utils();
-  // @ts-ignore
-  let server: MocSocket.default;
+  let server: MocSocket;
   let client: IClient;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
@@ -43,8 +43,7 @@ describe('Socket - generic tests', () => {
     };
 
     // Well. ESM borked plenty of stuff for reasons unknown to me...
-    // @ts-ignore
-    server = new MocSocket.default((State.socket as SocketServer).server);
+    server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
     client = server.createClient();
     fakeBroker.actions.push({
       shouldFail: false,

@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IReadMessageDto } from './types.js';
 
 /**
@@ -14,13 +14,18 @@ import type { IReadMessageDto } from './types.js';
  *           type: string
  */
 export default class ReadMessagesDto implements IReadMessageDto {
-  @isDefined
-  accessor chatId: string;
-  @isDefined
-  accessor receiver: string;
+  chatId: string;
+  receiver: string;
 
   constructor(body: IReadMessageDto) {
     this.chatId = body.chatId;
     this.receiver = body.receiver;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.chatId, 'chatId').isDefined();
+    new Validation(this.receiver, 'receiver').isDefined();
   }
 }

@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IGetPartyDto } from './types.js';
 
 /**
@@ -14,10 +14,15 @@ import type { IGetPartyDto } from './types.js';
  *          type: string
  */
 export default class GetPartyDto implements IGetPartyDto {
-  @isDefined
-  accessor id: string;
+  id: string;
 
   constructor(id: string) {
     this.id = id;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.id, 'id').isDefined();
   }
 }

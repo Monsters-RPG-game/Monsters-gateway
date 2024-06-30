@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IAddBugReport } from './types.js';
 
 /**
@@ -12,13 +12,18 @@ import type { IAddBugReport } from './types.js';
  *           type: string
  */
 export default class AddBugReport implements IAddBugReport {
-  @isDefined
-  accessor message: string;
-  @isDefined
-  accessor user: string;
+  message: string;
+  user: string;
 
   constructor(body: IAddBugReport, user: string) {
     this.message = body.message;
     this.user = user;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.message, 'message').isDefined();
+    new Validation(this.user, 'user').isDefined();
   }
 }

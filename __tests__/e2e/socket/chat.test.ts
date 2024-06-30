@@ -19,8 +19,7 @@ import { fakeAccessToken } from '../../utils/index.js';
 describe('Socket - chat', () => {
   const fakeBroker = State.broker as FakeBroker;
   const utils = new Utils();
-  // @ts-ignore
-  let server: MocSocket.default;
+  let server: MocSocket;
   let client: IClient;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
@@ -67,8 +66,7 @@ describe('Socket - chat', () => {
     };
 
     // Well. ESM borked plenty of stuff for reasons unknown to me...
-    // @ts-ignore
-    server = new MocSocket.default((State.socket as SocketServer).server);
+    server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
     client = server.createClient();
 
     await client.connect(clientOptions);

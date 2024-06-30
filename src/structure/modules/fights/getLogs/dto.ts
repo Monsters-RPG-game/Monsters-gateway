@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../tools/validation/index.js';
+import Validation from '../../../../tools/validation/index.js';
 import type { IGetFightLogsDto } from './types.js';
 
 /**
@@ -12,10 +12,15 @@ import type { IGetFightLogsDto } from './types.js';
  *           type: string
  */
 export default class GetFightLogsDto implements IGetFightLogsDto {
-  @isDefined
-  accessor id: string;
+  id: string;
 
   constructor(body: IGetFightLogsDto) {
     this.id = body.id;
+
+    this.validate();
+  }
+
+  validate(): void {
+    new Validation(this.id, 'id').isDefined();
   }
 }
