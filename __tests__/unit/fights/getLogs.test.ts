@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import * as errors from '../../../src/errors';
-import GetFightLogsDto from '../../../src/structure/modules/fights/getLogs/dto';
-import { IGetFightLogsDto } from '../../../src/structure/modules/fights/getLogs/types';
+import * as errors from '../../../src/errors/index.js';
+import GetFightLogsDto from '../../../src/structure/modules/fights/getLogs/dto.js';
+import type { IGetFightLogsDto } from '../../../src/structure/modules/fights/getLogs/types.js';
 
 describe('fights-getLogs', () => {
   const data: IGetFightLogsDto = {

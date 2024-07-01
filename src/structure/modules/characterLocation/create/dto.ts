@@ -1,5 +1,5 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { ICreateCharacterLocationDto } from './types';
+import type { ICreateCharacterLocationDto } from './types.js';
 
 export default class CreateCharacterLocationDto implements ICreateCharacterLocationDto {
   character: string;

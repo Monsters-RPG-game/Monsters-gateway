@@ -1,4 +1,4 @@
-import FakeBroker from './broker';
-import FakeRedis from './redis';
+import FakeBroker from './broker.js';
+import FakeRedis from './redis.js';
 
 export { FakeBroker, FakeRedis };

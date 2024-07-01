@@ -1,15 +1,15 @@
 import { beforeAll, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
-import * as enums from '../../../src/enums';
-import * as errors from '../../../src/errors';
-import State from '../../../src/state';
-import { IAddBugReport } from '../../../src/structure/modules/bugReport/add/types';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { IFullError } from '../../../src/types';
+import * as enums from '../../../src/enums/index.js';
+import * as errors from '../../../src/errors/index.js';
+import State from '../../../src/state.js';
+import type { IAddBugReport } from '../../../src/structure/modules/bugReport/add/types.js';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IFullError } from '../../../src/types/index.js';
 import fakeData from '../../fakeData.json';
-import * as types from '../../types';
-import { fakeAccessToken } from '../../utils';
-import { FakeBroker } from '../../utils/mocks';
+import * as types from '../../types/index.js';
+import { fakeAccessToken } from '../../utils/index.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
 
 describe('BugReport - add', () => {
   const fakeBroker = State.broker as FakeBroker;

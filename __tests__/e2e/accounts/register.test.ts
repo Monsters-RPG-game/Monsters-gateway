@@ -1,13 +1,13 @@
 import { describe, expect, it } from '@jest/globals';
-import { IFullError } from '../../../src/types';
-import * as types from '../../types';
+import { IFullError } from '../../../src/types/index.js';
+import * as types from '../../types/index.js';
 import supertest from 'supertest';
 import fakeData from '../../fakeData.json';
-import State from '../../../src/state';
-import { UsernameAlreadyInUseError } from '../../../src/errors';
-import { FakeBroker } from '../../utils/mocks';
-import { EMessageTypes } from '../../../src/enums';
-import { generateRandomName } from '../../../src/utils';
+import State from '../../../src/state.js';
+import { UsernameAlreadyInUseError } from '../../../src/errors/index.js';
+import { FakeBroker } from '../../utils/mocks/index.js';
+import { EMessageTypes } from '../../../src/enums/index.js';
+import { generateRandomName } from '../../../src/utils/index.js';
 
 describe('Register', () => {
   const fakeBroker = State.broker as FakeBroker;

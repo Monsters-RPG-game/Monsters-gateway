@@ -1,9 +1,9 @@
-import State from '../../src/state';
-import FakeBroker from './mocks/broker';
-import FakeRedis from './mocks/redis';
-import Router from '../../src/structure';
-import SocketServer from './mocks/websocket';
-import FakeMysql from './mocks/mysql';
+import State from '../../src/state.js';
+import FakeBroker from './mocks/broker.js';
+import FakeRedis from './mocks/redis.js';
+import Router from '../../src/structure/index.js';
+import SocketServer from './mocks/websocket.js';
+import FakeMysql from './mocks/mysql.js';
 
 export default class Utils {
   constructor() {

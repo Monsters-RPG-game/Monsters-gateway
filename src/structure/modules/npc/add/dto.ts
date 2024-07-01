@@ -1,6 +1,6 @@
 import Validation from '../../../../tools/validation/index.js';
-import type { IAddCharacterDto } from './types';
-import type { ENpcRace } from '../../../../enums';
+import type { IAddCharacterDto } from './types.js';
+import type { ENpcRace } from '../../../../enums/index.js';
 
 /**
  * @openapi

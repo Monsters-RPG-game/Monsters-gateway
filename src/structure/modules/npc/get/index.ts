@@ -2,7 +2,7 @@ import GetCharacterDto from './dto.js';
 import { EUserTypes } from '../../../../enums/index.js';
 import { NoPermission } from '../../../../errors/index.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
-import type { ENpcRace } from '../../../../enums';
+import type { ENpcRace } from '../../../../enums/index.js';
 import type * as types from '../../../../types/index.js';
 import type { ICharacterEntity } from '../entity.js';
 import type express from 'express';

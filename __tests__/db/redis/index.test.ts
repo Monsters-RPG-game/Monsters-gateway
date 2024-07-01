@@ -1,10 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import State from '../../../src/state';
+import State from '../../../src/state.js';
 import fakeData from '../../fakeData.json';
-import { IUserEntity } from '../../../src/structure/modules/user/entity';
-import { IProfileEntity } from '../../../src/structure/modules/profile/entity';
-import { FakeRedis } from '../../utils/mocks';
-import { ICachedUser } from '../../../src/types';
+import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IProfileEntity } from '../../../src/structure/modules/profile/entity.js';
+import { FakeRedis } from '../../utils/mocks/index.js';
+import type { ICachedUser } from '../../../src/types/index.js';
 
 describe('Redis', () => {
   const fakeUser: IUserEntity = fakeData.users[0] as IUserEntity;

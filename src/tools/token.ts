@@ -2,7 +2,7 @@ import Log from './logger/index.js';
 import * as errors from '../errors/index.js';
 import { IncorrectTokenError, InternalError } from '../errors/index.js';
 import State from '../state.js';
-import type { IAccessToken } from '../types';
+import type { IAccessToken } from '../types/index.js';
 import type { AdapterPayload } from 'oidc-provider';
 
 export const validateToken = async (token: string | undefined): Promise<IAccessToken> => {

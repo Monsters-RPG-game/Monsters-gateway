@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import * as errors from '../../../src/errors';
-import CreateFightDto from '../../../src/structure/modules/fights/debug/dto';
-import { ICreateFightDto, IFightStateTeam } from '../../../src/structure/modules/fights/debug/types';
-import { IFightCharacterEntity, IStatsEntity } from '../../../src/structure/modules/npc/entity';
+import * as errors from '../../../src/errors/index.js';
+import CreateFightDto from '../../../src/structure/modules/fights/debug/dto.js';
+import type { ICreateFightDto, IFightStateTeam } from '../../../src/structure/modules/fights/debug/types.js';
+import { IFightCharacterEntity, IStatsEntity } from '../../../src/structure/modules/npc/entity.js';
 import fakeData from '../../fakeData.json';
 
 describe('Fights - debug', () => {
