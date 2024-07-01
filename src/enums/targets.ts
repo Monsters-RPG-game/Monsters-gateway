@@ -71,6 +71,7 @@ export enum EChatTargets {
 export enum EFightsTargets {
   Attack = 'attack',
   CreateFight = 'createFight',
+  UseSkill = 'useSkill',
   Leave = 'leave',
   GetLogs = 'getLogs',
   GetFights = 'getFights',

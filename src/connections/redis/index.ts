@@ -4,6 +4,7 @@ import * as enums from '../../enums/index.js';
 import getConfig from '../../tools/configLoader.js';
 import Log from '../../tools/logger/index.js';
 import type { IProfileEntity } from '../../structure/modules/profile/entity.js';
+import type { ISkillsEntityDetailed } from '../../structure/modules/skills/getDetailed/types.js';
 import type { IUserEntity } from '../../structure/modules/user/entity.js';
 import type { ICachedUser, IFullError } from '../../types/index.js';
 import type { JWK } from 'jose';
@@ -41,10 +42,20 @@ export default class Redis {
   async getAccountToRemove(target: string): Promise<string | undefined> {
     return this.rooster.getFromHash({ target: `${enums.ERedisTargets.AccountToRemove}:${target}`, value: target });
   }
+
+  async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
+    const cachedSkills = await this.rooster.getFromHash({
+      target: `${enums.ERedisTargets.CachedSkills}:${id}`,
+      value: id,
+    });
+    return cachedSkills ? (JSON.parse(cachedSkills) as ISkillsEntityDetailed) : undefined;
+  }
+
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {
     const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
     return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
   }
+
   async getOidcHash(target: string, id: string): Promise<string | undefined> {
     return this.rooster.getFromHash({ target, value: id });
   }
@@ -99,7 +110,10 @@ export default class Redis {
   ): Promise<void> {
     const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
     if (!cachedUser) return;
-    const parsedUser = JSON.parse(cachedUser) as { account: IUserEntity; profile: IProfileEntity };
+    const parsedUser = JSON.parse(cachedUser) as {
+      account: IUserEntity;
+      profile: IProfileEntity;
+    };
     await this.addCachedUser({
       ...parsedUser,
       account: value.account ? { ...parsedUser.account, ...value.account } : parsedUser.account,
@@ -116,20 +130,25 @@ export default class Redis {
     await this.rooster.setExpirationDate(`${enums.ERedisTargets.CachedUser}:${user.account._id}`, 60000);
   }
 
+  async addCachedSkills(skills: ISkillsEntityDetailed, userId: string): Promise<void> {
+    await this.rooster.addToHash(`${enums.ERedisTargets.CachedSkills}:${userId}`, userId, JSON.stringify(skills));
+    await this.rooster.setExpirationDate(`${enums.ERedisTargets.CachedSkills}:${userId}`, 60000);
+  }
+
   async addPrivateKeys(keys: JWK[]): Promise<void> {
     const indexes = await this.rooster.getKeys(`${enums.ERedisTargets.PrivateKeys}:*`);
     const highestNumber =
       indexes.length === 0
         ? '1'
         : (
-            indexes
-              .map((i) => Number(i.split(':')[1]))
-              .sort((a, b) => {
-                if (a > b) return 1;
-                if (b > 1) return -1;
-                return 0;
-              })[indexes.length - 1]! + 1
-          ).toString();
+          indexes
+            .map((i) => Number(i.split(':')[1]))
+            .sort((a, b) => {
+              if (a > b) return 1;
+              if (b > 1) return -1;
+              return 0;
+            })[indexes.length - 1]! + 1
+        ).toString();
     const liveKey = `${enums.ERedisTargets.PrivateKeys}:${highestNumber}`;
 
     await this.rooster.addToList(

@@ -16,7 +16,11 @@ export default class UserRouter extends RouterFactory {
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler, user, profile } = locals;
 
-    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined! };
+    const teams: ICreateFightDto = {
+      teams: [[], []],
+      attacker: undefined!,
+      skills: { _id: '', owner: '', singleSkills: [] },
+    };
     const body = req.body as ICreateFight;
 
     if (!body.team || body.team.length === 0) {

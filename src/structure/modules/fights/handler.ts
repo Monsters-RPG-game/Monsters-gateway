@@ -5,6 +5,7 @@ import type CreateFightDto from './debug/dto.js';
 import type { IActionEntity, IFight, IFightLogsEntity } from './entity.js';
 import type { IGetFightDto } from './getFights/types.js';
 import type { IGetFightLogsDto } from './getLogs/types.js';
+import type UseSkillDto from './useSkill/dto.js';
 import type * as types from '../../../types/index.js';
 
 export default class Fight extends ReqHandler {
@@ -67,6 +68,25 @@ export default class Fight extends ReqHandler {
       this.service,
       enums.EUserMainTargets.Fight,
       enums.EFightsTargets.Attack,
+      userInfo,
+      data,
+    )) as {
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: { logs: IActionEntity[]; status: enums.EFightStatus };
+    };
+  }
+
+  async useSkill(
+    data: UseSkillDto,
+    userInfo: types.IUserBrokerInfo,
+  ): Promise<{
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: { logs: IActionEntity[]; status: enums.EFightStatus };
+  }> {
+    return (await this.sendReq(
+      this.service,
+      enums.EUserMainTargets.Fight,
+      enums.EFightsTargets.UseSkill,
       userInfo,
       data,
     )) as {

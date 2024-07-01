@@ -127,6 +127,7 @@ export default class Router {
             .then((state) => {
               // #TODO This is temporary. Add some kind of system, which will update profile better, that this
               ws.profile!.state = state.state.state as enums.ECharacterState;
+              console.log('\t\t gate attack',state.state)
               ws.send(JSON.stringify({ ...state, type: enums.ESocketType.Success } as types.ISocketOutMessage));
             })
             .catch((err) => {
@@ -147,14 +148,24 @@ export default class Router {
     const { reqHandler, userId, profile } = ws;
 
     if (!profile) throw new errors.ProfileNotFound();
-    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined! };
 
-    const skills = await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), { userId, tempId: '' });
+    let skills = await State.redis.getCachedSkills(userId);
+
+    if (!skills) {
+      skills = (
+        await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), {
+          userId,
+          tempId: '',
+        })
+      ).payload;
+    }
+    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined!, skills };
 
     const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile.stats }), {
       userId,
       tempId: '',
     });
+
     teams.attacker = {
       _id: userId,
       lvl: profile.lvl,
@@ -176,6 +187,7 @@ export default class Router {
       userId,
       tempId: '',
     });
+
     const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Fight });
     const stateUpdate = await reqHandler.characterState.changeState(characterState, {
       userId,

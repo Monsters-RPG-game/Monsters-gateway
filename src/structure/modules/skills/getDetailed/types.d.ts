@@ -13,5 +13,5 @@ export interface ISingleSkillDetailed {
 export interface ISkillsEntityDetailed {
   _id: string;
   owner: string;
-  singleSkills: ISkillsEntityDetailed[];
+  singleSkills: ISingleSkillDetailed[];
 }
