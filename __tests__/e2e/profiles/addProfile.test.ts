@@ -11,6 +11,7 @@ import State from '../../../src/state.js';
 import { MissingArgError } from '../../../src/errors/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
+import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
 
 describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
@@ -21,6 +22,8 @@ describe('Profiles - add', () => {
   let accessToken: IFakeOidcKey;
   let accessToken2: IFakeOidcKey;
   let accessToken3: IFakeOidcKey;
+  const fakeSkills = fakeData.skills[1] as ISkillsEntityDetailed;
+  const fakeSkills2 = fakeData.skills[0] as ISkillsEntityDetailed;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
   const fakeUser3 = fakeData.users[2] as IUserEntity;
@@ -34,6 +37,8 @@ describe('Profiles - add', () => {
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
     await State.redis.addOidc(accessToken2.key, accessToken2.key, accessToken2.body);
     await State.redis.addOidc(accessToken3.key, accessToken3.key, accessToken3.body);
+    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills2,fakeUser._id);
   });
 
   describe('Should throw', () => {

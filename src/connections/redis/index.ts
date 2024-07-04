@@ -142,14 +142,14 @@ export default class Redis {
       indexes.length === 0
         ? '1'
         : (
-          indexes
-            .map((i) => Number(i.split(':')[1]))
-            .sort((a, b) => {
-              if (a > b) return 1;
-              if (b > 1) return -1;
-              return 0;
-            })[indexes.length - 1]! + 1
-        ).toString();
+            indexes
+              .map((i) => Number(i.split(':')[1]))
+              .sort((a, b) => {
+                if (a > b) return 1;
+                if (b > 1) return -1;
+                return 0;
+              })[indexes.length - 1]! + 1
+          ).toString();
     const liveKey = `${enums.ERedisTargets.PrivateKeys}:${highestNumber}`;
 
     await this.rooster.addToList(
