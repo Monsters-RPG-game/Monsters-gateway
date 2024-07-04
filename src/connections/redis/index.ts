@@ -123,7 +123,6 @@ export default class Redis {
   }
 
   async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
-    console.log('____oidc', {user});
     await this.rooster.addToHash(
       `${enums.ERedisTargets.CachedUser}:${user.account._id}`,
       user.account._id,

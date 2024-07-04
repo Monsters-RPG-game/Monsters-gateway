@@ -8,7 +8,6 @@ import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
   async get(req: express.Request, res: express.Response): Promise<IFight[]> {
-    console.log('______________________1Get')
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler } = locals;
 
@@ -24,7 +23,6 @@ export default class FightRouter extends RouterFactory {
       userId: locals.userId,
       tempId: locals.tempId,
     });
-    console.log('@)@))@@)',payload)
     return this.prepareNames(payload, locals);
   }
 

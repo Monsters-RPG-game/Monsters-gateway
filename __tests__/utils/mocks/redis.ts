@@ -57,6 +57,12 @@ export default class FakeRedis extends Redis {
       resolve();
     });
   }
+
+  override async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
+    return new Promise((resolve) => {
+      resolve(this.skills.find((t) => t._id === id));
+    });
+  }
   override async removeCachedUser(id: string): Promise<void> {
     return new Promise((resolve) => {
       this.cachedUsers = this.cachedUsers.filter((u) => u.account?._id !== id);

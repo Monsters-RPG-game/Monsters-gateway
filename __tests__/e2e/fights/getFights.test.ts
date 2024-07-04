@@ -22,7 +22,7 @@ describe('Fights - getFight', () => {
   } as IProfileEntity;
 
   const data: IGetFightDto = {
-    page: 1,
+    page: 2,
     active: true,
   };
   let accessToken: IFakeOidcKey;
@@ -56,11 +56,11 @@ describe('Fights - getFight', () => {
 
   describe('should pass', () => {
     it('GetFight', async () => {
-      console.log("\t ACcesToken",accessToken)
       fakeBroker.actions.push({
         shouldFail: false,
         returns: { payload: [], target: enums.EMessageTypes.Send },
       });
+      console.log('DATA-----',data)
       const res = await supertest(app).get('/fights').auth(accessToken.key, { type: 'bearer' }).query(data).send();
 
       expect(res.status).toEqual(200);
