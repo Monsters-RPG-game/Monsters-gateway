@@ -7,13 +7,14 @@ import AddProfileDto from '../../../src/structure/modules/profile/add/dto.js';
 describe('Profile - add', () => {
   const addProfile: types.IAddProfileDto = {
     race: EUserRace.Elf,
+    location: 'asdaksjdalhsdf',
   };
 
   describe('Should throw', () => {
     describe('No data passed', () => {
       it(`Missing race`, () => {
         const clone = structuredClone(addProfile);
-        delete clone.race;
+        clone.race = undefined!;
 
         const func = () => new AddProfileDto(clone, 'fakeMap');
 

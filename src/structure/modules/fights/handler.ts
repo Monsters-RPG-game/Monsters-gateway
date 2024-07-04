@@ -62,7 +62,7 @@ export default class Fight extends ReqHandler {
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: { logs: IActionEntity[]; status: enums.EFightStatus };
+    payload: { logs: IActionEntity[]; status: enums.EFightStatus; currentHp: number };
   }> {
     return (await this.sendReq(
       this.service,
@@ -72,7 +72,7 @@ export default class Fight extends ReqHandler {
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: { logs: IActionEntity[]; status: enums.EFightStatus };
+      payload: { logs: IActionEntity[]; status: enums.EFightStatus; currentHp: number };
     };
   }
 

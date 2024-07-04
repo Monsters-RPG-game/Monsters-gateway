@@ -14,7 +14,7 @@ const initFightsRoutes = (router: Router): void => {
     .use(prefix, attack.router)
     .use(prefix, getFight.router)
     .use(prefix, getFightLogs.router)
-    .use(prefix,useSkill.router);
+    .use(prefix, useSkill.router);
 
   // Debug routes
   if (process.env.NODE_ENV !== 'production') {

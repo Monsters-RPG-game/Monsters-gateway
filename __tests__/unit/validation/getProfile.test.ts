@@ -12,7 +12,7 @@ describe('Profile - get', () => {
     describe('No data passed', () => {
       it(`Missing id`, () => {
         const clone = structuredClone(getProfile);
-        delete clone.id;
+        clone.id = undefined!;
         const func = () => new GetProfileDto(clone.id);
 
         expect(func).toThrow(new errors.MissingArgError('id'));

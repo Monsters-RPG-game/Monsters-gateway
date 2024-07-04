@@ -16,6 +16,7 @@ describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
   const addProfile: types.IAddProfileDto = {
     race: enums.EUserRace.Elf,
+    location:"asdasda"
   };
   let accessToken: IFakeOidcKey;
   let accessToken2: IFakeOidcKey;
@@ -39,7 +40,7 @@ describe('Profiles - add', () => {
     describe('No data passed', () => {
       it(`Missing race`, async () => {
         const clone = structuredClone(addProfile);
-        delete clone.race;
+        clone.race=undefined!
 
         fakeBroker.actions.push({
           shouldFail: false,

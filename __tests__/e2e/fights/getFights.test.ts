@@ -22,7 +22,7 @@ describe('Fights - getFight', () => {
   } as IProfileEntity;
 
   const data: IGetFightDto = {
-    page: 2,
+    page: 1,
     active: true,
   };
   let accessToken: IFakeOidcKey;
@@ -56,6 +56,7 @@ describe('Fights - getFight', () => {
 
   describe('should pass', () => {
     it('GetFight', async () => {
+      console.log("ASAASASD",accessToken)
       fakeBroker.actions.push({
         shouldFail: false,
         returns: { payload: [], target: enums.EMessageTypes.Send },

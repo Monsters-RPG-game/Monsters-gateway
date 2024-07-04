@@ -76,7 +76,7 @@
       "party": "64649e334e19dfa5f70fd7ba",
       "state": "map",
       "stats": "64649e344e19dfa5f75fd7db",
-    "skills":"63e55edbe8a800060941121d",
+      "skills": "63e55edbe8a800060941121d",
       "_id": "64649e334e19dfa5f70fd7bd"
     },
     {
@@ -237,10 +237,7 @@
       "name": "Clarence",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeaa5",
       "_id": "6465bd2cc9f753720afeeaa9"
     },
@@ -248,10 +245,7 @@
       "name": "Alia",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeaab",
       "_id": "6465bd2cc9f753720afeeaad"
     },
@@ -259,10 +253,7 @@
       "name": "Scarlet",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeaaf",
       "_id": "6465bd2cc9f753720afeeab1"
     },
@@ -270,10 +261,7 @@
       "name": "Jonah",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeab3",
       "_id": "6465bd2cc9f753720afeeab5"
     },
@@ -281,10 +269,7 @@
       "name": "Jeremy",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeab7",
       "_id": "6465bd2cc9f753720afeeab9"
     },
@@ -292,10 +277,7 @@
       "name": "Amaya",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeabb",
       "_id": "6465bd2cc9f753720afeeabd"
     },
@@ -303,10 +285,7 @@
       "name": "Harun",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeabf",
       "_id": "6465bd2cc9f753720afeeac1"
     },
@@ -314,10 +293,7 @@
       "name": "Florence",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeac3",
       "_id": "6465bd2cc9f753720afeeac5"
     },
@@ -325,10 +301,7 @@
       "name": "Sebastien",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeac7",
       "_id": "6465bd2cc9f753720afeeac9"
     },
@@ -336,10 +309,7 @@
       "name": "Aarav",
       "race": "human",
       "lvl": 1,
-      "exp": [
-        0,
-        10
-      ],
+      "exp": [0, 10],
       "inventory": "6465bd2cc9f753720afeeacb",
       "_id": "6465bd2cc9f753720afeeacd"
     }
@@ -369,7 +339,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f73fd7db",
@@ -377,7 +347,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f72fd7db",
@@ -385,7 +355,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f71fd7db",
@@ -393,7 +363,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f71fd7db",
@@ -401,7 +371,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f70fd7dc",
@@ -409,7 +379,7 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
     },
     {
       "_id": "64649e344e19dfa5f71fd7db",
@@ -417,7 +387,29 @@
       "initialized": true,
       "strength": 1,
       "intelligence": 1,
-      "hp":10
+      "hp": 10
+    }
+  ],
+  "skills": [
+    {
+      "_id": "65edc7bcefd4ecbb6ca8d673",
+      "owner": "65edaf46f08f4b4b8030ff38",
+      "singleSkills": [
+        {
+          "_id": "65edc7bcefd4ecbb6ca8d673",
+          "name": "65edc7bcefd4ecbb6ca8d673",
+          "power": 3,
+          "type": "attack",
+          "target": "enemy"
+        },
+        {
+          "_id": "6672c3bde7d0917cf910fd5d",
+          "name": "65edc7bcefd4ecbb6ca8d670",
+          "power": 100,
+          "type": "support",
+          "target": "teammate"
+        }
+      ]
     }
   ]
 }

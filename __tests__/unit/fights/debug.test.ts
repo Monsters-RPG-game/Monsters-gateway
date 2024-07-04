@@ -4,10 +4,12 @@ import CreateFightDto from '../../../src/structure/modules/fights/debug/dto.js';
 import type { ICreateFightDto, IFightStateTeam } from '../../../src/structure/modules/fights/debug/types.js';
 import { IFightCharacterEntity, IStatsEntity } from '../../../src/structure/modules/npc/entity.js';
 import fakeData from '../../fakeData.json';
+import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
 
 describe('Fights - debug', () => {
   const fakeStats = fakeData.stats[0] as IStatsEntity;
   const fakeCharacter = fakeData.characters[0]!;
+  const fakeSkills = fakeData.skills[0] as ISkillsEntityDetailed;
   const stats = {
     _id: fakeStats._id,
     strength: fakeStats.strength,
@@ -25,6 +27,7 @@ describe('Fights - debug', () => {
   const data: ICreateFightDto = {
     teams: [team, team],
     attacker: character,
+    skills: fakeSkills,
   };
 
   describe('should throw', () => {

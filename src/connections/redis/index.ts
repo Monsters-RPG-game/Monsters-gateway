@@ -94,6 +94,7 @@ export default class Redis {
   }
 
   async addOidc(target: string, id: string, value: unknown): Promise<void> {
+    console.log('____oidc', { target, id, value });
     await this.rooster.addToHash(target, id, typeof value === 'string' ? value : JSON.stringify(value));
   }
 
@@ -122,6 +123,7 @@ export default class Redis {
   }
 
   async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
+    console.log('____oidc', {user});
     await this.rooster.addToHash(
       `${enums.ERedisTargets.CachedUser}:${user.account._id}`,
       user.account._id,

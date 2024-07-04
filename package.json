@@ -17,7 +17,7 @@
     "listErrors": "node_modules/.bin/tsc --skipLibCheck",
     "lintStaged": "npx lint-staged",
     "test": "echo 'If you want to run all the tests, please use makefile'",
-    "test:e2e": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config __tests__/jest.config.e2e.ts",
+    "test:e2e": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config  __tests__/jest.config.e2e.ts",
     "test:db": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config __tests__/jest.config.db.ts",
     "test:unit": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config __tests__/jest.config.unit.ts",
     "migrate:init": "node src/migrations/init.js",
