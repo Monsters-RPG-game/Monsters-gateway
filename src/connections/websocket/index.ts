@@ -368,6 +368,7 @@ export default class WebsocketServer {
 
   private handleServerError(err: Error): void {
     const error = err as IFullError;
+    console.trace('asda')
     Log.error('Socket', error.message, error.stack);
     this.close();
   }

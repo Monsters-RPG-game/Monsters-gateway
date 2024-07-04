@@ -86,6 +86,7 @@ export default class Middleware {
       res.locals.user = user.account;
 
       let skills = await State.redis.getCachedSkills(userId);
+      console.log("SKILLS",skills)
       if (!skills) {
         skills = (
           await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(user.profile!.skills), {

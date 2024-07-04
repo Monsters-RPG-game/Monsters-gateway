@@ -27,7 +27,6 @@ export default class Fight extends ReqHandler {
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
     payload: IFight[];
   }> {
-    console.log("HANDLER DATA",data)
     return (await this.sendReq(
       this.service,
       enums.EUserMainTargets.Fight,

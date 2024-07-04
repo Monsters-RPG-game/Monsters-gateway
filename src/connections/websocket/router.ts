@@ -127,10 +127,10 @@ export default class Router {
             .then((state) => {
               // #TODO This is temporary. Add some kind of system, which will update profile better, that this
               ws.profile!.state = state.state.state as enums.ECharacterState;
-              console.log('\t\t gate attack',state.state)
               ws.send(JSON.stringify({ ...state, type: enums.ESocketType.Success } as types.ISocketOutMessage));
             })
             .catch((err) => {
+              console.log("-2-2--2-2-2-",err)
               Log.error('Socket read message error', err);
               ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
             });
