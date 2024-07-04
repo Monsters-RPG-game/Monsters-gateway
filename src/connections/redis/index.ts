@@ -94,7 +94,6 @@ export default class Redis {
   }
 
   async addOidc(target: string, id: string, value: unknown): Promise<void> {
-    console.log('____oidc', { target, id, value });
     await this.rooster.addToHash(target, id, typeof value === 'string' ? value : JSON.stringify(value));
   }
 

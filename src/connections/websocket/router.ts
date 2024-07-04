@@ -130,7 +130,6 @@ export default class Router {
               ws.send(JSON.stringify({ ...state, type: enums.ESocketType.Success } as types.ISocketOutMessage));
             })
             .catch((err) => {
-              console.log("-2-2--2-2-2-",err)
               Log.error('Socket read message error', err);
               ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
             });
