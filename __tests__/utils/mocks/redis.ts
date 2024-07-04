@@ -4,9 +4,11 @@ import type { IProfileEntity } from '../../../src/structure/modules/profile/enti
 import type { ICachedUser } from '../../../src/types/index.js';
 import * as enums from '../../../src/enums/index.js';
 import type { AdapterPayload } from 'oidc-provider';
+import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
 
 export default class FakeRedis extends Redis {
   private _cachedUsers: ICachedUser[] = [];
+  private _skills: ISkillsEntityDetailed[] = [];
   private _accountsToRemove: string[] = [];
   private _accessTokens: AdapterPayload[] = [];
 
@@ -38,6 +40,10 @@ export default class FakeRedis extends Redis {
     this._cachedUsers = value;
   }
 
+  public get skills(): ISkillsEntityDetailed[] {
+    return this._skills;
+  }
+
   override async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
     return new Promise((resolve) => {
       this.cachedUsers.push(user);
@@ -45,6 +51,12 @@ export default class FakeRedis extends Redis {
     });
   }
 
+  override async addCachedSkills(skills: ISkillsEntityDetailed, _userId: string): Promise<void> {
+    return new Promise((resolve) => {
+      this.skills.push(skills);
+      resolve();
+    });
+  }
   override async removeCachedUser(id: string): Promise<void> {
     return new Promise((resolve) => {
       this.cachedUsers = this.cachedUsers.filter((u) => u.account?._id !== id);

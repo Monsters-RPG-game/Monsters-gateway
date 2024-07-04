@@ -57,8 +57,6 @@ const service = new Router();
  */
 service.router.get('/', limitRate, async (req, res) => {
   try {
-
-    console.log('______________________0')
     const data = await service.get(req, res);
     res.status(200).send({ data });
   } catch (err) {

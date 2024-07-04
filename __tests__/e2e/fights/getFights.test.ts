@@ -56,7 +56,7 @@ describe('Fights - getFight', () => {
 
   describe('should pass', () => {
     it('GetFight', async () => {
-      console.log("ASAASASD",accessToken)
+      console.log("\t ACcesToken",accessToken)
       fakeBroker.actions.push({
         shouldFail: false,
         returns: { payload: [], target: enums.EMessageTypes.Send },

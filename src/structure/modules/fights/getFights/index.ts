@@ -8,7 +8,7 @@ import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
   async get(req: express.Request, res: express.Response): Promise<IFight[]> {
-    console.log('______________________1')
+    console.log('______________________1Get')
     const locals = res.locals as types.IUsersTokens;
     const { reqHandler } = locals;
 
