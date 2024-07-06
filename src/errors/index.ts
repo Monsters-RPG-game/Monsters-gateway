@@ -409,3 +409,12 @@ export class AwaitingAuthorizationError extends FullError {
     this.status = 403;
   }
 }
+
+export class ProfileNotFound extends FullError {
+  constructor() {
+    super('ProfileNotFound');
+    this.message = 'User profile was not found';
+    this.name = 'ProfileNotFound';
+    this.status = 404;
+  }
+}

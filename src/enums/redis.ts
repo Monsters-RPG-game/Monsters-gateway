@@ -4,4 +4,5 @@ export enum ERedisTargets {
   CachedUser = 'cachedUsers',
   Oidc = 'oidc',
   PrivateKeys = 'privateKeys',
+  CachedSkills = 'cachedSkills',
 }

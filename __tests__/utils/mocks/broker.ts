@@ -41,6 +41,7 @@ export default class FakeBroker extends Broker {
     _payload?: types.IRabbitConnectionData[T],
   ): void {
     const action = this.actions[0];
+    console.log('\taaaa',action?.returns?.payload)
     if (!action) {
       this.actions = this.actions.slice(1, this.actions.length);
       return resolve({ type: EMessageTypes.Send, payload: {} });

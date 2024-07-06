@@ -10,6 +10,7 @@ import type AttackDto from '../structure/modules/fights/attack/dto.js';
 import type CreateFightDto from '../structure/modules/fights/debug/dto.js';
 import type { IGetFightDto } from '../structure/modules/fights/getFights/types.js';
 import type { IGetFightLogsDto } from '../structure/modules/fights/getLogs/types.js';
+import type UseSkillDto from '../structure/modules/fights/useSkill/dto.js';
 import type InventoryDropDto from '../structure/modules/inventory/drop/dto.js';
 import type InventoryAddDto from '../structure/modules/inventory/use/dto.js';
 import type { ICreateMapDto } from '../structure/modules/maps/create/types.js';
@@ -38,6 +39,7 @@ import type AddExpDto from 'structure/modules/profile/addExp/dto.js';
 import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
 import type AddSkillsDto from 'structure/modules/skills/add/dto.js';
 import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
+import type GetDetailedSkillsDto from 'structure/modules/skills/getDetailed/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileTargets
@@ -80,6 +82,7 @@ export interface IFightConnectionData {
   [enums.EFightsTargets.Attack]: AttackDto;
   [enums.EFightsTargets.GetLogs]: IGetFightLogsDto;
   [enums.EFightsTargets.GetFights]: IGetFightDto;
+  [enums.EFightsTargets.UseSkill]: UseSkillDto;
 }
 
 export interface IInventoryConnectionData {
@@ -119,6 +122,7 @@ export interface IPartyConnectionData {
 export interface ISkillsConnectionData {
   [enums.ESkillsTargets.GetSkills]: GetSkillsDto;
   [enums.ESkillsTargets.AddSkills]: AddSkillsDto;
+  [enums.ESkillsTargets.GetDetailedSkills]: GetDetailedSkillsDto;
 }
 
 export interface ISingleSkillConnectionData {

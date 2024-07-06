@@ -7,6 +7,9 @@ import * as enums from '../../enums/index.js';
  */
 export default class Log {
   static error(target: string, ...messages: unknown[]): void {
+    if (process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production') {
+      console.trace(target);
+    }
     messages.forEach((m) => {
       Log.buildLog(() => chalk.red(`Log.ERROR: ${target}`), enums.ELogTypes.Error, m);
     });

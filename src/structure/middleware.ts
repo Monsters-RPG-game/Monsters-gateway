@@ -5,6 +5,7 @@ import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
 import GetProfileDto from './modules/profile/get/dto.js';
+import GetDetailedSkillsDto from './modules/skills/getDetailed/dto.js';
 import UserDetailsDto from './modules/user/details/dto.js';
 import ReqHandler from './reqHandler.js';
 import { EUserTypes } from '../enums/index.js';
@@ -66,6 +67,8 @@ export default class Middleware {
   }
 
   static async initUserProfile(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    const reqHandler = new ReqHandler();
+
     if (Middleware.shouldSkipUserValidation(req)) {
       return next();
     }
@@ -81,6 +84,18 @@ export default class Middleware {
 
       res.locals.profile = user.profile;
       res.locals.user = user.account;
+
+      let skills = await State.redis.getCachedSkills(userId);
+      if (!skills) {
+        skills = (
+          await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(user.profile!.skills), {
+            userId,
+            tempId: '',
+          })
+        ).payload;
+
+        await State.redis.addCachedSkills(skills, userId);
+      }
 
       return next();
     } catch (err) {
@@ -147,6 +162,7 @@ export default class Middleware {
       );
       throw new errors.IncorrectTokenError();
     }
+
     await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
     return user;
   }

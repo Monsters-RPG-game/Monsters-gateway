@@ -10,14 +10,16 @@ import fakeData from '../../fakeData.json';
 import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
+import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
 
 describe('Fights - getFight', () => {
   const fakeBroker = State.broker as FakeBroker;
   const fakeUser = fakeData.users[0] as IUserEntity;
+  const fakeSkills = fakeData.skills[0] as ISkillsEntityDetailed;
   const fakeProfile = {
     ...fakeData.profiles[0],
     initialized: true,
-    skills:"63e55edbe8a800060941121d",
+    skills: '65edc7bcefd4ecbb6ca8d673',
     state: enums.ECharacterState.Fight,
   } as IProfileEntity;
 
@@ -31,6 +33,7 @@ describe('Fights - getFight', () => {
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
     await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
+    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
 

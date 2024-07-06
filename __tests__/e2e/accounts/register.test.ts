@@ -11,15 +11,15 @@ import { generateRandomName } from '../../../src/utils/index.js';
 
 describe('Register', () => {
   const fakeBroker = State.broker as FakeBroker;
-  const registerData: types.IRegisterDto = fakeData.users[2];
-  const registerData2: types.IRegisterDto = fakeData.users[3];
+  const registerData: types.IRegisterDto = fakeData.users[2]!;
+  const registerData2: types.IRegisterDto = fakeData.users[3]!;
   const { app } = State.router;
 
   describe('Should throw', () => {
     describe('No data passed', () => {
       it(`Missing login`, async () => {
         const clone = structuredClone(registerData);
-        delete clone.login;
+        clone.login = undefined!;
         const res = await supertest(app).post('/users/register').send(clone);
         const body = res.body as { error: IFullError };
 
@@ -29,7 +29,7 @@ describe('Register', () => {
 
       it(`Missing password`, async () => {
         const clone = structuredClone(registerData);
-        delete clone.password;
+        clone.password = undefined!;
 
         const res = await supertest(app).post('/users/register').send(clone);
         const body = res.body as { error: IFullError };
@@ -40,7 +40,7 @@ describe('Register', () => {
 
       it(`Missing email`, async () => {
         const clone = structuredClone(registerData);
-        delete clone.email;
+        clone.email = undefined!;
 
         const res = await supertest(app).post('/users/register').send(clone);
         const body = res.body as { error: IFullError };

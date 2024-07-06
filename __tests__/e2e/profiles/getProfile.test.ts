@@ -12,11 +12,13 @@ import { FakeBroker } from '../../utils/mocks/index.js';
 import * as errors from '../../../src/errors/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import { fakeAccessToken } from '../../utils/index.js';
+import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
 
 describe('Profiles = get', () => {
   const fakeBroker = State.broker as FakeBroker;
   const fakeUser = fakeData.users[0] as IUserEntity;
-  const getProfile: types.IGetProfileDto = {
+  const fakeSkills = fakeData.skills[0] as ISkillsEntityDetailed;
+  const getProfile: types.IUserDetailsDto = {
     name: fakeUser.login,
   };
   let accessToken: IFakeOidcKey;
@@ -25,6 +27,7 @@ describe('Profiles = get', () => {
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
 
+    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
 
