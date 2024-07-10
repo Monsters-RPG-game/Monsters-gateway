@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, describe, expect, it, afterEach } from '@jest/globals';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import fakeData from '../../fakeData.json';
@@ -25,7 +25,7 @@ describe('Remove', () => {
   const fakeProfile = {
     ...fakeData.profiles[0],
     initialized: true,
-    skills:"63e55edbe8a800060941121d",
+    skills: "63e55edbe8a800060941121d",
     state: enums.ECharacterState.Fight,
   } as IProfileEntity;
 
@@ -39,6 +39,10 @@ describe('Remove', () => {
     await State.redis.addCachedUser({ account: fakeUserEntity, profile: fakeProfile });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('Should throw', () => {
     describe('Missing data', () => {
@@ -61,10 +65,10 @@ describe('Remove', () => {
   describe('Should pass', () => {
     it(`Remove User`, async () => {
       await State.redis.addAccountToRemove(fakeUser._id);
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: {}, target: EMessageTypes.Send },
-      });
+      }, enums.EUserTargets.Remove)
 
       const res = await supertest(app).post('/users/remove').auth(accessToken.key, { type: 'bearer' }).send(data);
       const body = res.body;

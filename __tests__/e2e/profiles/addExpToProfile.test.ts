@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
@@ -25,20 +25,26 @@ describe('Profiles - addExp', () => {
 
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
+    await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
-    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('Should pass', () => {
     it(`AddExp`, async () => {
       const target = [{ state: fakeProfile }] as unknown as Record<string, unknown>;
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: target,
           target: enums.EMessageTypes.Send,
         },
-      });
+      }, enums.EProfileTargets.AddExp)
+
       const res = await supertest(app).post('/profile/exp').auth(accessToken.key, { type: 'bearer' }).send(payload);
 
       expect(res.status).toEqual(200);

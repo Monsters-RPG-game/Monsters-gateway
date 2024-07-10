@@ -3,7 +3,6 @@ import { IFullError } from '../../../src/types/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
-import * as errors from '../../../src/errors/index.js'
 import fakeData from '../../fakeData.json';
 import * as types from '../../types/index.js';
 import { IFakeOidcKey } from '../../types/index.js';
@@ -58,7 +57,7 @@ describe('Profiles - add', () => {
                 _id: fakeUser._id,
                 login: fakeUser.login,
                 verified: false,
-                type: enums.EUserTypes.User,
+                type: EUserTypes.User,
               },
             ],
             target: enums.EMessageTypes.Send,
@@ -78,7 +77,7 @@ describe('Profiles - add', () => {
 
         const res = await supertest(app).post('/profile').auth(accessToken.key, { type: 'bearer' }).send(clone);
         const body = res.body as { error: IFullError };
-        const target = new errors.MissingArgError('race');
+        const target = new MissingArgError('race');
 
         expect(body.error.message).toEqual(target.message);
       });
