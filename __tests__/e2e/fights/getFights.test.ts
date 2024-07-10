@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js';
@@ -33,18 +33,23 @@ describe('Fights - getFight', () => {
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
     await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
-    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('should throw', () => {
     describe('no data pass', () => {
       it('missing active', async () => {
         const target = new errors.MissingArgError('active') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EFightsTargets.GetFights)
+
         const res = await supertest(app)
           .get('/fights')
           .auth(accessToken.key, { type: 'bearer' })
@@ -59,10 +64,11 @@ describe('Fights - getFight', () => {
 
   describe('should pass', () => {
     it('GetFight', async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: [], target: enums.EMessageTypes.Send },
-      });
+      }, enums.EFightsTargets.GetFights)
+
       const res = await supertest(app).get('/fights').auth(accessToken.key, { type: 'bearer' }).query(data).send();
 
       expect(res.status).toEqual(200);

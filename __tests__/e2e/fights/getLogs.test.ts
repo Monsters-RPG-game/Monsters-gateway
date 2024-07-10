@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js';
@@ -17,7 +17,7 @@ describe('Fights-getLogs', () => {
   const fakeProfile = {
     ...fakeData.profiles[0],
     initialized: true,
-    skills:"63e55edbe8a800060941121d",
+    skills: "63e55edbe8a800060941121d",
     state: enums.ECharacterState.Fight,
   } as IProfileEntity;
   let accessToken: IFakeOidcKey;
@@ -32,14 +32,20 @@ describe('Fights-getLogs', () => {
     await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
+
   describe('should throw', () => {
     describe('No data passed', () => {
       it('missing id', async () => {
         const target = new errors.MissingArgError('id') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EFightsTargets.GetLogs)
+
         const res = await supertest(app)
           .get('/fights/logs')
           .auth(accessToken.key, { type: 'bearer' })
@@ -54,10 +60,10 @@ describe('Fights-getLogs', () => {
 
   describe('should pass', () => {
     it('getLogs', async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: [], target: enums.EMessageTypes.Send },
-      });
+      }, enums.EFightsTargets.GetLogs)
       const res = await supertest(app).get('/fights/logs').auth(accessToken.key, { type: 'bearer' }).query(data);
 
       expect(res.status).toEqual(200);

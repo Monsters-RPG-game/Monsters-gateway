@@ -1,14 +1,13 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import { IFullError } from '../../../src/types/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
-import { EUserTypes } from '../../../src/enums/index.js';
+import * as errors from '../../../src/errors/index.js'
 import fakeData from '../../fakeData.json';
 import * as types from '../../types/index.js';
 import { IFakeOidcKey } from '../../types/index.js';
 import State from '../../../src/state.js';
-import { MissingArgError } from '../../../src/errors/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
@@ -17,37 +16,41 @@ describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
   const addProfile: types.IAddProfileDto = {
     race: enums.EUserRace.Elf,
-    location:"asdasda"
+    location: "asdasda"
   };
   let accessToken: IFakeOidcKey;
   let accessToken2: IFakeOidcKey;
-  let accessToken3: IFakeOidcKey;
   const fakeSkills = fakeData.skills[1] as ISkillsEntityDetailed;
-  const fakeSkills2 = fakeData.skills[0] as ISkillsEntityDetailed;
+  const fakeSkills2 = fakeData.skills[1] as ISkillsEntityDetailed;
   const fakeUser = fakeData.users[0] as IUserEntity;
+  const fakeProfile = fakeData.profiles[0] as types.IProfileEntity
   const fakeUser2 = fakeData.users[1] as IUserEntity;
-  const fakeUser3 = fakeData.users[2] as IUserEntity;
+  const fakeProfile2 = fakeData.profiles[1] as types.IProfileEntity
   const { app } = State.router;
 
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
     accessToken2 = fakeAccessToken(fakeUser2._id, 2);
-    accessToken3 = fakeAccessToken(fakeUser3._id, 3);
 
+    await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
+    await State.redis.addCachedUser({ account: fakeUser2, profile: fakeProfile2 });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
     await State.redis.addOidc(accessToken2.key, accessToken2.key, accessToken2.body);
-    await State.redis.addOidc(accessToken3.key, accessToken3.key, accessToken3.body);
-    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
-    await State.redis.addCachedSkills(fakeSkills2,fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills2, fakeUser2._id);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('Should throw', () => {
     describe('No data passed', () => {
       it(`Missing race`, async () => {
         const clone = structuredClone(addProfile);
-        clone.race=undefined!
+        clone.race = undefined!
 
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: false,
           returns: {
             payload: [
@@ -55,24 +58,27 @@ describe('Profiles - add', () => {
                 _id: fakeUser._id,
                 login: fakeUser.login,
                 verified: false,
-                type: EUserTypes.User,
+                type: enums.EUserTypes.User,
               },
             ],
             target: enums.EMessageTypes.Send,
           },
-        });
-        fakeBroker.actions.push({
+        }, enums.EUserTargets.GetName)
+
+        fakeBroker.addAction({
           shouldFail: false,
           returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
-        });
-        fakeBroker.actions.push({
+        }, enums.ECharacterLocationTargets.Create)
+
+        fakeBroker.addAction({
           shouldFail: false,
           returns: { payload: { _id: fakeUser._id, initialized: false }, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EProfileTargets.Get)
+
 
         const res = await supertest(app).post('/profile').auth(accessToken.key, { type: 'bearer' }).send(clone);
         const body = res.body as { error: IFullError };
-        const target = new MissingArgError('race');
+        const target = new errors.MissingArgError('race');
 
         expect(body.error.message).toEqual(target.message);
       });
@@ -81,10 +87,35 @@ describe('Profiles - add', () => {
     describe('Incorrect data', () => {
       it(`Incorrect race`, async () => {
         const target = new Error('race has incorrect type') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: {
+            payload: [
+              {
+                _id: fakeUser._id,
+                login: fakeUser.login,
+                verified: false,
+                type: enums.EUserTypes.User,
+              },
+            ],
+            target: enums.EMessageTypes.Send,
+          },
+        }, enums.EUserTargets.GetName)
+
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
+        }, enums.EProfileTargets.Get)
+
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
+        }, enums.ECharacterLocationTargets.Create)
+
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EProfileTargets.Create)
 
         const res = await supertest(app)
           .post('/profile')
@@ -97,12 +128,37 @@ describe('Profiles - add', () => {
 
       it(`Profile already exists`, async () => {
         const target = new Error('Profile already initialized') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: {
+            payload: [
+              {
+                _id: fakeUser2._id,
+                login: fakeUser2.login,
+                verified: false,
+                type: enums.EUserTypes.User,
+              },
+            ],
+            target: enums.EMessageTypes.Send,
+          },
+        }, enums.EUserTargets.GetName)
+
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: { payload: { _id: fakeUser2._id }, target: enums.EMessageTypes.Send },
+        }, enums.EProfileTargets.Get)
+
+        fakeBroker.addAction({
+          shouldFail: false,
+          returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
+        }, enums.ECharacterLocationTargets.Create)
+
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EProfileTargets.Create)
 
-        const res = await supertest(app).post('/profile').auth(accessToken3.key, { type: 'bearer' }).send(addProfile);
+        const res = await supertest(app).post('/profile').auth(accessToken2.key, { type: 'bearer' }).send(addProfile);
         const body = res.body as { error: IFullError };
 
         expect(body.error.message).toEqual('Profile already initialized');
@@ -112,7 +168,7 @@ describe('Profiles - add', () => {
 
   describe('Should pass', () => {
     it(`Add profile`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -120,30 +176,28 @@ describe('Profiles - add', () => {
               _id: fakeUser._id,
               login: fakeUser.login,
               verified: false,
-              type: EUserTypes.User,
+              type: enums.EUserTypes.User,
             },
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
-      });
-      fakeBroker.actions.push({
-        shouldFail: false,
-        returns: { payload: { id: 'testMap' }, target: enums.EMessageTypes.Send },
-      });
-      fakeBroker.actions.push({
+      }, enums.ECharacterLocationTargets.Create)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id, initialized: false }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Create)
+
       const res = await supertest(app)
         .post('/profile')
         .auth(accessToken2.key, { type: 'bearer' })
         .send({ ...addProfile });
 
-      console.log('aaa', res.body)
       expect(res.status).toEqual(200);
     });
   });

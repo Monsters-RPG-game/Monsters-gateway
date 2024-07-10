@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it, afterEach } from '@jest/globals';
 import { IFullError } from '../../../src/types/index.js';
 import * as types from '../../types/index.js';
 import supertest from 'supertest';
@@ -6,7 +6,7 @@ import fakeData from '../../fakeData.json';
 import State from '../../../src/state.js';
 import { UsernameAlreadyInUseError } from '../../../src/errors/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
-import { EMessageTypes } from '../../../src/enums/index.js';
+import { EMessageTypes, EUserTargets } from '../../../src/enums/index.js';
 import { generateRandomName } from '../../../src/utils/index.js';
 
 describe('Register', () => {
@@ -14,6 +14,10 @@ describe('Register', () => {
   const registerData: types.IRegisterDto = fakeData.users[2]!;
   const registerData2: types.IRegisterDto = fakeData.users[3]!;
   const { app } = State.router;
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('Should throw', () => {
     describe('No data passed', () => {
@@ -53,10 +57,10 @@ describe('Register', () => {
     describe('Incorrect data', () => {
       it(`Selected username is already in use`, async () => {
         const target = new UsernameAlreadyInUseError() as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app).post('/users/register').send(fakeData.users[0]);
         const body = res.body as { error: IFullError };
@@ -68,10 +72,10 @@ describe('Register', () => {
         const target = new Error(
           'login should only contain letters, numbers and special characters',
         ) as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -86,10 +90,10 @@ describe('Register', () => {
           string,
           unknown
         >;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -104,10 +108,10 @@ describe('Register', () => {
           string,
           unknown
         >;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -125,10 +129,10 @@ describe('Register', () => {
         const target = new Error(
           'password should contain at least 8 characters with: at least 1 digit, 1 letter, 1 upper case letter and 1 lower case letter',
         ) as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -145,10 +149,10 @@ describe('Register', () => {
           string,
           unknown
         >;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -163,10 +167,10 @@ describe('Register', () => {
           string,
           unknown
         >;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -182,10 +186,10 @@ describe('Register', () => {
 
       it(`Email incorrect`, async () => {
         const target = new Error('email invalid') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: EMessageTypes.Send },
-        });
+        }, EUserTargets.Register)
 
         const res = await supertest(app)
           .post('/users/register')
@@ -199,10 +203,10 @@ describe('Register', () => {
 
   describe('Should pass', () => {
     it(`Validated register`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: {}, target: EMessageTypes.Send },
-      });
+      }, EUserTargets.Register)
 
       const res = await supertest(app)
         .post('/users/register')

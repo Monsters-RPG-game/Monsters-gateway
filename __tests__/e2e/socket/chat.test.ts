@@ -77,6 +77,10 @@ describe('Socket - chat', () => {
     State.keys = { keys: [] };
   });
 
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
+
   describe('Should throw', () => {
     describe('Not logged in', () => {
       let client2: IClient;
@@ -114,7 +118,7 @@ describe('Socket - chat', () => {
     });
 
     it(`Get message from db`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -127,13 +131,14 @@ describe('Socket - chat', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Get)
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {
@@ -147,7 +152,8 @@ describe('Socket - chat', () => {
           },
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
+
       await client2.connect(client2Options);
       const userMessage = (await client2.sendAsyncMessage(getMessage)) as ISocketOutMessage;
 
@@ -156,7 +162,7 @@ describe('Socket - chat', () => {
     });
 
     it(`Read chat`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -169,13 +175,14 @@ describe('Socket - chat', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Get)
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {
@@ -189,12 +196,12 @@ describe('Socket - chat', () => {
           },
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
 
       await client2.connect(client2Options);
       const userMessage = (await client2.sendAsyncMessage(getMessage, { timeout: 100 })) as ISocketOutMessage;
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {
@@ -208,7 +215,7 @@ describe('Socket - chat', () => {
           },
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
 
       const userMessage2 = (await client2.sendAsyncMessage(
         {
@@ -222,23 +229,21 @@ describe('Socket - chat', () => {
       )) as ISocketOutMessage;
       expect(userMessage2?.type).toEqual(ESocketType.Success);
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {},
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.GetUnread)
 
       const userMessage3 = (await client2.sendAsyncMessage(getUnread, { timeout: 100 })) as ISocketOutMessage;
-      console.log('message')
-      console.log(JSON.stringify(userMessage3))
       expect(Object.keys(userMessage3?.payload as Record<string, string>).length).toEqual(0);
       client2.disconnect();
     });
 
     it(`Get with details`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -251,14 +256,14 @@ describe('Socket - chat', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Get)
 
-
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {
@@ -272,13 +277,14 @@ describe('Socket - chat', () => {
           },
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
 
       await client2.connect(client2Options);
 
       const userMessage = (await client2.sendAsyncMessage(getMessage, { timeout: 100 })) as ISocketOutMessage;
       expect(Object.keys((userMessage?.payload as Record<string, string>) ?? {}).length).toBeGreaterThan(0);
-      fakeBroker.actions.push({
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -291,9 +297,9 @@ describe('Socket - chat', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -307,7 +313,7 @@ describe('Socket - chat', () => {
           ],
           target: EMessageTypes.Send,
         },
-      });
+      }, enums.EChatTargets.Get)
 
       const userMessage2 = (await client2.sendAsyncMessage({
         ...getWithDetails,

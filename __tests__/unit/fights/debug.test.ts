@@ -82,7 +82,6 @@ describe('Fights - debug', () => {
         try {
           new CreateFightDto(clone);
         } catch (err) {
-          console.log('-----', err);
           expect(err).toEqual(new errors.IncorrectArgTypeError('attacker'));
         }
       });

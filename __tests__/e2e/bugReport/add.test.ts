@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, describe, expect, it, afterEach } from '@jest/globals';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js';
@@ -32,6 +32,10 @@ describe('BugReport - add', () => {
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
 
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
+
   const { app } = State.router;
 
   describe('should throw', () => {
@@ -46,10 +50,11 @@ describe('BugReport - add', () => {
       });
       it('missing user', async () => {
         const target = new errors.MissingArgError('user') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EBugReportTargets.AddBugReport)
+
         const res = await supertest(app).post('/bug').auth(accessToken.key, { type: 'bearer' }).send(payload);
         const body = res.body as { error: IFullError };
 
