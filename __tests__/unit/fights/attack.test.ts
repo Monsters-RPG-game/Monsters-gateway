@@ -27,7 +27,6 @@ describe('Fights - attack', () => {
         clone.target = 'as';
         try {
           new AttackDto(clone);
-          console.log('ok');
         } catch (err) {
           expect(err).toEqual(new errors.IncorrectArgTypeError('target'));
         }

@@ -29,7 +29,7 @@ export default class Log {
 
   static debug(target: string, ...messages: unknown[]): void {
     messages.forEach((m) => {
-      Log.buildLog(() => chalk.blueBright(`Log.Debug: ${target}`), enums.ELogTypes.Debug, m);
+      Log.buildLog(() => chalk.magenta(`Log.Debug: ${target}`), enums.ELogTypes.Debug, m);
     });
   }
 

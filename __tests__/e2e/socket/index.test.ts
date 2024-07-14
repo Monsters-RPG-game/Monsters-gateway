@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
+import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/globals';
 import fakeData from '../../fakeData.json';
 import Utils from '../../utils/utils.js';
 import * as enums from '../../../src/enums/index.js';
@@ -45,7 +45,8 @@ describe('Socket - generic tests', () => {
     // Well. ESM borked plenty of stuff for reasons unknown to me...
     server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
     client = server.createClient();
-    fakeBroker.actions.push({
+
+    fakeBroker.addAction({
       shouldFail: false,
       returns: {
         payload: [
@@ -58,11 +59,12 @@ describe('Socket - generic tests', () => {
         ],
         target: enums.EMessageTypes.Send,
       },
-    });
-    fakeBroker.actions.push({
+    }, enums.EUserTargets.GetName)
+
+    fakeBroker.addAction({
       shouldFail: false,
       returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-    });
+    }, enums.EProfileTargets.Get)
 
     await client.connect(clientOptions);
   });
@@ -72,10 +74,16 @@ describe('Socket - generic tests', () => {
     State.keys = { keys: [] };
   });
 
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
+
   describe('Should throw', () => {
     describe('Not logged in', () => {
       it(`User not logged in`, async () => {
-        fakeBroker.actions.push({
+
+
+        fakeBroker.addAction({
           shouldFail: false,
           returns: {
             payload: [
@@ -88,11 +96,12 @@ describe('Socket - generic tests', () => {
             ],
             target: enums.EMessageTypes.Send,
           },
-        });
-        fakeBroker.actions.push({
+        }, enums.EUserTargets.GetName)
+
+        fakeBroker.addAction({
           shouldFail: false,
           returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EProfileTargets.Get)
 
         const client2 = server.createClient();
         await client2.connect();
@@ -171,10 +180,10 @@ describe('Socket - generic tests', () => {
         const clone = structuredClone(message);
         clone.payload.target = 'a';
 
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: targetErr, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EChatTargets.Send)
 
         const m = (await client.sendAsyncMessage(clone)) as ISocketOutMessage;
         const { name } = m.payload as IFullError;
@@ -192,10 +201,10 @@ describe('Socket - generic tests', () => {
           clone.payload.message += 'A';
         }
 
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: targetErr, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EChatTargets.Send)
 
         const m = (await client.sendAsyncMessage(clone)) as ISocketOutMessage;
         const { name } = m.payload as IFullError;
@@ -209,10 +218,10 @@ describe('Socket - generic tests', () => {
         const clone = structuredClone(message);
         clone.payload.target = 'a';
 
-        fakeBroker.actions.push({
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: targetErr, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EChatTargets.Send)
 
         const m = (await client.sendAsyncMessage(clone)) as ISocketOutMessage;
         const { name } = m.payload as IFullError;
@@ -224,7 +233,8 @@ describe('Socket - generic tests', () => {
 
   describe('Should pass', () => {
     it(`Message sent`, async () => {
-      fakeBroker.actions.push({
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -237,22 +247,23 @@ describe('Socket - generic tests', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Get)
 
       const client2 = server.createClient();
       await client2.connect(client2Options);
 
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: {},
           target: enums.EMessageTypes.Send,
         },
-      });
+      }, enums.EMessagesTargets.Send)
 
       await client.sendAsyncMessage(message);
       await utils.sleep(100);

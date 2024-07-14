@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from '@jest/globals';
+import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import { IFullError } from '../../../src/types/index.js';
 import supertest from 'supertest';
 import fakeData from '../../fakeData.json';
@@ -27,18 +27,23 @@ describe('Profiles = get', () => {
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
 
-    await State.redis.addCachedSkills(fakeSkills,fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
+
+  afterEach(() => {
+    fakeBroker.getStats()
+  })
 
   describe('Should throw', () => {
     describe('No data passed', () => {
       it(`Missing name`, async () => {
         const target = new errors.MissingArgError('name') as unknown as Record<string, unknown>;
-        fakeBroker.actions.push({
+
+        fakeBroker.addAction({
           shouldFail: true,
           returns: { payload: target, target: enums.EMessageTypes.Send },
-        });
+        }, enums.EProfileTargets.Get)
 
         const res = await supertest(app)
           .get('/profile')
@@ -54,7 +59,7 @@ describe('Profiles = get', () => {
 
   describe('Should pass', () => {
     it(`Got profile`, async () => {
-      fakeBroker.actions.push({
+      fakeBroker.addAction({
         shouldFail: false,
         returns: {
           payload: [
@@ -67,11 +72,12 @@ describe('Profiles = get', () => {
           ],
           target: enums.EMessageTypes.Send,
         },
-      });
-      fakeBroker.actions.push({
+      }, enums.EUserTargets.GetName)
+
+      fakeBroker.addAction({
         shouldFail: false,
         returns: { payload: { _id: fakeUser._id }, target: enums.EMessageTypes.Send },
-      });
+      }, enums.EProfileTargets.Get)
 
       const res = await supertest(app)
         .get('/profile')
