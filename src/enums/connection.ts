@@ -15,6 +15,7 @@ export enum EServices {
   Users = 'users',
   Maps = 'maps',
   Messages = 'messages',
+  Story = 'story',
 }
 
 export enum EAmqQueues {
@@ -23,4 +24,5 @@ export enum EAmqQueues {
   Users = 'usersQueue',
   Maps = 'mapsQueue',
   Messages = 'messagesQueue',
+  Story = 'storyQueue',
 }

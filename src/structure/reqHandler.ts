@@ -12,6 +12,7 @@ import Profile from './modules/profile/handler.js';
 import SingleSkill from './modules/singleSkill/handler.js';
 import Skills from './modules/skills/handler.js';
 import Stats from './modules/stats/handler.js';
+import NpcStory from './modules/story/handler.js';
 import User from './modules/user/handler.js';
 import * as enums from '../enums/index.js';
 import State from '../state.js';
@@ -31,6 +32,7 @@ export default class ReqHandler {
   singleSkill: SingleSkill;
   fights: Fights;
   profile: Profile;
+  npcStory:NpcStory;
   message: Message;
   inventory: Inventory;
   bugReport: BugReport;
@@ -59,6 +61,7 @@ export default class ReqHandler {
     this.singleSkill = new SingleSkill(enums.EServices.Users, action);
     this.fights = new Fights(enums.EServices.Fights, action);
     this.profile = new Profile(enums.EServices.Users, action);
+    this.npcStory=new NpcStory(enums.EServices.Story,action)
     this.message = new Message(enums.EServices.Messages, action);
     this.inventory = new Inventory(enums.EServices.Users, action);
     this.bugReport = new BugReport(enums.EServices.Users, action);

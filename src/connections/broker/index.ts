@@ -22,6 +22,7 @@ export default class Broker {
     [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
+    [enums.EServices.Story]: { timeout: null, retries: 0, dead: true },
   };
   private readonly _controller: Controller;
   private _channel: amqplib.Channel | null = null;
@@ -264,6 +265,9 @@ export default class Broker {
         break;
       case enums.EServices.Fights:
         await this.channel!.purgeQueue(enums.EAmqQueues.Fights);
+        break;
+      case enums.EServices.Story:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Story);
         break;
       default:
         Log.error('Socket', 'Got req to close socket that does not exist');

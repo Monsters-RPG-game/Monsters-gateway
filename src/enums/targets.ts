@@ -9,6 +9,7 @@ export enum EUserMainTargets {
   Fight = 'fight',
   Profile = 'profile',
   Skills = 'skills',
+  NpcStory = 'npcStory',
   SingleSkill = 'singleSkill',
   Message = 'message',
   BugReport = 'bugReport',
@@ -55,7 +56,10 @@ export enum ESkillsTargets {
   GetDetailedSkills = 'getDetailedSkills',
   AddSkills = 'addSkills',
 }
-
+export enum ENpcStoryTargets {
+  GetNpcStory = 'getNpcStory',
+  GetNpcIntent = 'getNpcIntent',
+}
 export enum ESingleSkillTargets {
   GetSingleSkill = 'getSkill',
   AddSingleSkill = 'addSingleSkill',
