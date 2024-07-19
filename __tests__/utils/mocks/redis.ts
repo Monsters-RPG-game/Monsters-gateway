@@ -60,8 +60,6 @@ export default class FakeRedis extends Redis {
 
   override async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
     return new Promise((resolve) => {
-      console.log("Skills")
-      console.log(this.skills)
       resolve(this.skills.find((t) => t.owner === id));
     });
   }

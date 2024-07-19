@@ -1,45 +1,46 @@
 import * as enums from '../../../enums/index.js';
 import ReqHandler from '../../../tools/abstracts/reqHandler.js';
-import type { INpcStoryEntity, ILine } from './entity.js';
+import type { INarratorEntity } from './entity.js';
+import type { IChapter } from './types.js';
 import type { IUserBrokerInfo } from '../../../types/index.js';
-import type GetNpcStoryDto from '../../modules/story/get/dto.js';
-import type GetIntentResponseDto from '../../modules/story/getIntent/dto.js';
+import type GetNarratorStoryDto from '../../modules/narratorStory/get/dto.js';
+import type GetByStageNarratorStoryDto from '../../modules/narratorStory/getByStage/dto.js';
 
-export default class Story extends ReqHandler {
+export default class NarratorStory extends ReqHandler {
   async get(
-    data: GetNpcStoryDto,
+    data: GetNarratorStoryDto,
     userData: IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: INpcStoryEntity;
+    payload: INarratorEntity;
   }> {
     return (await this.sendReq(
       this.service,
-      enums.EUserMainTargets.NpcStory,
-      enums.ENpcStoryTargets.GetNpcStory,
+      enums.EUserMainTargets.NarratorStory,
+      enums.ENarratorStoryTargets.GetNarratorStory,
       userData,
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: INpcStoryEntity;
+      payload: INarratorEntity;
     };
   }
-  async getIntent(
-    data: GetIntentResponseDto,
+  async getByStage(
+    data: GetByStageNarratorStoryDto,
     userData: IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: ILine;
+    payload: IChapter & { _id: string };
   }> {
     return (await this.sendReq(
       this.service,
-      enums.EUserMainTargets.NpcStory,
-      enums.ENpcStoryTargets.GetNpcIntent,
+      enums.EUserMainTargets.NarratorStory,
+      enums.ENarratorStoryTargets.GetByStageNarratorStory,
       userData,
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: ILine;
+      payload: IChapter & { _id: string };
     };
   }
 }
