@@ -21,6 +21,8 @@ import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dt
 import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
 import type ReadMessagesDto from '../structure/modules/message/read/dto.js';
 import type SendMessagesDto from '../structure/modules/message/send/dto.js';
+import type GetNarratorStoryDto from '../structure/modules/narratorStory/get/dto.js';
+import type GetByStageNarratorStoryDto from '../structure/modules/narratorStory/getByStage/dto.js';
 import type { IAddCharacterDto } from '../structure/modules/npc/add/types.js';
 import type { IGetCharacterDto } from '../structure/modules/npc/get/types.js';
 import type { IRemoveCharacterDto } from '../structure/modules/npc/remove/types.js';
@@ -31,6 +33,8 @@ import type AddProfileDto from '../structure/modules/profile/add/dto.js';
 import type GetProfileDto from '../structure/modules/profile/get/dto.js';
 import type AddSingleSkillDto from '../structure/modules/singleSkill/add/dto.js';
 import type GetStatsDto from '../structure/modules/stats/get/dto.js';
+import type GetNpcStoryDto from '../structure/modules/story/get/dto.js';
+import type GetNpcIntentDto from '../structure/modules/story/getIntent/dto.js';
 import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
 import type UserDetailsDto from '../structure/modules/user/details/dto';
 import type RegisterDto from '../structure/modules/user/register/dto.js';
@@ -53,6 +57,8 @@ export type IRabbitSubTargets =
   | enums.EBugReportTargets
   | enums.EStatsTargets
   | enums.ESkillsTargets
+  | enums.ENpcStoryTargets
+  | enums.ENarratorStoryTargets
   | enums.ESingleSkillTargets
   | enums.EMapTargets
   | enums.ECharacterLocationTargets
@@ -134,6 +140,16 @@ export interface ICharacterStateConnectionData {
   [enums.ECharacterStateTargets.ChangeState]: ChangeCharacterStatusDto;
 }
 
+export interface INpcStoryConnectionData {
+  [enums.ENpcStoryTargets.GetNpcStory]: GetNpcStoryDto;
+  [enums.ENpcStoryTargets.GetNpcIntent]: GetNpcIntentDto;
+}
+
+export interface INarratorStoryConnectionData {
+  [enums.ENarratorStoryTargets.GetNarratorStory]: GetNarratorStoryDto;
+  [enums.ENarratorStoryTargets.GetByStageNarratorStory]: GetByStageNarratorStoryDto;
+}
+
 export interface IMessageConnectionData {
   [enums.EMessagesTargets.Get]: GetMessagesDto;
   [enums.EMessagesTargets.GetUnread]: GetUnreadMessagesDto;
@@ -158,9 +174,11 @@ export interface IRabbitConnectionData
     IFightConnectionData,
     IStatsConnectionData,
     INpcConnectionData,
+    INarratorStoryConnectionData,
     IBugReportConnectionData,
     ISkillsConnectionData,
     ISingleSkillConnectionData,
+    INpcStoryConnectionData,
     IMapConnectionData,
     ICharacterLocationConnectionData,
     IInventoryConnectionData {}
