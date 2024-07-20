@@ -6,17 +6,19 @@ import type { ISocketInMessage, ISocketOutMessage } from '../../../src/connectio
 import State from '../../../src/state.js';
 import * as errors from '../../../src/errors/index.js';
 import SocketServer from '../../utils/mocks/websocket.js';
-import type { IClient } from 'moc-socket';
+import type { IClient, ISimpleClient } from 'moc-socket';
 import MocSocket from 'moc-socket';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { IFullError } from '../../../src/types/index.js';
 import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
 import { fakeAccessToken } from '../../utils/index.js';
+import { WsServer } from 'moc-socket/lib/modules/servers/index.js';
+import { WebSocketServer } from 'ws';
 
 describe('Socket - generic tests', () => {
   const fakeBroker = State.broker as FakeBroker;
   const utils = new Utils();
-  let server: MocSocket;
+  let server: { createSimpleClient: () => ISimpleClient, createClient: () => IClient };
   let client: IClient;
   const fakeUser = fakeData.users[0] as IUserEntity;
   const fakeUser2 = fakeData.users[1] as IUserEntity;
@@ -43,7 +45,7 @@ describe('Socket - generic tests', () => {
     };
 
     // Well. ESM borked plenty of stuff for reasons unknown to me...
-    server = new (MocSocket as unknown as { default: typeof MocSocket }).default((State.socket as SocketServer).server);
+    server = (((MocSocket as unknown as { default: typeof MocSocket }).default as unknown as { createWsClient: (server: WebSocketServer) => WsServer }).createWsClient((State.socket as SocketServer).server) as { createSimpleClient: () => ISimpleClient, createClient: () => IClient });
     client = server.createClient();
 
     fakeBroker.addAction({
