@@ -14,7 +14,7 @@ export default class StoryRouter extends RouterFactory {
       episodeNumber: parseInt(req.params.episode as string),
     });
     return (
-      await reqHandler.narratorStory.getByStage(data, {
+      await reqHandler.story.getByStage(data, {
         userId: locals.userId,
         tempId: locals.tempId,
       })
