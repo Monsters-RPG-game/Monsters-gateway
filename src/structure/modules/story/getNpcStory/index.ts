@@ -10,7 +10,7 @@ export default class StoryRouter extends RouterFactory {
     const { reqHandler } = locals;
     const data = new GetNpcStoryDto({ id: req.query.id as string });
     return (
-      await reqHandler.npcStory.get(data, {
+      await reqHandler.story.getNpcStory(data, {
         userId: locals.userId,
         tempId: locals.tempId,
       })
