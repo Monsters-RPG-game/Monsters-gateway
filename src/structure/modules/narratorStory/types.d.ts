@@ -7,8 +7,3 @@ export interface IStage {
   stageNumber: number;
   chapters: IChapter[];
 }
-export interface ILine {
-  intent: string;
-  line: string;
-}
-

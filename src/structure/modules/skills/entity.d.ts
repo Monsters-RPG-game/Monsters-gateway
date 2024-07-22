@@ -1,3 +1,5 @@
+// import type { ISingleSkillEntity } from '../singleSkill/entity';
+
 export interface ISingleSkillEntity {
   _id: string;
   singleSkillId: string;

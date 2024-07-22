@@ -10,7 +10,7 @@ export default class StoryRouter extends RouterFactory {
     const { reqHandler } = locals;
     const data = new GetNarratorStoryDto({ id: req.query.id as string });
     return (
-      await reqHandler.story.getNarratoryStory(data, {
+      await reqHandler.narratorStory.get(data, {
         userId: locals.userId,
         tempId: locals.tempId,
       })
