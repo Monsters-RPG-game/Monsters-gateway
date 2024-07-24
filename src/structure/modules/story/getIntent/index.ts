@@ -1,8 +1,8 @@
 import GetIntentResponseDto from './dto.js';
 import RouterFactory from '../../../../tools/abstracts/router.js';
 import type * as types from '../../../../types/index.js';
-import type { ILine } from '../entity.js';
 import type express from 'express';
+import { ILine } from '../types.js';
 
 export default class StoryRouter extends RouterFactory {
   async getIntent(req: express.Request, res: express.Response): Promise<ILine> {
@@ -10,7 +10,7 @@ export default class StoryRouter extends RouterFactory {
     const { reqHandler } = locals;
     const data = new GetIntentResponseDto({ npcId: req.params.npcId!, intent: req.params.intent! });
     return (
-      await reqHandler.npcStory.getIntent(data, {
+      await reqHandler.story.getIntent(data, {
         userId: locals.userId,
         tempId: locals.tempId,
       })
