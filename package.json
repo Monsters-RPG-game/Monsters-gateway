@@ -45,7 +45,7 @@
     "cors": "2.8.5",
     "ejs": "3.1.10",
     "express": "4.19.2",
-    "express-rate-limit": "7.3.1",
+    "express-rate-limit": "7.4.0",
     "express-session": "1.18.0",
     "helmet": "7.1.0",
     "jsonwebtoken": "9.0.2",
@@ -55,7 +55,7 @@
     "node": "22.5.1",
     "node-jose": "2.2.0",
     "oidc-provider": "8.5.1",
-    "redis": "4.6.15",
+    "redis": "4.7.0",
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1",
     "winston": "3.13.1",
@@ -78,7 +78,7 @@
     "@types/swagger-ui-express": "4.1.6",
     "@types/ws": "8.5.11",
     "@typescript-eslint/eslint-plugin": "7.17.0",
-    "@typescript-eslint/parser": "7.17.0",
+    "@typescript-eslint/parser": "7.18.0",
     "concurrently": "8.2.2",
     "cross-env": "7.0.3",
     "eslint": "8.57.0",
@@ -96,6 +96,6 @@
     "tslib": "^2.6.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.2",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   }
 }
