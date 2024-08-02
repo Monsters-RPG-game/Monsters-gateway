@@ -33,6 +33,8 @@ import type AddProfileDto from '../structure/modules/profile/add/dto.js';
 import type GetProfileDto from '../structure/modules/profile/get/dto.js';
 import type AddSingleSkillDto from '../structure/modules/singleSkill/add/dto.js';
 import type GetStatsDto from '../structure/modules/stats/get/dto.js';
+import type AddUserCompletionDto from '../structure/modules/story/addUserCompletion/dto.js';
+import type GetUserCompletionDto from '../structure/modules/story/getUserCompletion/dto.js';
 import type GetNpcStoryDto from '../structure/modules/story/get/dto.js';
 import type GetNpcIntentDto from '../structure/modules/story/getIntent/dto.js';
 import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
@@ -48,6 +50,7 @@ import type GetDetailedSkillsDto from 'structure/modules/skills/getDetailed/dto.
 export type IRabbitSubTargets =
   | enums.EProfileTargets
   | enums.EUserTargets
+  | enums.EUserCompletionTargets
   | enums.EItemsTargets
   | enums.EPartyTargets
   | enums.EMessagesTargets
@@ -139,7 +142,10 @@ export interface ISingleSkillConnectionData {
 export interface ICharacterStateConnectionData {
   [enums.ECharacterStateTargets.ChangeState]: ChangeCharacterStatusDto;
 }
-
+export interface IUserCompletionConnectionData {
+  [enums.EUserCompletionTargets.AddUserCompletion]: AddUserCompletionDto;
+  [enums.EUserCompletionTargets.GetUserCompletion]: GetUserCompletionDto;
+}
 export interface INpcStoryConnectionData {
   [enums.ENpcStoryTargets.GetNpcStory]: GetNpcStoryDto;
   [enums.ENpcStoryTargets.GetNpcIntent]: GetNpcIntentDto;
@@ -170,16 +176,17 @@ export interface IRabbitConnectionData
     IPartyConnectionData,
     ICharacterStateConnectionData,
     IMessageConnectionData,
+    IUserCompletionConnectionData,
     IChatConnectionData,
     IFightConnectionData,
     IStatsConnectionData,
     INpcConnectionData,
-    INarratorStoryConnectionData,
     IBugReportConnectionData,
     ISkillsConnectionData,
     ISingleSkillConnectionData,
-    INpcStoryConnectionData,
     IMapConnectionData,
+    INpcStoryConnectionData,
+    INarratorStoryConnectionData,
     ICharacterLocationConnectionData,
     IInventoryConnectionData {}
 

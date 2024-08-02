@@ -11,6 +11,7 @@ export enum EUserMainTargets {
   Skills = 'skills',
   NpcStory = 'npcStory',
   NarratorStory = 'narratorStory',
+  UserCompletion = 'userCompletion',
   SingleSkill = 'singleSkill',
   Message = 'message',
   BugReport = 'bugReport',
@@ -64,6 +65,10 @@ export enum ENpcStoryTargets {
 export enum ENarratorStoryTargets {
   GetNarratorStory = 'getNarratorStory',
   GetByStageNarratorStory = 'getByStageNarratorStory',
+}
+export enum EUserCompletionTargets {
+  AddUserCompletion = 'addUserCompletion',
+  GetUserCompletion = 'getUserCompletion',
 }
 export enum ESingleSkillTargets {
   GetSingleSkill = 'getSkill',
