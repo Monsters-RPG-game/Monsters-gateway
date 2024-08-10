@@ -26,23 +26,9 @@ export default class Redis {
     return this._rooster;
   }
 
-  async init(): Promise<void> {
-    this.initClient();
-    this.rooster.init(this.client!);
-    this.listen();
-    await this.client!.connect();
-  }
-
-  async close(): Promise<void> {
-    if (this.client) {
-      await this.client.quit();
-    }
-  }
-
   async getAccountToRemove(target: string): Promise<string | undefined> {
     return this.rooster.getFromHash({ target: `${enums.ERedisTargets.AccountToRemove}:${target}`, value: target });
   }
-
   async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
     const cachedSkills = await this.rooster.getFromHash({
       target: `${enums.ERedisTargets.CachedSkills}:${id}`,
@@ -50,17 +36,16 @@ export default class Redis {
     });
     return cachedSkills ? (JSON.parse(cachedSkills) as ISkillsEntityDetailed) : undefined;
   }
-
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {
     const cachedUser = await this.rooster.getFromHash({ target: `${enums.ERedisTargets.CachedUser}:${id}`, value: id });
     return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
   }
-
   async getOidcHash(target: string, id: string): Promise<string | undefined> {
     return this.rooster.getFromHash({ target, value: id });
   }
   /**
-   * Get private keys used to generate user keys
+   * Get private keys used to generate user keys.
+   * @returns Saved private keys.
    */
   async getPrivateKeys(): Promise<JWK[]> {
     const target = `${enums.ERedisTargets.PrivateKeys}`;
@@ -74,6 +59,18 @@ export default class Redis {
   }
   async setExpirationDate(target: enums.ERedisTargets | string, ttl: number): Promise<void> {
     await this.rooster.setExpirationDate(target, ttl);
+  }
+  async init(): Promise<void> {
+    this.initClient();
+    this.rooster.init(this.client!);
+    this.listen();
+    await this.client!.connect();
+  }
+
+  async close(): Promise<void> {
+    if (this.client) {
+      await this.client.quit();
+    }
   }
 
   async removeOidcElement(target: string): Promise<void> {

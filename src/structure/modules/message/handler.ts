@@ -9,14 +9,6 @@ import type ReadMessagesDto from '../../modules/message/read/dto.js';
 import type SendMessagesDto from '../../modules/message/send/dto.js';
 
 export default class Message extends ReqHandler {
-  async send(data: SendMessagesDto, userData: IUserBrokerInfo): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EMessagesTargets.Send, userData, data);
-  }
-
-  async read(data: ReadMessagesDto, userData: IUserBrokerInfo): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EMessagesTargets.Read, userData, data);
-  }
-
   async getUnread(
     data: GetUnreadMessagesDto,
     userData: IUserBrokerInfo,
@@ -34,6 +26,13 @@ export default class Message extends ReqHandler {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IUnreadMessage[];
     };
+  }
+  async send(data: SendMessagesDto, userData: IUserBrokerInfo): Promise<void> {
+    await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EMessagesTargets.Send, userData, data);
+  }
+
+  async read(data: ReadMessagesDto, userData: IUserBrokerInfo): Promise<void> {
+    await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EMessagesTargets.Read, userData, data);
   }
 
   async get(

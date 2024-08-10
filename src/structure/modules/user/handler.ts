@@ -9,6 +9,24 @@ import type RegisterDto from '../../modules/user/register/dto.js';
 import type RemoveUserDto from '../../modules/user/remove/dto.js';
 
 export default class User extends ReqHandler {
+  async getDetails(
+    data: UserDetailsDto[],
+    userInfo: types.IUserBrokerInfo,
+  ): Promise<{
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: IUserEntity[];
+  }> {
+    return (await this.sendReq(
+      this.service,
+      enums.EUserMainTargets.User,
+      enums.EUserTargets.GetName,
+      userInfo,
+      data,
+    )) as {
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: IUserEntity[];
+    };
+  }
   async delete(data: RemoveUserDto, userInfo: types.IUserBrokerInfo): Promise<void> {
     await this.sendReq(this.service, enums.EUserMainTargets.User, enums.EUserTargets.Remove, userInfo, data);
   }
@@ -28,25 +46,6 @@ export default class User extends ReqHandler {
       this.service,
       enums.EUserMainTargets.User,
       enums.EUserTargets.DebugGetAll,
-      userInfo,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUserEntity[];
-    };
-  }
-
-  async getDetails(
-    data: UserDetailsDto[],
-    userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUserEntity[];
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.User,
-      enums.EUserTargets.GetName,
       userInfo,
       data,
     )) as {

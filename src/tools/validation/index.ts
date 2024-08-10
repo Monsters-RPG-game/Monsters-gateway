@@ -20,7 +20,9 @@ export default class Validation {
 
   /**
    * Validate if element is typeof string
-   * Require param: any
+   * Require param: any.
+   * @returns This.
+   * @throws MissingArgError.
    */
   isDefined(): this {
     const { v, name } = this;
@@ -30,7 +32,11 @@ export default class Validation {
 
   /**
    * Validate if element is smaller than x and bigger than y
-   * Require param: number
+   * Require param: number.
+   * @param max Max amount of elements.
+   * @param min Min amount of elements.
+   * @returns This.
+   * @throws IncorrectArgLengthError.
    */
   isBetween(max: number, min?: number): this {
     const { v, name } = this;
@@ -47,7 +53,9 @@ export default class Validation {
 
   /**
    * Validate if element is typeof number
-   * Require param: any
+   * Require param: any.
+   * @returns This.
+   * @throws IncorrectArgError.
    */
   isNumber(): this {
     const { v, name } = this;
@@ -58,7 +66,9 @@ export default class Validation {
 
   /**
    * Validate if element is typeof array
-   * Require param: array of strings
+   * Require param: array of strings.
+   * @returns This.
+   * @throws IncorrectArgTypeError.
    */
   isArray(): this {
     const { v, name } = this;
@@ -71,7 +81,10 @@ export default class Validation {
 
   /**
    * Validate if element has more children than x
-   * Require param: array of strings
+   * Require param: array of strings.
+   * @param amount Minimum amount of elements.
+   * @returns This.
+   * @throws ElementTooLongError.
    */
   minElements(amount: number): this {
     const { v, name } = this;
@@ -84,7 +97,10 @@ export default class Validation {
 
   /**
    * Validate if element has fewer children than x
-   * Require param: array of strings
+   * Require param: array of strings.
+   * @param amount Max amount of elements in array.
+   * @returns This.
+   * @throws ElementTooLongError.
    */
   maxElements(amount: number): this {
     const { v, name } = this;

@@ -28,6 +28,60 @@ export default class Router {
     return this._validator;
   }
 
+  private getCharacterLocation(data: IGetCharacterLocationDto, ws: types.ISocket): void {
+    const payload = new GetCharacterLocationDto(data);
+
+    ws.reqHandler.characterLocation
+      .get(payload, { userId: ws.userId, tempId: '' })
+      .then((callback) => {
+        ws.send(
+          JSON.stringify({
+            type: enums.ESocketType.Success,
+            payload: callback.payload,
+          } as types.ISocketOutMessage),
+        );
+      })
+      .catch((err) => {
+        Log.error('Socket read message error', err);
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+      });
+  }
+  private getMessage(data: types.IGetMessageBody, ws: types.ISocket): void {
+    this.validator.validateGetMessage(data);
+
+    ws.reqHandler.chat
+      .get(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .then((callback) => {
+        ws.send(
+          JSON.stringify({
+            type: enums.ESocketType.Success,
+            payload: callback.payload,
+          } as types.ISocketOutMessage),
+        );
+      })
+      .catch((err) => {
+        Log.error('Socket get messages error', err);
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+      });
+  }
+  private getUnread(data: types.IGetMessageBody, ws: types.ISocket): void {
+    this.validator.validateGetMessage(data);
+
+    ws.reqHandler.chat
+      .getUnread(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .then((callback) => {
+        ws.send(
+          JSON.stringify({
+            type: enums.ESocketType.Success,
+            payload: callback.payload,
+          } as types.ISocketOutMessage),
+        );
+      })
+      .catch((err) => {
+        Log.error('Socket get unread messages error', err);
+        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
+      });
+  }
   handleChatMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
     this.validator.preValidate(message);
 
@@ -93,25 +147,6 @@ export default class Router {
       })
       .catch((err) => {
         Log.error('Socket send message error', err);
-        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-      });
-  }
-
-  private getCharacterLocation(data: IGetCharacterLocationDto, ws: types.ISocket): void {
-    const payload = new GetCharacterLocationDto(data);
-
-    ws.reqHandler.characterLocation
-      .get(payload, { userId: ws.userId, tempId: '' })
-      .then((callback) => {
-        ws.send(
-          JSON.stringify({
-            type: enums.ESocketType.Success,
-            payload: callback.payload,
-          } as types.ISocketOutMessage),
-        );
-      })
-      .catch((err) => {
-        Log.error('Socket read message error', err);
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
@@ -206,44 +241,6 @@ export default class Router {
       })
       .catch((err) => {
         Log.error('Socket read message error', err);
-        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-      });
-  }
-
-  private getMessage(data: types.IGetMessageBody, ws: types.ISocket): void {
-    this.validator.validateGetMessage(data);
-
-    ws.reqHandler.chat
-      .get(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
-      .then((callback) => {
-        ws.send(
-          JSON.stringify({
-            type: enums.ESocketType.Success,
-            payload: callback.payload,
-          } as types.ISocketOutMessage),
-        );
-      })
-      .catch((err) => {
-        Log.error('Socket get messages error', err);
-        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-      });
-  }
-
-  private getUnread(data: types.IGetMessageBody, ws: types.ISocket): void {
-    this.validator.validateGetMessage(data);
-
-    ws.reqHandler.chat
-      .getUnread(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
-      .then((callback) => {
-        ws.send(
-          JSON.stringify({
-            type: enums.ESocketType.Success,
-            payload: callback.payload,
-          } as types.ISocketOutMessage),
-        );
-      })
-      .catch((err) => {
-        Log.error('Socket get unread messages error', err);
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }

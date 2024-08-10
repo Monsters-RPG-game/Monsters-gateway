@@ -25,10 +25,6 @@ export default class WebsocketServer {
     this._router = new Router();
   }
 
-  protected get users(): types.ISocketUser[] {
-    return this._users;
-  }
-
   protected get server(): WebSocketServer {
     return this._server!;
   }
@@ -45,10 +41,17 @@ export default class WebsocketServer {
     this._heartbeat = value;
   }
 
+  protected get users(): types.ISocketUser[] {
+    return this._users;
+  }
+
   private get router(): Router {
     return this._router;
   }
 
+  getServer(): WebSocketServer {
+    return this.server;
+  }
   init(): void {
     this._server = new WebSocketServer({
       port: getConfig().socketPort,
@@ -68,10 +71,6 @@ export default class WebsocketServer {
         this.userDisconnected(c);
       });
     });
-  }
-
-  getServer(): WebSocketServer {
-    return this.server;
   }
 
   startListeners(): void {
@@ -304,7 +303,7 @@ export default class WebsocketServer {
 
     try {
       message = JSON.parse(mess) as types.ISocketInMessage;
-    } catch (err) {
+    } catch (_err) {
       return this.router.handleError(new errors.IncorrectBodyTypeError(), ws);
     }
 

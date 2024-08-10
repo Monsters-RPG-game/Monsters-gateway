@@ -49,7 +49,7 @@ export default class Router {
   }
 
   /**
-   * Close server
+   * Close server.
    */
   close(): void {
     Log.log('Server', 'Closing');
@@ -60,7 +60,7 @@ export default class Router {
   }
 
   /**
-   * Init middleware
+   * Initialize middleware to handle express.
    */
   private initMiddleware(): void {
     this.middleware.generateMiddleware(this.app);
@@ -68,14 +68,14 @@ export default class Router {
   }
 
   /**
-   * Init err handler, catching errors in whole app
+   * Init err handler, catching errors in whole app.
    */
   private initErrHandler(): void {
     this.middleware.generateErrHandler(this.app);
   }
 
   /**
-   * Init swagger documentation
+   * Init swagger documentation.
    */
   private initDocumentation(): void {
     this.router.generateDocumentation();
@@ -110,7 +110,7 @@ export default class Router {
   }
 
   /**
-   * Init server
+   * Initialize http server.
    */
   private initServer(): void {
     if (process.env.NODE_ENV === 'test') return;

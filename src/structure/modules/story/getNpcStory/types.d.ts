@@ -1,3 +1,3 @@
 export interface IGetNpcStoryDto {
-  id:string
+  id: string;
 }

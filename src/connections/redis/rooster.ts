@@ -8,18 +8,6 @@ export default class Rooster {
     return this._client!;
   }
 
-  init(client: RedisClientType): void {
-    this._client = client;
-  }
-
-  async addToHash(target: enums.ERedisTargets | string, key: string, value: string): Promise<void> {
-    await this.client.hSet(target, key, value);
-  }
-
-  async addToList(target: enums.ERedisTargets | string, value: string[]): Promise<void> {
-    await this.client.lPush(target, value);
-  }
-
   async getAllFromList(target: enums.ERedisTargets | string): Promise<string[] | undefined> {
     const amount = await this.client.lLen(target);
     return this.client.lRange(target, 0, amount);
@@ -35,6 +23,17 @@ export default class Rooster {
   }
   async setExpirationDate(target: enums.ERedisTargets | string, time: number): Promise<void> {
     await this.client.expire(target, time);
+  }
+  init(client: RedisClientType): void {
+    this._client = client;
+  }
+
+  async addToHash(target: enums.ERedisTargets | string, key: string, value: string): Promise<void> {
+    await this.client.hSet(target, key, value);
+  }
+
+  async addToList(target: enums.ERedisTargets | string, value: string[]): Promise<void> {
+    await this.client.lPush(target, value);
   }
 
   async removeFromHash(target: enums.ERedisTargets | string, value: string): Promise<void> {

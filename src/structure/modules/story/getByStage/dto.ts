@@ -14,8 +14,8 @@ export default class GetDetailedNarratorStoryDto implements IGetDetailedNarrator
     this.validate();
   }
   validate(): void {
-    new Validation(this.episodeNumber, 'episodeNumber').isDefined()
-    new Validation(this.stageNumber, 'stageNumber').isDefined()
-    new Validation(this.chapterNumber, 'chapterNumber').isDefined()
+    new Validation(this.episodeNumber, 'episodeNumber').isDefined();
+    new Validation(this.stageNumber, 'stageNumber').isDefined();
+    new Validation(this.chapterNumber, 'chapterNumber').isDefined();
   }
 }
