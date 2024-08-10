@@ -57,23 +57,25 @@ export default class Broker {
   private get queueName(): string | undefined {
     return this._queueName;
   }
-  private get closed(): boolean {
-    return this._closed;
-  }
-  get channel(): amqplib.Channel | null {
-    return this._channel;
-  }
 
   private set queueName(value: string | undefined) {
     this._queueName = value;
   }
 
-  private get controller(): Communicator {
-    return this._controller;
+  private get closed(): boolean {
+    return this._closed;
   }
 
   private set closed(value: boolean) {
     this._closed = value;
+  }
+
+  get channel(): amqplib.Channel | null {
+    return this._channel;
+  }
+
+  private get controller(): Communicator {
+    return this._controller;
   }
 
   getHealth(): IHealth {
@@ -153,7 +155,7 @@ export default class Broker {
           const error = err as types.IFullError;
           Log.error('Rabbit', error.message, error.stack);
           this._retryTimeout = setTimeout(async () => this.initCommunication(), 1000);
-          reject(err);
+          reject(error);
         });
     });
   }

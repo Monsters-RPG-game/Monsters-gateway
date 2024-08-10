@@ -7,11 +7,13 @@ export default class Liveness {
   /**
    * Generate path based on meta.url
    * This is made in stupid way, but jest seems to be bugging out.
+   * @returns Path to probe.
    */
   private getPath = (): string => {
     const basePath = import.meta.url.split('/');
     return path.join(basePath.splice(2, basePath.length - 1).join('/'), '..', '..', '..', '.livenessProbe');
   };
+
   private get timer(): NodeJS.Timeout | undefined {
     return this._timer;
   }

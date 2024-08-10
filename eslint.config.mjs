@@ -104,6 +104,8 @@ export default [...fixupConfigRules(compat.extends(
         "import/extensions": [0, "ignorePackages"],
         "import/default": 0,
         "import/namespace": 0,
+        "import/no-named-as-default": 0,
+        "import/no-named-as-default-member": 0,
         "import/no-cycle": 2,
         "import/prefer-default-export": 2,
         "import/no-absolute-path": 2,
@@ -134,11 +136,11 @@ export default [...fixupConfigRules(compat.extends(
 
         "jsdoc/check-access": 1,
         "jsdoc/check-alignment": 1,
-        "jsdoc/check-indentation": 1,
+        "jsdoc/check-indentation": 0,
         "jsdoc/check-line-alignment": 1,
         "jsdoc/check-param-names": 1,
         "jsdoc/check-property-names": 1,
-        "jsdoc/check-tag-names": 1,
+        "jsdoc/check-tag-names": 0,
         "jsdoc/check-types": 1,
         "jsdoc/check-values": 1,
         "jsdoc/empty-tags": 1,
@@ -197,7 +199,6 @@ export default [...fixupConfigRules(compat.extends(
         "no-new-func": 2,
         "no-new-wrappers": 2,
         "no-non-null-assertion": 0,
-        "no-unused-vars": 0,
         "no-param-reassign": 2,
         "no-plusplus": 0,
         "no-restricted-modules": 2,
@@ -380,6 +381,7 @@ export default [...fixupConfigRules(compat.extends(
 
         "@typescript-eslint/no-unused-vars": [2, {
             argsIgnorePattern: "^_",
+            caughtErrorsIgnorePattern: "^_",
             varsIgnorePattern: "^_",
         }],
 
@@ -393,7 +395,6 @@ export default [...fixupConfigRules(compat.extends(
 
         "@typescript-eslint/no-var-requires": 2,
         "@typescript-eslint/prefer-nullish-coalescing": 2,
-        "@typescript-eslint/semi": [2],
         "@typescript-eslint/typedef": 2,
 
         "@typescript-eslint/unbound-method": [2, {

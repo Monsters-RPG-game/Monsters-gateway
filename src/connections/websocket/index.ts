@@ -28,19 +28,21 @@ export default class WebsocketServer {
   protected get server(): WebSocketServer {
     return this._server!;
   }
-  private get heartbeat(): NodeJS.Timer {
-    return this._heartbeat as NodeJS.Timer;
-  }
-  protected get users(): types.ISocketUser[] {
-    return this._users;
-  }
 
   protected set server(value: WebSocketServer) {
     this._server = value;
   }
 
+  private get heartbeat(): NodeJS.Timer {
+    return this._heartbeat as NodeJS.Timer;
+  }
+
   private set heartbeat(value: NodeJS.Timer) {
     this._heartbeat = value;
+  }
+
+  protected get users(): types.ISocketUser[] {
+    return this._users;
   }
 
   private get router(): Router {
@@ -301,7 +303,7 @@ export default class WebsocketServer {
 
     try {
       message = JSON.parse(mess) as types.ISocketInMessage;
-    } catch (err) {
+    } catch (_err) {
       return this.router.handleError(new errors.IncorrectBodyTypeError(), ws);
     }
 

@@ -41,7 +41,7 @@ export default class Middleware {
             : undefined);
         const userToken = await validateToken(token);
         res.locals.userId = userToken.accountId;
-      } catch (err) {
+      } catch (_err) {
         // Access token is invalid. Check if session is valid
         const sessionId = (req.cookies as Record<string, string>)._session as string;
         const userSession = await State.provider.Session.find(sessionId);
@@ -125,7 +125,7 @@ export default class Middleware {
       }
 
       return next();
-    } catch (err) {
+    } catch (_err) {
       return handleErr(new errors.ProfileNotInitialized(), res);
     }
   }

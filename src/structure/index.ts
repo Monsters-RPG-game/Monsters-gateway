@@ -60,7 +60,7 @@ export default class Router {
   }
 
   /**
-   * Init middleware.
+   * Initialize middleware to handle express.
    */
   private initMiddleware(): void {
     this.middleware.generateMiddleware(this.app);
@@ -110,7 +110,7 @@ export default class Router {
   }
 
   /**
-   * Init server.
+   * Initialize http server.
    */
   private initServer(): void {
     if (process.env.NODE_ENV === 'test') return;

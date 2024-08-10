@@ -20,7 +20,6 @@ class UserAccount implements Account {
     return this._reqHandler;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
   async claims(_use: string, _scope: string): Promise<AccountClaims> {
     // #TODO This should return client based on scope. I don't use any other scopes currently
     // #TODO Currently broker require user locals to be present and there is no way to send req "as system"
@@ -43,7 +42,6 @@ class UserAccount implements Account {
   [key: string]: unknown;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const findAccount = (_ctx: KoaContextWithOIDC, id: string, _token: unknown): Account => {
   return new UserAccount(id);
 };

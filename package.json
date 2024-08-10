@@ -100,5 +100,10 @@
     "tslib": "^2.6.3",
     "tsx": "^4.7.2",
     "typescript": "5.5.4"
+  },
+  "overrides": {
+    "eslint-plugin-import": {
+      "eslint": "^9"
+    }
   }
 }

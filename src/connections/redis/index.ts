@@ -45,6 +45,7 @@ export default class Redis {
   }
   /**
    * Get private keys used to generate user keys.
+   * @returns Saved private keys.
    */
   async getPrivateKeys(): Promise<JWK[]> {
     const target = `${enums.ERedisTargets.PrivateKeys}`;
