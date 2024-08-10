@@ -8,6 +8,34 @@ import type amqplib from 'amqplib';
 export default class Communicator {
   private _queue: types.ICommunicationQueue = {};
 
+  sendHeartbeat = (channel: amqplib.Channel, target: enums.EServices): void => {
+    const body: types.IRabbitMessage = {
+      user: undefined,
+      payload: undefined,
+      subTarget: enums.EMessagesTargets.Send,
+      target: enums.EMessageTypes.Heartbeat,
+    };
+
+    switch (target) {
+      case enums.EServices.Users:
+        channel.sendToQueue(enums.EAmqQueues.Users, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
+      case enums.EServices.Messages:
+        channel.sendToQueue(enums.EAmqQueues.Messages, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
+      case enums.EServices.Fights:
+        channel.sendToQueue(enums.EAmqQueues.Fights, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
+      case enums.EServices.Maps:
+        channel.sendToQueue(enums.EAmqQueues.Maps, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
+      case enums.EServices.Story:
+        channel.sendToQueue(enums.EAmqQueues.Story, Buffer.from(JSON.stringify(body)), { persistent: true });
+        return;
+      default:
+        throw new Error('Unknown message target');
+    }
+  };
   get queue(): types.ICommunicationQueue {
     return this._queue;
   }
@@ -62,35 +90,6 @@ export default class Communicator {
         throw new Error('Incorrect service target');
     }
   }
-
-  sendHeartbeat = (channel: amqplib.Channel, target: enums.EServices): void => {
-    const body: types.IRabbitMessage = {
-      user: undefined,
-      payload: undefined,
-      subTarget: enums.EMessagesTargets.Send,
-      target: enums.EMessageTypes.Heartbeat,
-    };
-
-    switch (target) {
-      case enums.EServices.Users:
-        channel.sendToQueue(enums.EAmqQueues.Users, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
-      case enums.EServices.Messages:
-        channel.sendToQueue(enums.EAmqQueues.Messages, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
-      case enums.EServices.Fights:
-        channel.sendToQueue(enums.EAmqQueues.Fights, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
-      case enums.EServices.Maps:
-        channel.sendToQueue(enums.EAmqQueues.Maps, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
-      case enums.EServices.Story:
-        channel.sendToQueue(enums.EAmqQueues.Story, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
-      default:
-        throw new Error('Unknown message target');
-    }
-  };
 
   sendExternally(payload: types.IRabbitMessage): void {
     Log.log('Server', 'Got new message');

@@ -23,6 +23,10 @@ import type * as types from '../types/index.js';
 import type { Express } from 'express';
 
 export default class Middleware {
+  static setNoCache(_req: express.Request, res: express.Response, next: express.NextFunction): void {
+    res.set('cache-control', 'no-store');
+    next();
+  }
   static userValidation(app: Express): void {
     app.use(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       if (Middleware.shouldSkipUserValidation(req)) {
@@ -52,11 +56,6 @@ export default class Middleware {
 
       return next();
     });
-  }
-
-  static setNoCache(_req: express.Request, res: express.Response, next: express.NextFunction): void {
-    res.set('cache-control', 'no-store');
-    next();
   }
 
   static validateAdmin(_req: express.Request, res: express.Response, next: express.NextFunction): void {

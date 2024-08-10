@@ -5,6 +5,28 @@ import type * as types from '../../../connections/websocket/types/index.js';
 import type { IGetUnreadMessagesDto, IUnreadMessage } from '../message/getUnread/types.js';
 
 export default class Chat extends ReqHandler {
+  async getUnread(
+    data: IGetUnreadMessagesDto,
+    locals: {
+      tempId: string;
+      userId: string | undefined;
+      type: enums.EUserTypes;
+    },
+  ): Promise<{
+    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+    payload: IUnreadMessage[];
+  }> {
+    return (await this.sendReq(
+      this.service,
+      enums.EUserMainTargets.Message,
+      enums.EChatTargets.GetUnread,
+      locals,
+      data,
+    )) as {
+      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+      payload: IUnreadMessage[];
+    };
+  }
   async send(
     data: types.ISendMessageDto,
     locals: {
@@ -41,29 +63,6 @@ export default class Chat extends ReqHandler {
     return (await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EChatTargets.Get, locals, data)) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[];
-    };
-  }
-
-  async getUnread(
-    data: IGetUnreadMessagesDto,
-    locals: {
-      tempId: string;
-      userId: string | undefined;
-      type: enums.EUserTypes;
-    },
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUnreadMessage[];
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.Message,
-      enums.EChatTargets.GetUnread,
-      locals,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUnreadMessage[];
     };
   }
 }

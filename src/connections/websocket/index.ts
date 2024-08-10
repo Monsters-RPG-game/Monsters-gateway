@@ -25,20 +25,18 @@ export default class WebsocketServer {
     this._router = new Router();
   }
 
+  protected get server(): WebSocketServer {
+    return this._server!;
+  }
+  private get heartbeat(): NodeJS.Timer {
+    return this._heartbeat as NodeJS.Timer;
+  }
   protected get users(): types.ISocketUser[] {
     return this._users;
   }
 
-  protected get server(): WebSocketServer {
-    return this._server!;
-  }
-
   protected set server(value: WebSocketServer) {
     this._server = value;
-  }
-
-  private get heartbeat(): NodeJS.Timer {
-    return this._heartbeat as NodeJS.Timer;
   }
 
   private set heartbeat(value: NodeJS.Timer) {
@@ -49,6 +47,9 @@ export default class WebsocketServer {
     return this._router;
   }
 
+  getServer(): WebSocketServer {
+    return this.server;
+  }
   init(): void {
     this._server = new WebSocketServer({
       port: getConfig().socketPort,
@@ -68,10 +69,6 @@ export default class WebsocketServer {
         this.userDisconnected(c);
       });
     });
-  }
-
-  getServer(): WebSocketServer {
-    return this.server;
   }
 
   startListeners(): void {

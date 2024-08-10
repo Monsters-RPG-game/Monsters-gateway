@@ -28,16 +28,40 @@ export default class Broker {
   private _channel: amqplib.Channel | null = null;
   private _queueName: string | undefined = undefined;
 
+  private closeDeadQueue = async (target: types.IAvailableServices): Promise<void> => {
+    switch (target) {
+      case enums.EServices.Users:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Users);
+        break;
+      case enums.EServices.Maps:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
+        break;
+      case enums.EServices.Messages:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Messages);
+        break;
+      case enums.EServices.Fights:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Fights);
+        break;
+      case enums.EServices.Story:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Story);
+        break;
+      default:
+        Log.error('Socket', 'Got req to close socket that does not exist');
+    }
+    return this.controller.fulfillDeadQueue(target);
+  };
   constructor() {
     this._controller = new Controller();
   }
 
-  get channel(): amqplib.Channel | null {
-    return this._channel;
-  }
-
   private get queueName(): string | undefined {
     return this._queueName;
+  }
+  private get closed(): boolean {
+    return this._closed;
+  }
+  get channel(): amqplib.Channel | null {
+    return this._channel;
   }
 
   private set queueName(value: string | undefined) {
@@ -48,14 +72,19 @@ export default class Broker {
     return this._controller;
   }
 
-  private get closed(): boolean {
-    return this._closed;
-  }
-
   private set closed(value: boolean) {
     this._closed = value;
   }
 
+  getHealth(): IHealth {
+    const data = { alive: 0 };
+    Object.entries(this._services).forEach(([k, v]) => {
+      data[k] = !v.dead;
+    });
+    data.alive = Math.round(process.uptime());
+
+    return data;
+  }
   async init(): Promise<void> {
     await this.initCommunication();
   }
@@ -94,16 +123,6 @@ export default class Broker {
         })
         .catch(() => undefined);
     }
-  }
-
-  getHealth(): IHealth {
-    const data = { alive: 0 };
-    Object.entries(this._services).forEach(([k, v]) => {
-      data[k] = !v.dead;
-    });
-    data.alive = Math.round(process.uptime());
-
-    return data;
   }
 
   private async reconnect(): Promise<void> {
@@ -251,29 +270,6 @@ export default class Broker {
     this.controller.sendHeartbeat(this.channel!, target);
     this._services[target].timeout = setTimeout(() => this.retryHeartbeat(target), 5000);
   }
-
-  private closeDeadQueue = async (target: types.IAvailableServices): Promise<void> => {
-    switch (target) {
-      case enums.EServices.Users:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Users);
-        break;
-      case enums.EServices.Maps:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
-        break;
-      case enums.EServices.Messages:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Messages);
-        break;
-      case enums.EServices.Fights:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Fights);
-        break;
-      case enums.EServices.Story:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Story);
-        break;
-      default:
-        Log.error('Socket', 'Got req to close socket that does not exist');
-    }
-    return this.controller.fulfillDeadQueue(target);
-  };
 
   private async closeChannel(): Promise<void> {
     if (this._retryTimeout) {

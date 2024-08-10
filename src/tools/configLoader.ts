@@ -4,7 +4,8 @@ import * as path from 'node:path';
 
 /**
  * Generate path based on meta.url
- * This is made in stupid way, but jest seems to be bugging out
+ * This is made in stupid way, but jest seems to be bugging out.
+ * @param target
  */
 const getUrl = (target: string): string => {
   const basePath = import.meta.url.split('/');
@@ -12,7 +13,7 @@ const getUrl = (target: string): string => {
 };
 
 /**
- * Load config from json files
+ * Load config from json files.
  */
 export default function getConfig(): types.IConfigInterface {
   let baseConfig: types.IConfigInterface = JSON.parse(

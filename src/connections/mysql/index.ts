@@ -13,6 +13,9 @@ export default class Mysql {
     this._knex = value;
   }
 
+  async getOidcClients(): Promise<ClientMetadata[]> {
+    return this.knex('oidcClients').select();
+  }
   init(): void {
     this.knex = knex({
       client: 'mysql2',
@@ -36,9 +39,5 @@ export default class Mysql {
         // Ignored
       });
     }
-  }
-
-  async getOidcClients(): Promise<ClientMetadata[]> {
-    return this.knex('oidcClients').select();
   }
 }

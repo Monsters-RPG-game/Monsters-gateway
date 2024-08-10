@@ -11,4 +11,3 @@ export interface ILine {
   intent: string;
   line: string;
 }
-

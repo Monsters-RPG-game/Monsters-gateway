@@ -3,9 +3,16 @@ import errLogger from './logger.js';
 import * as enums from '../../enums/index.js';
 
 /**
- * Log passed data and save it in local files
+ * Log passed data and save it in local files.
  */
 export default class Log {
+  private static getDate(): string {
+    const date = new Date();
+    const h = date.getHours().toString().length === 1 ? `0${date.getHours()}:` : `${date.getHours()}:`;
+    const m = date.getMinutes().toString().length === 1 ? `0${date.getMinutes()}:` : `${date.getMinutes()}:`;
+    const s = date.getSeconds().toString().length === 1 ? `0${date.getSeconds()}` : `${date.getSeconds()}`;
+    return `${h}${m}${s}`;
+  }
   static error(target: string, ...messages: unknown[]): void {
     if (process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production') {
       console.trace(target);
@@ -59,14 +66,6 @@ export default class Log {
       default:
         errLogger.info(mess);
     }
-  }
-
-  private static getDate(): string {
-    const date = new Date();
-    const h = date.getHours().toString().length === 1 ? `0${date.getHours()}:` : `${date.getHours()}:`;
-    const m = date.getMinutes().toString().length === 1 ? `0${date.getMinutes()}:` : `${date.getMinutes()}:`;
-    const s = date.getSeconds().toString().length === 1 ? `0${date.getSeconds()}` : `${date.getSeconds()}`;
-    return `${h}${m}${s}`;
   }
 
   private static toString(message: unknown): string {

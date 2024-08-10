@@ -53,7 +53,8 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "sourceMap": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "useUnknownInCatchVariables": true
   },
   "include": [
     "src"

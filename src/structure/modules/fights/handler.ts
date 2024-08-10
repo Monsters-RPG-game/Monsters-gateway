@@ -9,17 +9,6 @@ import type UseSkillDto from './useSkill/dto.js';
 import type * as types from '../../../types/index.js';
 
 export default class Fight extends ReqHandler {
-  async createFight(
-    data: CreateFightDto, // Temporary change
-    userInfo: types.IUserBrokerInfo,
-  ): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Fight, enums.EFightsTargets.CreateFight, userInfo, data);
-  }
-
-  async leaveFight(data: null, userInfo: types.IUserBrokerInfo): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Fight, enums.EFightsTargets.Leave, userInfo, data);
-  }
-
   async getFights(
     data: IGetFightDto,
     userInfo: types.IUserBrokerInfo,
@@ -55,6 +44,16 @@ export default class Fight extends ReqHandler {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
       payload: IFightLogsEntity;
     };
+  }
+  async createFight(
+    data: CreateFightDto, // Temporary change
+    userInfo: types.IUserBrokerInfo,
+  ): Promise<void> {
+    await this.sendReq(this.service, enums.EUserMainTargets.Fight, enums.EFightsTargets.CreateFight, userInfo, data);
+  }
+
+  async leaveFight(data: null, userInfo: types.IUserBrokerInfo): Promise<void> {
+    await this.sendReq(this.service, enums.EUserMainTargets.Fight, enums.EFightsTargets.Leave, userInfo, data);
   }
 
   async attack(

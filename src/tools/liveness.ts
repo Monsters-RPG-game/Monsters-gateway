@@ -4,6 +4,14 @@ import * as path from 'node:path';
 export default class Liveness {
   private _timer: NodeJS.Timeout | undefined;
 
+  /**
+   * Generate path based on meta.url
+   * This is made in stupid way, but jest seems to be bugging out.
+   */
+  private getPath = (): string => {
+    const basePath = import.meta.url.split('/');
+    return path.join(basePath.splice(2, basePath.length - 1).join('/'), '..', '..', '..', '.livenessProbe');
+  };
   private get timer(): NodeJS.Timeout | undefined {
     return this._timer;
   }
@@ -29,13 +37,4 @@ export default class Liveness {
 
     fs.writeFileSync(location, Date.now().toString());
   }
-
-  /**
-   * Generate path based on meta.url
-   * This is made in stupid way, but jest seems to be bugging out
-   */
-  private getPath = (): string => {
-    const basePath = import.meta.url.split('/');
-    return path.join(basePath.splice(2, basePath.length - 1).join('/'), '..', '..', '..', '.livenessProbe');
-  };
 }

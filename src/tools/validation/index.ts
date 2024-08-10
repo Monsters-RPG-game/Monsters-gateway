@@ -20,7 +20,7 @@ export default class Validation {
 
   /**
    * Validate if element is typeof string
-   * Require param: any
+   * Require param: any.
    */
   isDefined(): this {
     const { v, name } = this;
@@ -30,7 +30,9 @@ export default class Validation {
 
   /**
    * Validate if element is smaller than x and bigger than y
-   * Require param: number
+   * Require param: number.
+   * @param max
+   * @param min
    */
   isBetween(max: number, min?: number): this {
     const { v, name } = this;
@@ -47,7 +49,7 @@ export default class Validation {
 
   /**
    * Validate if element is typeof number
-   * Require param: any
+   * Require param: any.
    */
   isNumber(): this {
     const { v, name } = this;
@@ -58,7 +60,7 @@ export default class Validation {
 
   /**
    * Validate if element is typeof array
-   * Require param: array of strings
+   * Require param: array of strings.
    */
   isArray(): this {
     const { v, name } = this;
@@ -71,7 +73,8 @@ export default class Validation {
 
   /**
    * Validate if element has more children than x
-   * Require param: array of strings
+   * Require param: array of strings.
+   * @param amount
    */
   minElements(amount: number): this {
     const { v, name } = this;
@@ -84,7 +87,8 @@ export default class Validation {
 
   /**
    * Validate if element has fewer children than x
-   * Require param: array of strings
+   * Require param: array of strings.
+   * @param amount
    */
   maxElements(amount: number): this {
     const { v, name } = this;
