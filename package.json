@@ -50,7 +50,7 @@
     "jsonwebtoken": "9.0.2",
     "knex": "3.1.0",
     "moc-socket": "0.2.0",
-    "mysql2": "3.10.2",
+    "mysql2": "3.11.0",
     "node": "22.5.1",
     "node-jose": "2.2.0",
     "oidc-provider": "8.5.1",
