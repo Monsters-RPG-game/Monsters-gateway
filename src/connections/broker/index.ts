@@ -18,7 +18,7 @@ export default class Broker {
   private _services: {
     [key in types.IAvailableServices]: { timeout: NodeJS.Timeout | null; retries: number; dead: boolean };
   } = {
-    [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
+    // [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
@@ -33,9 +33,9 @@ export default class Broker {
       case enums.EServices.Users:
         await this.channel!.purgeQueue(enums.EAmqQueues.Users);
         break;
-      case enums.EServices.Maps:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
-        break;
+      // case enums.EServices.Maps:
+      //  await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
+      //  break;
       case enums.EServices.Messages:
         await this.channel!.purgeQueue(enums.EAmqQueues.Messages);
         break;
@@ -194,7 +194,7 @@ export default class Broker {
 
   private async createQueue(): Promise<void> {
     const filtered = Object.entries(enums.EAmqQueues)
-      .filter((e) => e[1] !== enums.EAmqQueues.Gateway)
+      .filter((e) => e[1] !== enums.EAmqQueues.Gateway && e[1] !== enums.EAmqQueues.Maps) // Disabled maps connections
       .map((e) => e[1]);
     await Promise.all(
       Object.values(filtered).map(async (queue) => {

@@ -192,7 +192,7 @@ export interface IRabbitMessage {
   payload: unknown;
 }
 
-export type IAvailableServices = Exclude<enums.EServices, enums.EServices.Gateway>;
+export type IAvailableServices = Exclude<enums.EServices, enums.EServices.Gateway | enums.EServices.Maps>;
 
 export type ICommunicationQueue = Record<
   string,
