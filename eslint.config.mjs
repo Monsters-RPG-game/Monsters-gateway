@@ -189,7 +189,7 @@ export default [...fixupConfigRules(compat.extends(
             allow: ["info", "trace"],
         }],
 
-        "no-constructor-return": 1,
+        "no-constructor-return": 0,
         "no-empty-pattern": 2,
         "no-func-assign": 2,
         "no-implicit-coercion": 0,

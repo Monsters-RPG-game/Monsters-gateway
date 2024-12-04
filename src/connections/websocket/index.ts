@@ -1,19 +1,18 @@
+import Log from 'simpleLogger';
 import { WebSocketServer } from 'ws';
 import Router from './router.js';
+import ReqController from '../../connections/router/reqController.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
+import GetProfileDto from '../../modules/profile/get/dto.js';
+import UserDetailsDto from '../../modules/user/details/dto.js';
 import State from '../../state.js';
-import GetProfileDto from '../../structure//modules/profile/get/dto.js';
-import UserDetailsDto from '../../structure/modules/user/details/dto.js';
-import ReqHandler from '../../structure/reqHandler.js';
 import getConfig from '../../tools/configLoader.js';
-import Log from '../../tools/logger/index.js';
 import { validateToken } from '../../tools/token.js';
 import type * as types from './types/index.js';
 import type { ESocketType } from '../../enums/index.js';
-import type { IUserEntity } from '../../structure/modules/user/entity.js';
+import type { IUserEntity } from '../../modules/user/entity.js';
 import type { IFullError } from '../../types/index.js';
-import type { AdapterPayload } from 'oidc-provider';
 
 export default class WebsocketServer {
   protected _server: WebSocketServer | null = null;
@@ -243,13 +242,13 @@ export default class WebsocketServer {
       ws.profile = user.profile;
     } else {
       const account = (
-        await ws.reqHandler.user.getDetails([new UserDetailsDto({ id: payload.accountId })], {
+        await ws.reqController.user.getDetails([new UserDetailsDto({ id: payload.accountId })], {
           userId: payload.accountId,
           tempId: '',
         })
       ).payload[0] as IUserEntity;
       const profile = (
-        await ws.reqHandler.profile.get(new GetProfileDto(payload.accountId), {
+        await ws.reqController.profile.get(new GetProfileDto(payload.accountId), {
           userId: payload.accountId,
           tempId: '',
         })
@@ -293,7 +292,7 @@ export default class WebsocketServer {
   }
 
   private initializeUser(ws: types.ISocket): void {
-    ws.reqHandler = new ReqHandler();
+    ws.reqController = new ReqController();
   }
 
   private handleUserMessage(mess: string, ws: types.ISocket): void {

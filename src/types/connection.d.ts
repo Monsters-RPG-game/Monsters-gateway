@@ -1,49 +1,47 @@
 import type { IUserBrokerInfo } from './user.js';
 import type * as types from '../connections/websocket/types/index.js';
 import type * as enums from '../enums/index.js';
-import type { IAddBugReportDto } from '../structure/modules/bugReport/add/types.js';
-import type ChangeCharacterStatusDto from '../structure/modules/character/changeState/dto.js';
-import type { IChangeCharacterLocationDto } from '../structure/modules/characterLocation/change/types';
-import type { ICreateCharacterLocationDto } from '../structure/modules/characterLocation/create/types';
-import type { IGetCharacterLocationDto } from '../structure/modules/characterLocation/get/types';
-import type AttackDto from '../structure/modules/fights/attack/dto.js';
-import type CreateFightDto from '../structure/modules/fights/debug/dto.js';
-import type { IGetFightDto } from '../structure/modules/fights/getFights/types.js';
-import type { IGetFightLogsDto } from '../structure/modules/fights/getLogs/types.js';
-import type UseSkillDto from '../structure/modules/fights/useSkill/dto.js';
-import type InventoryDropDto from '../structure/modules/inventory/drop/dto.js';
-import type InventoryAddDto from '../structure/modules/inventory/use/dto.js';
-import type { ICreateMapDto } from '../structure/modules/maps/create/types.js';
-import type { IGetMapDto } from '../structure/modules/maps/get/types.js';
-import type { IUpdateMapDto } from '../structure/modules/maps/update/types';
-import type GetMessagesDto from '../structure/modules/message/get/dto.js';
-import type GetUnreadMessagesDto from '../structure/modules/message/getUnread/dto.js';
-import type { IGetUnreadMessagesDto } from '../structure/modules/message/getUnread/types.js';
-import type ReadMessagesDto from '../structure/modules/message/read/dto.js';
-import type SendMessagesDto from '../structure/modules/message/send/dto.js';
-import type GetNarratorStoryDto from '../structure/modules/narratorStory/get/dto.js';
-import type GetByStageNarratorStoryDto from '../structure/modules/narratorStory/getByStage/dto.js';
-import type { IAddCharacterDto } from '../structure/modules/npc/add/types.js';
-import type { IGetCharacterDto } from '../structure/modules/npc/get/types.js';
-import type { IRemoveCharacterDto } from '../structure/modules/npc/remove/types.js';
-import type { IUpdateCharacterDto } from '../structure/modules/npc/update/types.js';
-import type LoginDto from '../structure/modules/oidc/interaction/dto.js';
-import type GetPartyDto from '../structure/modules/party/get/dto.js';
-import type AddProfileDto from '../structure/modules/profile/add/dto.js';
-import type GetProfileDto from '../structure/modules/profile/get/dto.js';
-import type AddSingleSkillDto from '../structure/modules/singleSkill/add/dto.js';
-import type GetStatsDto from '../structure/modules/stats/get/dto.js';
-import type GetNpcStoryDto from '../structure/modules/story/get/dto.js';
-import type GetNpcIntentDto from '../structure/modules/story/getIntent/dto.js';
-import type DebugGetAllUsersDto from '../structure/modules/user/debug/dto.js';
-import type UserDetailsDto from '../structure/modules/user/details/dto';
-import type RegisterDto from '../structure/modules/user/register/dto.js';
-import type RemoveUserDto from '../structure/modules/user/remove/dto.js';
-import type AddExpDto from 'structure/modules/profile/addExp/dto.js';
-import type GetSingleSkillDto from 'structure/modules/singleSkill/get/dto.js';
-import type AddSkillsDto from 'structure/modules/skills/add/dto.js';
-import type GetSkillsDto from 'structure/modules/skills/get/dto.js';
-import type GetDetailedSkillsDto from 'structure/modules/skills/getDetailed/dto.js';
+import type ChangeCharacterStatusDto from '../modules/character/changeState/dto.js';
+import type { IChangeCharacterLocationDto } from '../modules/characterLocation/change/types';
+import type { ICreateCharacterLocationDto } from '../modules/characterLocation/create/types';
+import type { IGetCharacterLocationDto } from '../modules/characterLocation/get/types';
+import type AttackDto from '../modules/fights/attack/dto.js';
+import type CreateFightDto from '../modules/fights/debug/dto.js';
+import type { IGetFightDto } from '../modules/fights/getFights/types.js';
+import type { IGetFightLogsDto } from '../modules/fights/getLogs/types.js';
+import type UseSkillDto from '../modules/fights/useSkill/dto.js';
+import type InventoryDropDto from '../modules/inventory/drop/dto.js';
+import type InventoryAddDto from '../modules/inventory/use/dto.js';
+import type { ICreateMapDto } from '../modules/maps/create/types.js';
+import type { IGetMapDto } from '../modules/maps/get/types.js';
+import type { IUpdateMapDto } from '../modules/maps/update/types';
+import type GetMessagesDto from '../modules/message/get/dto.js';
+import type GetUnreadMessagesDto from '../modules/message/getUnread/dto.js';
+import type { IGetUnreadMessagesDto } from '../modules/message/getUnread/types.js';
+import type ReadMessagesDto from '../modules/message/read/dto.js';
+import type SendMessagesDto from '../modules/message/send/dto.js';
+import type { IAddCharacterDto } from '../modules/npc/add/types.js';
+import type { IGetCharacterDto } from '../modules/npc/get/types.js';
+import type { IRemoveCharacterDto } from '../modules/npc/remove/types.js';
+import type { IUpdateCharacterDto } from '../modules/npc/update/types.js';
+import type GetPartyDto from '../modules/party/get/dto.js';
+import type AddProfileDto from '../modules/profile/add/dto.js';
+import type AddExpDto from '../modules/profile/addExp/dto.js';
+import type GetProfileDto from '../modules/profile/get/dto.js';
+import type AddSingleSkillDto from '../modules/singleSkill/add/dto.js';
+import type GetSingleSkillDto from '../modules/singleSkill/get/dto.js';
+import type AddSkillsDto from '../modules/skills/add/dto.js';
+import type GetSkillsDto from '../modules/skills/get/dto.js';
+import type GetDetailedSkillsDto from '../modules/skills/getDetailed/dto.js';
+import type GetStatsDto from '../modules/stats/get/dto.js';
+import type GetByStageNarratorStoryDto from '../modules/story/getByStage/dto.js';
+import type GetNpcIntentDto from '../modules/story/getIntent/dto.js';
+import type GetNarratorStoryDto from '../modules/story/getNarratoryStory/dto.js';
+import type GetNpcStoryDto from '../modules/story/getNpcStory/dto.js';
+import type DebugGetAllUsersDto from '../modules/user/debug/dto.js';
+import type UserDetailsDto from '../modules/user/details/dto';
+import type RegisterDto from '../modules/user/register/dto.js';
+import type RemoveUserDto from '../modules/user/remove/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileTargets
@@ -54,7 +52,6 @@ export type IRabbitSubTargets =
   | enums.EChatTargets
   | enums.EFightsTargets
   | enums.ECharacterStateTargets
-  | enums.EBugReportTargets
   | enums.EStatsTargets
   | enums.ESkillsTargets
   | enums.ENpcStoryTargets
@@ -75,7 +72,6 @@ export interface IStatsConnectionData {
 }
 
 export interface IUserConnectionData {
-  [enums.EUserTargets.Login]: LoginDto;
   [enums.EUserTargets.GetName]: UserDetailsDto[];
   [enums.EUserTargets.Register]: RegisterDto;
   [enums.EUserTargets.Remove]: RemoveUserDto;
@@ -95,11 +91,6 @@ export interface IInventoryConnectionData {
   [enums.EItemsTargets.Drop]: InventoryDropDto;
   [enums.EItemsTargets.Get]: null;
   [enums.EItemsTargets.Use]: InventoryAddDto;
-}
-
-export interface IBugReportConnectionData {
-  [enums.EBugReportTargets.AddBugReport]: IAddBugReportDto;
-  [enums.EBugReportTargets.GetBugReport]: null;
 }
 
 export interface IMapConnectionData {
@@ -175,7 +166,6 @@ export interface IRabbitConnectionData
     IStatsConnectionData,
     INpcConnectionData,
     INarratorStoryConnectionData,
-    IBugReportConnectionData,
     ISkillsConnectionData,
     ISingleSkillConnectionData,
     INpcStoryConnectionData,

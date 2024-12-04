@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import * as errors from '../../../src/errors/index.js';
-import AttackDto from '../../../src/structure/modules/fights/attack/dto.js';
-import type { IAttackDto } from '../../../src/structure/modules/fights/attack/types.js';
+import AttackDto from '../../../src/modules/fights/attack/dto.js';
+import type { IAttackDto } from '../../../src/modules/fights/attack/types.js';
 
 describe('Fights - attack', () => {
   const data: IAttackDto = {

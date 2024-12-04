@@ -1,12 +1,12 @@
 import amqplib from 'amqplib';
+import Log from 'simpleLogger';
 import Controller from './controller.js';
 import * as enums from '../../enums/index.js';
 import { InternalError } from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
-import Log from '../../tools/logger/index.js';
 import { generateRandomName } from '../../utils/index.js';
 import type Communicator from './controller.js';
-import type { IHealth } from '../../structure/modules/health/types.js';
+import type { IHealth } from '../../modules/health/types.js';
 import type * as types from '../../types/index.js';
 
 export default class Broker {
@@ -309,7 +309,7 @@ export default class Broker {
     clearTimeout(this._retryTimeout!);
     Object.entries(this._services).forEach((s) => {
       clearTimeout(s[1].timeout!);
-      delete this._services[s[0]];
+      delete this._services[s[0] as types.IAvailableServices];
     });
   }
 

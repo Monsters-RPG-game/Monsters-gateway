@@ -13,7 +13,6 @@ export enum EUserMainTargets {
   NarratorStory = 'narratorStory',
   SingleSkill = 'singleSkill',
   Message = 'message',
-  BugReport = 'bugReport',
   Inventory = 'inventory',
   CharacterState = 'characterState',
   CharacterLocation = 'characterLocation',
@@ -21,7 +20,6 @@ export enum EUserMainTargets {
 
 export enum EUserTargets {
   Register = 'register',
-  Login = 'login',
   GetName = 'getName',
   Remove = 'removeUser',
   DebugGetAll = 'debugGetAll',
@@ -98,11 +96,6 @@ export enum EPartyTargets {
 
 export enum ECharacterStateTargets {
   ChangeState = 'changeState',
-}
-
-export enum EBugReportTargets {
-  AddBugReport = 'addBugReport',
-  GetBugReport = 'getBugReport',
 }
 
 export enum EStatsTargets {

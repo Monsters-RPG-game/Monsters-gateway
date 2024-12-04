@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "_id": "64649e344e19dfa5f75fd7db",
+      "owner": "63e55edbe8a800060941121d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f73fd7db",
+      "owner": "63e55edbe8a800060941121e",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f72fd7db",
+      "owner": "63e55edbe8a800060941123d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941124d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941125d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f70fd7dc",
+      "owner": "63e55edbe8a800060941126d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    },
+    {
+      "_id": "64649e344e19dfa5f71fd7db",
+      "owner": "63e55edbe8a800060941127d",
+      "initialized": true,
+      "strength": 1,
+      "intelligence": 1,
+      "hp": 10
+    }
+  ]
+}

@@ -3,21 +3,22 @@ import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import { MissingArgError } from '../../../src/errors/index.js';
 import State from '../../../src/state.js';
-import { IAttackDto } from '../../../src/structure/modules/fights/attack/types.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
-import fakeData from '../../fakeData.json';
+import { IAttackDto } from '../../../src/modules/fights/attack/types.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
+import fakeUsers from '../../utils/fakeData/users.json'
+import fakeProfiles from '../../utils/fakeData/profiles.json'
 import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import { IFullError } from '../../../src/types/errors.js';
 
 describe('Fights - attack', () => {
-  const fakeTarget = fakeData.users[0]!._id;
-  const fakeUser = fakeData.users[0] as IUserEntity;
+  const fakeTarget = fakeUsers.data[0]!._id;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
   const fakeProfile = {
-    ...fakeData.profiles[0],
+    ...fakeProfiles.data[0],
     initialized: true,
     state: enums.ECharacterState.Fight,
-    skills:"63e55edbe8a800060941121d"
+    skills: "63e55edbe8a800060941121d"
   } as IProfileEntity;
   let accessToken: IFakeOidcKey;
 

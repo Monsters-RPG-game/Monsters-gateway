@@ -1,5 +1,5 @@
 export * from './connection.js';
-export * from './jwt.js';
+export * from './ttl.js';
 export * from './logs.js';
 export * from './profiles.js';
 export * from './socket.js';

@@ -1,16 +1,18 @@
 import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
 import { IFullError } from '../../../src/types/index.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js'
-import fakeData from '../../fakeData.json';
+import fakeProfiles from '../../utils/fakeData/profiles.json';
+import fakeUsers from '../../utils/fakeData/users.json'
+import fakeSkills from '../../utils/fakeData/skils.json'
 import * as types from '../../types/index.js';
 import { IFakeOidcKey } from '../../types/index.js';
 import State from '../../../src/state.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
-import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
+import type { ISkillsEntityDetailed } from '../../../src/modules/skills/getDetailed/types.js';
 
 describe('Profiles - add', () => {
   const fakeBroker = State.broker as FakeBroker;
@@ -20,12 +22,12 @@ describe('Profiles - add', () => {
   };
   let accessToken: IFakeOidcKey;
   let accessToken2: IFakeOidcKey;
-  const fakeSkills = fakeData.skills[1] as ISkillsEntityDetailed;
-  const fakeSkills2 = fakeData.skills[1] as ISkillsEntityDetailed;
-  const fakeUser = fakeData.users[0] as IUserEntity;
-  const fakeProfile = fakeData.profiles[0] as types.IProfileEntity
-  const fakeUser2 = fakeData.users[1] as IUserEntity;
-  const fakeProfile2 = fakeData.profiles[1] as types.IProfileEntity
+  const fakeSkill = fakeSkills.data[1] as ISkillsEntityDetailed;
+  const fakeSkill2 = fakeSkills.data[1] as ISkillsEntityDetailed;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
+  const fakeProfile = fakeProfiles.data[0] as types.IProfileEntity
+  const fakeUser2 = fakeUsers.data[1] as IUserEntity;
+  const fakeProfile2 = fakeProfiles.data[1] as types.IProfileEntity
   const { app } = State.router;
 
   beforeAll(async () => {
@@ -36,8 +38,8 @@ describe('Profiles - add', () => {
     await State.redis.addCachedUser({ account: fakeUser2, profile: fakeProfile2 });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
     await State.redis.addOidc(accessToken2.key, accessToken2.key, accessToken2.body);
-    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
-    await State.redis.addCachedSkills(fakeSkills2, fakeUser2._id);
+    await State.redis.addCachedSkills(fakeSkill, fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkill2, fakeUser2._id);
   });
 
   afterEach(() => {

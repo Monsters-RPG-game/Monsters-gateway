@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import GetFightDto from '../../../src/structure/modules/fights/getFights/dto.js';
-import type { IGetFightDto } from '../../../src/structure/modules/fights/getFights/types.js';
+import GetFightDto from '../../../src/modules/fights/getFights/dto.js';
+import type { IGetFightDto } from '../../../src/modules/fights/getFights/types.js';
 
 describe('Fights-getFights', () => {
   const data: IGetFightDto = {

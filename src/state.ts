@@ -1,22 +1,18 @@
-import { getKeys as generateKeys } from './oidc/utils.js';
-import Log from './tools/logger/index.js';
+import Log from 'simpleLogger';
+import Keys from './modules/keys/index.js';
 import type Broker from './connections/broker/index.js';
-import type Mysql from './connections/mysql/index.js';
 import type Redis from './connections/redis/index.js';
+import type Router from './connections/router/index.js';
 import type WebsocketServer from './connections/websocket/index.js';
-import type Router from './structure/index.js';
 import type { IState } from './types/index.js';
 import type { JSONWebKeySet } from 'jose';
-import type Provider from 'oidc-provider';
 
 class State implements IState {
   private _broker: Broker | null = null;
   private _socket: WebsocketServer | null = null;
   private _redis: Redis | null = null;
   private _router: Router | null = null;
-  private _mysql: Mysql | null = null;
   private _keys: JSONWebKeySet = { keys: [] };
-  private _provider: Provider | null = null;
   private _keysValidation: NodeJS.Timeout | null = null;
 
   get broker(): Broker {
@@ -25,14 +21,6 @@ class State implements IState {
 
   set broker(value: Broker) {
     this._broker = value;
-  }
-
-  get mysql(): Mysql {
-    return this._mysql as Mysql;
-  }
-
-  set mysql(value: Mysql) {
-    this._mysql = value;
   }
 
   get socket(): WebsocketServer {
@@ -67,14 +55,6 @@ class State implements IState {
     this._keys = value;
   }
 
-  get provider(): Provider {
-    return this._provider as Provider;
-  }
-
-  set provider(value: Provider) {
-    this._provider = value;
-  }
-
   get keysValidation(): NodeJS.Timeout {
     return this._keysValidation as NodeJS.Timeout;
   }
@@ -83,12 +63,11 @@ class State implements IState {
     this._keysValidation = value;
   }
 
-  async kill(): Promise<void> {
-    await this.redis.close();
+  kill(): void {
+    this.redis.close();
     this.router.close();
     this.broker.close();
     this.socket.close();
-    this.mysql.close();
     clearInterval(this.keysValidation);
     Log.log('Server', 'Server closed');
   }
@@ -97,7 +76,7 @@ class State implements IState {
     let keys = await this.redis.getPrivateKeys();
 
     if (!keys || keys.length === 0) {
-      keys = await generateKeys(2);
+      keys = await Keys.generateKeys(2);
       await this.redis.addPrivateKeys(keys);
     }
     this.keys = { keys };

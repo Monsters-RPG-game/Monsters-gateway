@@ -18,7 +18,6 @@ coverage
 # Optional npm cache directory
 .npm
 yarn.lock
-package-lock.json
 
 # Optional eslint cache
 .eslintcache

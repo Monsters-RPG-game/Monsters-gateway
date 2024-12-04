@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import * as errors from '../../../src/errors/index.js';
 import * as types from '../../types/index.js';
-import RegisterDto from '../../../src/structure/modules/user/register/dto.js';
+import RegisterDto from '../../../src/modules/user/register/dto.js';
 
 describe('Register', () => {
   const register: types.IRegisterDto = {
@@ -15,7 +15,7 @@ describe('Register', () => {
       Object.keys(register).forEach((k) => {
         return it(`Missing ${k}`, () => {
           const clone = structuredClone(register);
-          delete clone[k];
+          delete clone[k as keyof types.IRegisterDto];
           const func = () => new RegisterDto(clone);
 
           expect(func).toThrow(new errors.MissingArgError(k));
