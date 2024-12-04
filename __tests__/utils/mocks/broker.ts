@@ -4,7 +4,7 @@ import * as enums from '../../../src/enums/connection.js';
 import { EMessageTypes } from '../../../src/enums/connection.js';
 import { IBrokerAction } from '../../types/broker.js';
 import { EUserTypes } from '../../../src/enums/index.js';
-import Log from '../../../src/tools/logger/index.js'
+import Log from 'simpleLogger'
 import chalk from 'chalk';
 
 export default class FakeBroker extends Broker {

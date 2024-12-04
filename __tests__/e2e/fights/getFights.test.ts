@@ -3,21 +3,23 @@ import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js';
 import State from '../../../src/state.js';
-import type { IGetFightDto } from '../../../src/structure/modules/fights/getFights/types.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import type { IGetFightDto } from '../../../src/modules/fights/getFights/types.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import { IFullError } from '../../../src/types/index.js';
-import fakeData from '../../fakeData.json';
+import fakeUsers from '../../utils/fakeData/users.json';
+import fakeSkills from '../../utils/fakeData/skils.json'
+import fakeProfiles from '../../utils/fakeData/profiles.json'
 import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
-import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
+import type { ISkillsEntityDetailed } from '../../../src/modules/skills/getDetailed/types.js';
 
 describe('Fights - getFight', () => {
   const fakeBroker = State.broker as FakeBroker;
-  const fakeUser = fakeData.users[0] as IUserEntity;
-  const fakeSkills = fakeData.skills[0] as ISkillsEntityDetailed;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
+  const fakeSkill = fakeSkills.data[0] as ISkillsEntityDetailed;
   const fakeProfile = {
-    ...fakeData.profiles[0],
+    ...fakeProfiles.data[0],
     initialized: true,
     skills: '65edc7bcefd4ecbb6ca8d673',
     state: enums.ECharacterState.Fight,
@@ -33,7 +35,7 @@ describe('Fights - getFight', () => {
   beforeAll(async () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
     await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
-    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkill, fakeUser._id);
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
   });
 

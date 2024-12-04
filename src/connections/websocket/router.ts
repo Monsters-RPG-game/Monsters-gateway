@@ -1,20 +1,20 @@
+import Log from 'simpleLogger';
 import Validation from './validation.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
+import ChangeCharacterStatusDto from '../../modules/character/changeState/dto.js';
+import ChangeCharacterLocationDto from '../../modules/characterLocation/change/dto.js';
+import GetCharacterLocationDto from '../../modules/characterLocation/get/dto.js';
+import CreateFightDto from '../../modules/fights/debug/dto.js';
+import GetCharacterDto from '../../modules/npc/get/dto.js';
+import GetDetailedSkillsDto from '../../modules/skills/getDetailed/dto.js';
+import CharacterStatsDto from '../../modules/stats/get/dto.js';
 import State from '../../state.js';
-import ChangeCharacterStatusDto from '../../structure/modules/character/changeState/dto.js';
-import ChangeCharacterLocationDto from '../../structure/modules/characterLocation/change/dto.js';
-import GetCharacterLocationDto from '../../structure/modules/characterLocation/get/dto.js';
-import CreateFightDto from '../../structure/modules/fights/debug/dto.js';
-import GetCharacterDto from '../../structure/modules/npc/get/dto.js';
-import GetDetailedSkillsDto from '../../structure/modules/skills/getDetailed/dto.js';
-import CharacterStatsDto from '../../structure/modules/stats/get/dto.js';
-import Log from '../../tools/logger/index.js';
 import type * as types from './types/index.js';
-import type { IChangeCharacterLocationDto } from '../../structure/modules/characterLocation/change/types.js';
-import type { IGetCharacterLocationDto } from '../../structure/modules/characterLocation/get/types.js';
-import type { ICreateFightDto } from '../../structure/modules/fights/debug/types.js';
-import type { IProfileEntity } from '../../structure/modules/profile/entity.js';
+import type { IChangeCharacterLocationDto } from '../../modules/characterLocation/change/types.js';
+import type { IGetCharacterLocationDto } from '../../modules/characterLocation/get/types.js';
+import type { ICreateFightDto } from '../../modules/fights/debug/types.js';
+import type { IProfileEntity } from '../../modules/profile/entity.js';
 import type { IFullError } from '../../types/index.js';
 
 export default class Router {
@@ -31,7 +31,7 @@ export default class Router {
   private getCharacterLocation(data: IGetCharacterLocationDto, ws: types.ISocket): void {
     const payload = new GetCharacterLocationDto(data);
 
-    ws.reqHandler.characterLocation
+    ws.reqController.characterLocation
       .get(payload, { userId: ws.userId, tempId: '' })
       .then((callback) => {
         ws.send(
@@ -46,10 +46,11 @@ export default class Router {
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
+
   private getMessage(data: types.IGetMessageBody, ws: types.ISocket): void {
     this.validator.validateGetMessage(data);
 
-    ws.reqHandler.chat
+    ws.reqController.chat
       .get(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then((callback) => {
         ws.send(
@@ -64,10 +65,11 @@ export default class Router {
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
+
   private getUnread(data: types.IGetMessageBody, ws: types.ISocket): void {
     this.validator.validateGetMessage(data);
 
-    ws.reqHandler.chat
+    ws.reqController.chat
       .getUnread(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then((callback) => {
         ws.send(
@@ -82,6 +84,7 @@ export default class Router {
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
   }
+
   handleChatMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
     this.validator.preValidate(message);
 
@@ -136,7 +139,7 @@ export default class Router {
       sender: ws.userId,
     };
 
-    ws.reqHandler.chat
+    ws.reqController.chat
       .send(prepared, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
@@ -154,7 +157,7 @@ export default class Router {
   private moveCharacter(data: IChangeCharacterLocationDto, ws: types.ISocket): void {
     const payload = new ChangeCharacterLocationDto(data);
 
-    ws.reqHandler.characterLocation
+    ws.reqController.characterLocation
       .change(payload, { userId: ws.userId, tempId: '' })
       .then((cb) => {
         if (cb.payload.attack) {
@@ -179,7 +182,7 @@ export default class Router {
   }
 
   private async attackEnemy(ws: types.ISocket): Promise<{ state: Partial<IProfileEntity> }> {
-    const { reqHandler, userId, profile } = ws;
+    const { reqController, userId, profile } = ws;
 
     if (!profile) throw new errors.ProfileNotFound();
 
@@ -187,7 +190,7 @@ export default class Router {
 
     if (!skills) {
       skills = (
-        await reqHandler.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), {
+        await reqController.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), {
           userId,
           tempId: '',
         })
@@ -195,7 +198,7 @@ export default class Router {
     }
     const teams: ICreateFightDto = { teams: [[], []], attacker: undefined!, skills };
 
-    const attackerStats = await reqHandler.stats.get(new CharacterStatsDto({ id: profile.stats }), {
+    const attackerStats = await reqController.stats.get(new CharacterStatsDto({ id: profile.stats }), {
       userId,
       tempId: '',
     });
@@ -205,7 +208,7 @@ export default class Router {
       lvl: profile.lvl,
       stats: attackerStats.payload,
     };
-    const enemies = await reqHandler.npc.get(new GetCharacterDto({ page: 0, race: enums.ENpcRace.Troll, lvl: 2 }), {
+    const enemies = await reqController.npc.get(new GetCharacterDto({ page: 0, race: enums.ENpcRace.Troll, lvl: 2 }), {
       userId,
       tempId: '',
     });
@@ -217,13 +220,13 @@ export default class Router {
     });
 
     const data = new CreateFightDto(teams);
-    await reqHandler.fights.createFight(data, {
+    await reqController.fights.createFight(data, {
       userId,
       tempId: '',
     });
 
     const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Fight });
-    const stateUpdate = await reqHandler.characterState.changeState(characterState, {
+    const stateUpdate = await reqController.characterState.changeState(characterState, {
       userId,
       tempId: '',
     });
@@ -234,7 +237,7 @@ export default class Router {
   private readMessage(data: types.IReadMessageBody, ws: types.ISocket): void {
     this.validator.validateReadMessage(data);
 
-    ws.reqHandler.chat
+    ws.reqController.chat
       .read(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));

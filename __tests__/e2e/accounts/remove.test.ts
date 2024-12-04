@@ -1,21 +1,22 @@
 import { beforeAll, describe, expect, it, afterEach } from '@jest/globals';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
-import fakeData from '../../fakeData.json';
+import fakeUsers from '../../utils/fakeData/users.json';
+import fakeProfiles from '../../utils/fakeData/profiles.json'
 import State from '../../../src/state.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { EMessageTypes } from '../../../src/enums/index.js';
-import { IRemoveAccountDto } from '../../../src/structure/modules/user/remove/types.js';
+import { IRemoveAccountDto } from '../../../src/modules/user/remove/types.js';
 import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import { IFullError } from '../../../src/types/index.js';
 
 describe('Remove', () => {
   const { app } = State.router;
   const fakeBroker = State.broker as FakeBroker;
 
-  const fakeUser = fakeData.users[0]!;
+  const fakeUser = fakeUsers.data[0]!;
   const fakeUserEntity: IUserEntity = {
     _id: fakeUser._id,
     type: fakeUser.type as enums.EUserTypes,
@@ -23,14 +24,14 @@ describe('Remove', () => {
     verified: fakeUser.verified,
   };
   const fakeProfile = {
-    ...fakeData.profiles[0],
+    ...fakeProfiles.data[0],
     initialized: true,
     skills: "63e55edbe8a800060941121d",
     state: enums.ECharacterState.Fight,
   } as IProfileEntity;
 
   const data: IRemoveAccountDto = {
-    password: fakeData.users[0]!.password,
+    password: fakeUsers.data[0]!.password,
   };
 
   let accessToken: IFakeOidcKey;

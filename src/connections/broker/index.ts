@@ -1,12 +1,12 @@
 import amqplib from 'amqplib';
+import Log from 'simpleLogger';
 import Controller from './controller.js';
 import * as enums from '../../enums/index.js';
 import { InternalError } from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
-import Log from '../../tools/logger/index.js';
 import { generateRandomName } from '../../utils/index.js';
 import type Communicator from './controller.js';
-import type { IHealth } from '../../structure/modules/health/types.js';
+import type { IHealth } from '../../modules/health/types.js';
 import type * as types from '../../types/index.js';
 
 export default class Broker {
@@ -18,7 +18,7 @@ export default class Broker {
   private _services: {
     [key in types.IAvailableServices]: { timeout: NodeJS.Timeout | null; retries: number; dead: boolean };
   } = {
-    // [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
+    [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
@@ -33,9 +33,9 @@ export default class Broker {
       case enums.EServices.Users:
         await this.channel!.purgeQueue(enums.EAmqQueues.Users);
         break;
-      // case enums.EServices.Maps:
-      //  await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
-      //  break;
+      case enums.EServices.Maps:
+        await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
+        break;
       case enums.EServices.Messages:
         await this.channel!.purgeQueue(enums.EAmqQueues.Messages);
         break;
@@ -194,7 +194,7 @@ export default class Broker {
 
   private async createQueue(): Promise<void> {
     const filtered = Object.entries(enums.EAmqQueues)
-      .filter((e) => e[1] !== enums.EAmqQueues.Gateway && e[1] !== enums.EAmqQueues.Maps) // Disabled maps connections
+      .filter((e) => e[1] !== enums.EAmqQueues.Gateway)
       .map((e) => e[1]);
     await Promise.all(
       Object.values(filtered).map(async (queue) => {
@@ -309,7 +309,7 @@ export default class Broker {
     clearTimeout(this._retryTimeout!);
     Object.entries(this._services).forEach((s) => {
       clearTimeout(s[1].timeout!);
-      delete this._services[s[0]];
+      delete this._services[s[0] as types.IAvailableServices];
     });
   }
 

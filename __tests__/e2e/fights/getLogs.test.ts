@@ -3,19 +3,20 @@ import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
 import * as errors from '../../../src/errors/index.js';
 import State from '../../../src/state.js';
-import { IGetFightLogsDto } from '../../../src/structure/modules/fights/getLogs/types.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IGetFightLogsDto } from '../../../src/modules/fights/getLogs/types.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import type { IFullError } from '../../../src/types/index.js';
-import fakeData from '../../fakeData.json';
+import fakeUsers from '../../utils/fakeData/users.json';
+import fakeProfiles from '../../utils/fakeData/profiles.json'
 import { IFakeOidcKey, IProfileEntity } from '../../types/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 
 describe('Fights-getLogs', () => {
   const fakeBroker = State.broker as FakeBroker;
-  const fakeUser = fakeData.users[0] as IUserEntity;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
   const fakeProfile = {
-    ...fakeData.profiles[0],
+    ...fakeProfiles.data[0],
     initialized: true,
     skills: "63e55edbe8a800060941121d",
     state: enums.ECharacterState.Fight,

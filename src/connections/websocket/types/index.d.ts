@@ -1,7 +1,7 @@
 import type { IGetMessageDto, IReadMessageDto } from './dto.js';
+import type ReqController from '../../../connections/router/reqController.js';
 import type * as enums from '../../../enums/index.js';
-import type ReqHandler from '../../../structure/reqHandler.js';
-import type { IProfileEntity } from 'structure/modules/profile/entity.js';
+import type { IProfileEntity } from '../../../modules/profile/entity.js';
 import type { WebSocket } from 'ws';
 
 export interface ISendMessageDto {
@@ -21,18 +21,20 @@ export interface ISocket extends WebSocket {
   ttl?: NodeJS.Timeout;
   userId: string;
   validated: boolean;
-  reqHandler: ReqHandler;
+  reqController: ReqController;
   profile: IProfileEntity | undefined;
 }
 
 export interface ISocketSubTargets {
   [enums.ESocketTargets.Chat]: enums.EMessageSubTargets;
+  [enums.ESocketTargets.Movement]: undefined;
+  [enums.ESocketTargets.Authorization]: undefined;
 }
 
 export interface ISocketInMessage {
   target: enums.ESocketTargets;
   subTarget: ISocketSubTargets[enums.ESocketTargets];
-  payload: ISocketPayload[enums.ESocketTargets];
+  payload: ISocketPayload[enums.EMessageSubTargets];
 }
 
 export interface ISocketUser {

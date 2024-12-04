@@ -1,11 +1,10 @@
+import Log from 'simpleLogger';
 import Broker from './connections/broker/index.js';
-import Mysql from './connections/mysql/index.js';
 import Redis from './connections/redis/index.js';
+import Router from './connections/router/index.js';
 import WebsocketServer from './connections/websocket/index.js';
 import State from './state.js';
-import Router from './structure/index.js';
 import Liveness from './tools/liveness.js';
-import Log from './tools/logger/index.js';
 import type { IFullError } from './types/index.js';
 
 class App {
@@ -22,15 +21,16 @@ class App {
   init(): void {
     this.handleInit().catch((err) => {
       const { stack, message } = err as IFullError;
-      Log.error('Server', 'Err while initializing app');
-      Log.error('Server', message, stack);
-      Log.error('Server', JSON.stringify(err));
+      Log.error('Server', 'Err while initializing app', message, stack);
 
-      this.liveness?.close();
-      return State.kill().catch((error) =>
-        Log.error('Server', "Couldn't kill server", (error as Error).message, (error as Error).stack),
-      );
+      this.close();
     });
+  }
+
+  @Log.decorateLog('Server', 'App closed')
+  private close(): void {
+    this.liveness?.close();
+    State.kill();
   }
 
   private async handleInit(): Promise<void> {
@@ -38,24 +38,34 @@ class App {
     const broker = new Broker();
     const socket = new WebsocketServer();
     const redis = new Redis();
-    const mysql = new Mysql();
 
     State.router = router;
     State.broker = broker;
     State.socket = socket;
-    State.mysql = mysql;
     State.redis = redis;
 
-    mysql.init();
     await broker.init();
     await redis.init();
     await State.initKeys();
-    await router.init();
+    router.init();
     socket.init();
     Log.log('Server', 'Server started');
 
     this.liveness = new Liveness();
     this.liveness.init();
+
+    this.listenForSignals();
+  }
+
+  private listenForSignals(): void {
+    process.on('SIGTERM', () => {
+      Log.log('Server', 'Received signal SIGTERM. Gracefully closing');
+      this.close();
+    });
+    process.on('SIGINT', () => {
+      Log.log('Server', 'Received signal SIGINT. Gracefully closing');
+      this.close();
+    });
   }
 }
 

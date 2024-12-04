@@ -1,10 +1,9 @@
 import Redis from '../../../src/connections/redis/index.js';
-import type { IUserEntity } from '../../../src/structure/modules/user/entity.js';
-import type { IProfileEntity } from '../../../src/structure/modules/profile/entity.js';
+import type { IUserEntity } from '../../../src/modules/user/entity.js';
+import type { IProfileEntity } from '../../../src/modules/profile/entity.js';
 import type { ICachedUser } from '../../../src/types/index.js';
 import * as enums from '../../../src/enums/index.js';
-import type { AdapterPayload } from 'oidc-provider';
-import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
+import type { ISkillsEntityDetailed } from '../../../src/modules/skills/getDetailed/types.js';
 
 export default class FakeRedis extends Redis {
   private _cachedUsers: ICachedUser[] = [];

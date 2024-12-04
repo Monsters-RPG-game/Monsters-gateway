@@ -1,21 +1,23 @@
 import { beforeAll, afterEach, describe, expect, it } from '@jest/globals';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import supertest from 'supertest';
 import * as enums from '../../../src/enums/index.js';
-import fakeData from '../../fakeData.json';
+import fakeUsers from '../../utils/fakeData/users.json'
+import fakeProfiles from '../../utils/fakeData/profiles.json'
+import fakeSkills from '../../utils/fakeData/skils.json';
 import * as types from '../../types/index.js';
 import State from '../../../src/state.js';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { fakeAccessToken } from '../../utils/index.js';
-import type { IAddExpDto } from '../../../src/structure/modules/profile/addExp/types.js';
-import type { ISkillsEntityDetailed } from '../../../src/structure/modules/skills/getDetailed/types.js';
+import type { IAddExpDto } from '../../../src/modules/profile/addExp/types.js';
+import type { ISkillsEntityDetailed } from '../../../src/modules/skills/getDetailed/types.js';
 
 describe('Profiles - addExp', () => {
   const fakeBroker = State.broker as FakeBroker;
   let accessToken: types.IFakeOidcKey;
-  const fakeUser = fakeData.users[0] as IUserEntity;
-  const fakeSkills = fakeData.skills[0] as ISkillsEntityDetailed;
-  const fakeProfile = fakeData.profiles[0] as types.IProfileEntity;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
+  const fakeSkill = fakeSkills.data[0] as ISkillsEntityDetailed;
+  const fakeProfile = fakeProfiles.data[0] as types.IProfileEntity;
 
   const payload: IAddExpDto = {
     profileId: fakeProfile._id,
@@ -27,7 +29,7 @@ describe('Profiles - addExp', () => {
     accessToken = fakeAccessToken(fakeUser._id, 1);
     await State.redis.addCachedUser({ account: fakeUser, profile: fakeProfile });
     await State.redis.addOidc(accessToken.key, accessToken.key, accessToken.body);
-    await State.redis.addCachedSkills(fakeSkills, fakeUser._id);
+    await State.redis.addCachedSkills(fakeSkill, fakeUser._id);
   });
 
   afterEach(() => {

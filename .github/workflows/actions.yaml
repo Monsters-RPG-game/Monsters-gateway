@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: node:18-alpine
+      image: node:22-alpine
 
     steps:
       - name: Checkout code
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: node:18-alpine
+      image: node:22-alpine
 
     steps:
       - name: Checkout code
@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: node:18-alpine
+      image: node:22-alpine
 
     steps:
       - name: Checkout code
@@ -115,13 +115,45 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  audit:
+    needs: [setup-config, test]
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:22-alpine
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Download config
+        uses: actions/download-artifact@v2
+        with:
+          name: config
+          path: config/
+
+      - name: Build
+        run: npm run build
+
   build:
     needs: [setup-config, test, lint]
 
     runs-on: ubuntu-latest
 
     container:
-      image: node:18-alpine
+      image: node:22-alpine
 
     steps:
       - name: Checkout code

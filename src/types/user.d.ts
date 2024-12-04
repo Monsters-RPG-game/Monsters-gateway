@@ -1,12 +1,12 @@
+import type ReqController from '../connections/router/reqController.js';
 import type * as enums from '../enums/index.js';
-import type { IProfileEntity } from '../structure/modules/profile/entity.js';
-import type { IUserEntity } from '../structure/modules/user/entity.js';
-import type ReqHandler from '../structure/reqHandler.js';
+import type { IProfileEntity } from '../modules/profile/entity.js';
+import type { IUserEntity } from '../modules/user/entity.js';
 import type { Locals } from 'express';
-import type session from 'express-session';
+import type { Session } from 'express-session';
 
 export interface IUsersTokens extends Locals {
-  reqHandler: ReqHandler;
+  reqController: ReqController;
   userId: string | undefined;
   tempId: string;
   initializedProfile: boolean;
@@ -21,8 +21,12 @@ export interface IUserCredentials {
   id: string;
 }
 
-export interface IUserSession extends session.Session, Partial<session.SessionData> {
-  userId: string;
+export interface IUserSession extends Session {
+  userId?: string;
+  nonce?: string;
+  client?: string;
+  verifier?: string;
+  logout?: boolean;
 }
 
 export interface IUserBrokerInfo {

@@ -1,4 +1,4 @@
-import Log from '../tools/logger/index.js';
+import Log from 'simpleLogger';
 import type * as types from '../types/index.js';
 import type express from 'express';
 

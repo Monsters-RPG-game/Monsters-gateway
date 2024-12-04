@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/globals';
-import fakeData from '../../fakeData.json';
+import fakeUsers from '../../utils/fakeData/users.json';
 import Utils from '../../utils/utils.js';
 import * as enums from '../../../src/enums/index.js';
 import type { ISocketInMessage, ISocketOutMessage } from '../../../src/connections/websocket/types/index.js';
@@ -10,7 +10,7 @@ import type { IClient, ISimpleClient } from 'moc-socket';
 import MocSocket from 'moc-socket';
 import { FakeBroker } from '../../utils/mocks/index.js';
 import { IFullError } from '../../../src/types/index.js';
-import { IUserEntity } from '../../../src/structure/modules/user/entity.js';
+import { IUserEntity } from '../../../src/modules/user/entity.js';
 import { fakeAccessToken } from '../../utils/index.js';
 import { WsServer } from 'moc-socket/lib/modules/servers/index.js';
 import { WebSocketServer } from 'ws';
@@ -20,8 +20,8 @@ describe('Socket - generic tests', () => {
   const utils = new Utils();
   let server: { createSimpleClient: () => ISimpleClient, createClient: () => IClient };
   let client: IClient;
-  const fakeUser = fakeData.users[0] as IUserEntity;
-  const fakeUser2 = fakeData.users[1] as IUserEntity;
+  const fakeUser = fakeUsers.data[0] as IUserEntity;
+  const fakeUser2 = fakeUsers.data[1] as IUserEntity;
   let clientOptions: Record<string, unknown>;
   let client2Options: Record<string, unknown>;
   const message: ISocketInMessage = {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import * as errors from '../../../src/errors/index.js';
-import type { IRemoveAccountDto } from '../../../src/structure/modules/user/remove/types.js';
-import RemoveUserDto from '../../../src/structure/modules/user/remove/dto.js';
+import type { IRemoveAccountDto } from '../../../src/modules/user/remove/types.js';
+import RemoveUserDto from '../../../src/modules/user/remove/dto.js';
 
 describe('User - remove', () => {
   const data: IRemoveAccountDto = {
