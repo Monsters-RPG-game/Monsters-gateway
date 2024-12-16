@@ -1,6 +1,6 @@
 import { ECharacterState } from '../../../enums/index.js';
-import State from '../../../state.js';
 import RouterFactory from '../../../tools/abstracts/router.js';
+import State from '../../../tools/state.js';
 import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
 import type * as types from '../../../types/index.js';
 import type { IProfileEntity } from '../../profile/entity.js';

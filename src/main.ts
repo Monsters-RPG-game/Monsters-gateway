@@ -1,10 +1,11 @@
 import Log from 'simpleLogger';
 import Broker from './connections/broker/index.js';
+import Mongo from './connections/mongo/index.js';
 import Redis from './connections/redis/index.js';
 import Router from './connections/router/index.js';
 import WebsocketServer from './connections/websocket/index.js';
-import State from './state.js';
 import Liveness from './tools/liveness.js';
+import State from './tools/state.js';
 import type { IFullError } from './types/index.js';
 
 class App {
@@ -19,6 +20,7 @@ class App {
   }
 
   init(): void {
+    this.configLogger();
     this.handleInit().catch((err) => {
       const { stack, message } = err as IFullError;
       Log.error('Server', 'Err while initializing app', message, stack);
@@ -33,19 +35,26 @@ class App {
     State.kill();
   }
 
+  private configLogger(): void {
+    Log.setPrefix('monsters');
+  }
+
   private async handleInit(): Promise<void> {
     const router = new Router();
     const broker = new Broker();
     const socket = new WebsocketServer();
+    const mongo = new Mongo();
     const redis = new Redis();
 
     State.router = router;
     State.broker = broker;
     State.socket = socket;
     State.redis = redis;
+    State.mongo = mongo;
 
     await broker.init();
     await redis.init();
+    await mongo.init();
     await State.initKeys();
     router.init();
     socket.init();

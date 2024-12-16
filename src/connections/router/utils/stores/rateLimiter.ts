@@ -1,5 +1,5 @@
 import Log from 'simpleLogger';
-import State from '../../../../state.js';
+import State from '../../../../tools/state.js';
 import type { IncrementResponse, Store } from 'express-rate-limit';
 
 export default class RateLimitStore implements Store {

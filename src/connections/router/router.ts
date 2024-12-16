@@ -4,7 +4,6 @@ import Middleware from './middleware.js';
 import initFightsRoutes from '../../modules/fights/index.js';
 import initHealthRoutes from '../../modules/health/index.js';
 import initInventoryRoutes from '../../modules/inventory/index.js';
-import initMapRoutes from '../../modules/maps/index.js';
 import initMessagesRoutes from '../../modules/message/index.js';
 import initNpcRoutes from '../../modules/npc/index.js';
 import initPartyRoutes from '../../modules/party/index.js';
@@ -13,8 +12,8 @@ import initSingleSkillRoutes from '../../modules/singleSkill/index.js';
 import initSkillsRoutes from '../../modules/skills/index.js';
 import initStatsRoutes from '../../modules/stats/index.js';
 import initStoryRoutes from '../../modules/story/index.js';
-import { initSecuredUserRoutes, initUserRemoveAccountRoutes, initUserRoutes } from '../../modules/user/index.js';
-import State from '../../state.js';
+import { initSecuredUserRoutes, initUserRoutes } from '../../modules/user/index.js';
+import State from '../../tools/state.js';
 import type { Express, Router } from 'express';
 import type swaggerJsdoc from 'swagger-jsdoc';
 import fs from 'fs';
@@ -38,8 +37,6 @@ export default class AppRouter {
   initSecuredRoutes(app: Express): void {
     Middleware.userValidation(app);
 
-    initUserRemoveAccountRoutes(this.router);
-
     this.router.use(Middleware.initUserProfile);
 
     initProfileRoutes(this.router);
@@ -57,13 +54,12 @@ export default class AppRouter {
     initStoryRoutes(this.router);
     initStatsRoutes(this.router);
     initNpcRoutes(this.router);
-    initMapRoutes(this.router);
   }
 
   initWebsocket(app: Express): void {
     app.get('/ws', (req, _res) => {
-      State.socket.getServer().handleUpgrade(req, req.socket, Buffer.from(''), (socket) => {
-        State.socket.getServer().emit('connection', socket, req);
+      State.socket.server.handleUpgrade(req, req.socket, Buffer.from(''), (socket) => {
+        State.socket.server.emit('connection', socket, req);
       });
     });
   }

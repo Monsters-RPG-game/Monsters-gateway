@@ -96,12 +96,6 @@ export default class FakeRedis extends Redis {
     });
   }
 
-  override async getOidcHash(_target: string, id: string): Promise<string | undefined> {
-    return new Promise((resolve) => {
-      const data = this.accessTokens.find((t) => t.jti === id);
-      resolve(data ? JSON.stringify(data) : undefined);
-    });
-  }
 
   override async getAccountToRemove(target: string): Promise<string | undefined> {
     return new Promise((resolve) => {

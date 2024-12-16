@@ -43,6 +43,9 @@ img/
 # production
 /build
 
+# Ts cache
+tsconfig.tsbuildinfo
+
 # misc
 .env.local
 .env.development.local

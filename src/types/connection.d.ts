@@ -12,9 +12,6 @@ import type { IGetFightLogsDto } from '../modules/fights/getLogs/types.js';
 import type UseSkillDto from '../modules/fights/useSkill/dto.js';
 import type InventoryDropDto from '../modules/inventory/drop/dto.js';
 import type InventoryAddDto from '../modules/inventory/use/dto.js';
-import type { ICreateMapDto } from '../modules/maps/create/types.js';
-import type { IGetMapDto } from '../modules/maps/get/types.js';
-import type { IUpdateMapDto } from '../modules/maps/update/types';
 import type GetMessagesDto from '../modules/message/get/dto.js';
 import type GetUnreadMessagesDto from '../modules/message/getUnread/dto.js';
 import type { IGetUnreadMessagesDto } from '../modules/message/getUnread/types.js';
@@ -41,7 +38,6 @@ import type GetNpcStoryDto from '../modules/story/getNpcStory/dto.js';
 import type DebugGetAllUsersDto from '../modules/user/debug/dto.js';
 import type UserDetailsDto from '../modules/user/details/dto';
 import type RegisterDto from '../modules/user/register/dto.js';
-import type RemoveUserDto from '../modules/user/remove/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileTargets
@@ -57,7 +53,6 @@ export type IRabbitSubTargets =
   | enums.ENpcStoryTargets
   | enums.ENarratorStoryTargets
   | enums.ESingleSkillTargets
-  | enums.EMapTargets
   | enums.ECharacterLocationTargets
   | enums.ENpcTargets;
 
@@ -74,7 +69,6 @@ export interface IStatsConnectionData {
 export interface IUserConnectionData {
   [enums.EUserTargets.GetName]: UserDetailsDto[];
   [enums.EUserTargets.Register]: RegisterDto;
-  [enums.EUserTargets.Remove]: RemoveUserDto;
   [enums.EUserTargets.DebugGetAll]: DebugGetAllUsersDto;
 }
 
@@ -91,12 +85,6 @@ export interface IInventoryConnectionData {
   [enums.EItemsTargets.Drop]: InventoryDropDto;
   [enums.EItemsTargets.Get]: null;
   [enums.EItemsTargets.Use]: InventoryAddDto;
-}
-
-export interface IMapConnectionData {
-  [enums.EMapTargets.Create]: ICreateMapDto;
-  [enums.EMapTargets.Get]: IGetMapDto;
-  [enums.EMapTargets.Update]: IUpdateMapDto;
 }
 
 export interface ICharacterLocationConnectionData {
@@ -169,7 +157,6 @@ export interface IRabbitConnectionData
     ISkillsConnectionData,
     ISingleSkillConnectionData,
     INpcStoryConnectionData,
-    IMapConnectionData,
     ICharacterLocationConnectionData,
     IInventoryConnectionData {}
 

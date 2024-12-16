@@ -1,8 +1,8 @@
 import UseSkillDto from './dto.js';
 import * as enums from '../../../enums/index.js';
 import * as errors from '../../../errors/index.js';
-import State from '../../../state.js';
 import RouterFactory from '../../../tools/abstracts/router.js';
+import State from '../../../tools/state.js';
 import ChangeCharacterStatusDto from '../../character/changeState/dto.js';
 import type { IUseSkillDto } from './types.js';
 import type * as types from '../../../types/index.js';

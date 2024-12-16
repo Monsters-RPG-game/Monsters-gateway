@@ -7,7 +7,6 @@ TLDR:
 4. [Docs](#4-docs)
 5. [Style](#5-style)
 
-
 ## 1. How to start
 
 ### Install dependencies

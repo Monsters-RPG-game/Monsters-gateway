@@ -2,7 +2,7 @@ import * as enums from '../../enums/index.js';
 import ReqController from '../../tools/abstracts/reqController.js';
 import type AttackDto from './attack/dto.js';
 import type CreateFightDto from './debug/dto.js';
-import type { IActionEntity, IFight, IFightLogsEntity } from './entity.js';
+import type { IActionEntity, IFightEntity, IFightLogsEntity } from './entity.js';
 import type { IGetFightDto } from './getFights/types.js';
 import type { IGetFightLogsDto } from './getLogs/types.js';
 import type UseSkillDto from './useSkill/dto.js';
@@ -14,7 +14,7 @@ export default class Fight extends ReqController {
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IFight[];
+    payload: IFightEntity[];
   }> {
     return (await this.sendReq(
       this.service,
@@ -24,7 +24,7 @@ export default class Fight extends ReqController {
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IFight[];
+      payload: IFightEntity[];
     };
   }
   async getLogs(

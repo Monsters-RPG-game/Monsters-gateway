@@ -11,11 +11,10 @@ import * as errors from '../../errors/index.js';
 import handleErr from '../../errors/utils.js';
 import GetDetailedSkillsDto from '../../modules/skills/getDetailed/dto.js';
 import UserDetailsDto from '../../modules/user/details/dto.js';
-import State from '../../state.js';
+import State from '../../tools/state.js';
 import SessionStore from './utils/stores/session.js';
 import GetProfileDto from '../../modules/profile/get/dto.js';
 import getConfig from '../../tools/configLoader.js';
-import { validateToken } from '../../tools/token.js';
 import type { IProfileEntity } from '../../modules/profile/entity.js';
 import type { IUserEntity } from '../../modules/user/entity.js';
 import type * as types from '../../types/index.js';
@@ -26,31 +25,31 @@ export default class Middleware {
     next();
   }
   static userValidation(app: express.Express): void {
-    app.use(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      if (Middleware.shouldSkipUserValidation(req)) {
-        return next();
-      }
-
-      try {
-        const token =
-          ((req.cookies as Record<string, string>)['monsters.uid'] as string) ??
-          (req.headers.authorization !== undefined
-            ? (req.headers.authorization.split('Bearer')?.[1] ?? '').trim()
-            : undefined);
-        const userToken = await validateToken(token);
-        res.locals.userId = userToken.accountId;
-      } catch (_err) {
-        // Access token is invalid. Check if session is valid
-        const sessionId = (req.cookies as Record<string, string>)._session as string;
-        const userSession = await State.provider.Session.find(sessionId);
-
-        if (!userSession) {
-          Log.error('Token validation error', 'No token nor session');
-          return handleErr(new errors.UnauthorizedError(), res);
-        }
-
-        res.locals.userId = userSession.accountId;
-      }
+    app.use((_req: express.Request, _res: express.Response, next: express.NextFunction): void => {
+      // if (Middleware.shouldSkipUserValidation(req)) {
+      //  return next();
+      // }
+      //
+      // try {
+      //  const token =
+      //    ((req.cookies as Record<string, string>)['monsters.uid'] as string) ??
+      //    (req.headers.authorization !== undefined
+      //      ? (req.headers.authorization.split('Bearer')?.[1] ?? '').trim()
+      //      : undefined);
+      //  const userToken = await validateToken(token);
+      //  res.locals.userId = userToken.accountId;
+      // } catch (_err) {
+      //  // Access token is invalid. Check if session is valid
+      //  const sessionId = (req.cookies as Record<string, string>)._session as string;
+      //  const userSession = await State.provider.Session.find(sessionId);
+      //
+      //  if (!userSession) {
+      //    Log.error('Token validation error', 'No token nor session');
+      //    return handleErr(new errors.UnauthorizedError(), res);
+      //  }
+      //
+      //  res.locals.userId = userSession.accountId;
+      // }
 
       return next();
     });
@@ -136,7 +135,7 @@ export default class Middleware {
   }
 
   private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
-    const reqController = new ReqControllerr();
+    const reqController = new ReqController();
     const user: types.ICachedUser = { account: undefined, profile: undefined };
 
     user.account = (

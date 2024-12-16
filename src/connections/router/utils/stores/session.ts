@@ -1,6 +1,6 @@
 import { Store } from 'express-session';
 import Log from 'simpleLogger';
-import State from '../../../../state.js';
+import State from '../../../../tools/state.js';
 import type { IUserSession } from '../../../../types/index.js';
 
 export default class SessionStore extends Store {

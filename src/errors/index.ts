@@ -415,6 +415,65 @@ export class ProfileNotFound extends FullError {
     super('ProfileNotFound');
     this.message = 'User profile was not found';
     this.name = 'ProfileNotFound';
+    this.code = '027';
     this.status = 404;
+  }
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     InvalidRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'InvalidRequest'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '028'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "Invalid request. This error means that there was a problem with user provided client data"
+ */
+export class InvalidRequest extends FullError {
+  constructor() {
+    super('Invalid request');
+    this.name = 'InvalidRequest';
+    this.code = '028';
+    this.status = 400;
+  }
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     MissingKeys:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'MissingKeys'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '029'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "Missing JWK keys for token validation"
+ */
+export class MissingKeys extends FullError {
+  constructor() {
+    super('Missing JWK keys for token validation');
+    this.name = 'MissingKeys';
+    this.code = '029';
+    this.status = 400;
   }
 }

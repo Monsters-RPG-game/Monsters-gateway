@@ -1,4 +1,7 @@
 export * from './connection.js';
+export * from './oidcClient.js';
+export * from './token.js';
+export * from './modules.js';
 export * from './ttl.js';
 export * from './logs.js';
 export * from './profiles.js';

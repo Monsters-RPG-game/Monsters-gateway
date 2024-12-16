@@ -18,20 +18,35 @@ export interface IFightTeam {
   value: number;
 }
 
+export interface ICharacterStats {
+  intelligence: number;
+  strength: number;
+  hp: number;
+}
+
+export interface IFightCharacterEntity {
+  _id: string;
+  lvl: number;
+  stats: ICharacterStats;
+}
+
+export interface IStateTeam {
+  character: IFightCharacterEntity;
+  stats: string;
+}
+
 export interface IState {
   initialized: { enemy: IStateTeam[]; attacker: IStateTeam[] };
   current: { enemy: IStateTeam[]; attacker: IStateTeam[] };
 }
 
 export interface IFightEntity {
+  _id: string;
   log: string;
   states: string;
   attacker: string;
   active: boolean;
   phase: number;
-}
-
-export interface IFight extends IFightEntity {
-  states: IState;
-  log: IFightLogsEntity;
+  start: string;
+  finish: string;
 }

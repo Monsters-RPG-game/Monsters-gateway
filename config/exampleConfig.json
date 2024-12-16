@@ -1,5 +1,6 @@
 {
   "amqpURI": "rabbitUrl",
+  "mongoURI": "mongodb://user:password@address:port",
   "redisURI": "redisUrl",
   "corsOrigin": "*",
   "myAddress": "http://localhost",
@@ -7,7 +8,6 @@
   "socketPort": 81,
   "session": {
     "secret": "sessionSecret",
-    "secured": false,
-    "trustProxy": false
+    "secured": false
   }
 }

@@ -1,5 +1,4 @@
 export enum EUserMainTargets {
-  Map = 'map',
   Npc = 'npc',
   Log = 'log',
   User = 'user',
@@ -21,7 +20,6 @@ export enum EUserMainTargets {
 export enum EUserTargets {
   Register = 'register',
   GetName = 'getName',
-  Remove = 'removeUser',
   DebugGetAll = 'debugGetAll',
 }
 
@@ -42,12 +40,6 @@ export enum EMessagesTargets {
   Get = 'get',
   Read = 'read',
   GetUnread = 'getUnread',
-}
-
-export enum EMapTargets {
-  Create = 'createMap',
-  Get = 'getMap',
-  Update = 'updateMap',
 }
 
 export enum ESkillsTargets {

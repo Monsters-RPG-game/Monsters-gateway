@@ -1,8 +1,8 @@
 import SendMessagesDto from './dto.js';
 import { ESocketType } from '../../../enums/index.js';
 import { NoUserWithProvidedName } from '../../../errors/index.js';
-import State from '../../../state.js';
 import RouterFactory from '../../../tools/abstracts/router.js';
+import State from '../../../tools/state.js';
 import UserDetailsDto from '../../user/details/dto.js';
 import type { ISendMessageDto } from './types.js';
 import type { IUsersTokens } from '../../../types/index.js';

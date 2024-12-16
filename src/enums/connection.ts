@@ -13,7 +13,6 @@ export enum EServices {
   Fights = 'fights',
   Gateway = 'gateway',
   Users = 'users',
-  Maps = 'maps',
   Messages = 'messages',
   Story = 'story',
 }
@@ -22,7 +21,6 @@ export enum EAmqQueues {
   Fights = 'fightsQueue',
   Gateway = 'gatewayQueue',
   Users = 'usersQueue',
-  Maps = 'mapsQueue',
   Messages = 'messagesQueue',
   Story = 'storyQueue',
 }

@@ -26,9 +26,6 @@ export default class Communicator {
       case enums.EServices.Fights:
         channel.sendToQueue(enums.EAmqQueues.Fights, Buffer.from(JSON.stringify(body)), { persistent: true });
         return;
-      case enums.EServices.Maps:
-        channel.sendToQueue(enums.EAmqQueues.Maps, Buffer.from(JSON.stringify(body)), { persistent: true });
-        return;
       case enums.EServices.Story:
         channel.sendToQueue(enums.EAmqQueues.Story, Buffer.from(JSON.stringify(body)), { persistent: true });
         return;
@@ -79,9 +76,6 @@ export default class Communicator {
         return;
       case enums.EServices.Fights:
         channel.sendToQueue(enums.EAmqQueues.Fights, Buffer.from(JSON.stringify(body)));
-        return;
-      case enums.EServices.Maps:
-        channel.sendToQueue(enums.EAmqQueues.Maps, Buffer.from(JSON.stringify(body)));
         return;
       case enums.EServices.Story:
         channel.sendToQueue(enums.EAmqQueues.Story, Buffer.from(JSON.stringify(body)));

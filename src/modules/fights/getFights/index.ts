@@ -3,11 +3,11 @@ import RouterFactory from '../../../tools/abstracts/router.js';
 import UserDetailsDto from '../../user/details/dto.js';
 import type * as types from '../../../types/index.js';
 import type { IUserEntity } from '../../user/entity.js';
-import type { IFight } from '../entity.js';
+import type { IFightEntity } from '../entity.js';
 import type express from 'express';
 
 export default class FightRouter extends RouterFactory {
-  async get(req: express.Request, res: express.Response): Promise<IFight[]> {
+  async get(req: express.Request, res: express.Response): Promise<IFightEntity[]> {
     const locals = res.locals as types.IUsersTokens;
     const { reqController } = locals;
 
@@ -26,7 +26,7 @@ export default class FightRouter extends RouterFactory {
     return this.prepareNames(payload, locals);
   }
 
-  private async prepareNames(data: IFight[], locals: types.IUsersTokens): Promise<IFight[]> {
+  private async prepareNames(data: IFightEntity[], locals: types.IUsersTokens): Promise<IFightEntity[]> {
     return Promise.all(
       data.map(async (d) => {
         return {

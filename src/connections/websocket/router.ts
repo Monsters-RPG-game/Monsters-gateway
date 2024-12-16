@@ -2,19 +2,8 @@ import Log from 'simpleLogger';
 import Validation from './validation.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
-import ChangeCharacterStatusDto from '../../modules/character/changeState/dto.js';
-import ChangeCharacterLocationDto from '../../modules/characterLocation/change/dto.js';
-import GetCharacterLocationDto from '../../modules/characterLocation/get/dto.js';
-import CreateFightDto from '../../modules/fights/debug/dto.js';
-import GetCharacterDto from '../../modules/npc/get/dto.js';
-import GetDetailedSkillsDto from '../../modules/skills/getDetailed/dto.js';
-import CharacterStatsDto from '../../modules/stats/get/dto.js';
-import State from '../../state.js';
+import State from '../../tools/state.js';
 import type * as types from './types/index.js';
-import type { IChangeCharacterLocationDto } from '../../modules/characterLocation/change/types.js';
-import type { IGetCharacterLocationDto } from '../../modules/characterLocation/get/types.js';
-import type { ICreateFightDto } from '../../modules/fights/debug/types.js';
-import type { IProfileEntity } from '../../modules/profile/entity.js';
 import type { IFullError } from '../../types/index.js';
 
 export default class Router {
@@ -26,25 +15,6 @@ export default class Router {
 
   private get validator(): Validation {
     return this._validator;
-  }
-
-  private getCharacterLocation(data: IGetCharacterLocationDto, ws: types.ISocket): void {
-    const payload = new GetCharacterLocationDto(data);
-
-    ws.reqController.characterLocation
-      .get(payload, { userId: ws.userId, tempId: '' })
-      .then((callback) => {
-        ws.send(
-          JSON.stringify({
-            type: enums.ESocketType.Success,
-            payload: callback.payload,
-          } as types.ISocketOutMessage),
-        );
-      })
-      .catch((err) => {
-        Log.error('Socket read message error', err);
-        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-      });
   }
 
   private getMessage(data: types.IGetMessageBody, ws: types.ISocket): void {
@@ -102,20 +72,6 @@ export default class Router {
     }
   }
 
-  handleMovementMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
-    this.validator.preValidate(message);
-
-    switch (message.subTarget) {
-      case enums.EMovementSubTargets.Move:
-        this.validator.validateCanMove(ws);
-        return this.moveCharacter(message.payload as IChangeCharacterLocationDto, ws);
-      case enums.EMovementSubTargets.Get:
-        return this.getCharacterLocation(message.payload as IGetCharacterLocationDto, ws);
-      default:
-        return this.handleError(new errors.IncorrectTargetError(), ws);
-    }
-  }
-
   handleError(err: IFullError, ws: types.ISocket): void {
     if (process.env.NODE_ENV !== 'production') console.trace(err);
     const { message, code, name } = err;
@@ -152,86 +108,6 @@ export default class Router {
         Log.error('Socket send message error', err);
         ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
       });
-  }
-
-  private moveCharacter(data: IChangeCharacterLocationDto, ws: types.ISocket): void {
-    const payload = new ChangeCharacterLocationDto(data);
-
-    ws.reqController.characterLocation
-      .change(payload, { userId: ws.userId, tempId: '' })
-      .then((cb) => {
-        if (cb.payload.attack) {
-          this.attackEnemy(ws)
-            .then((state) => {
-              // #TODO This is temporary. Add some kind of system, which will update profile better, that this
-              ws.profile!.state = state.state.state as enums.ECharacterState;
-              ws.send(JSON.stringify({ ...state, type: enums.ESocketType.Success } as types.ISocketOutMessage));
-            })
-            .catch((err) => {
-              Log.error('Socket read message error', err);
-              ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-            });
-        } else {
-          ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
-        }
-      })
-      .catch((err) => {
-        Log.error('Socket read message error', err);
-        ws.send(JSON.stringify({ type: enums.ESocketType.Error, payload: err } as types.ISocketOutMessage));
-      });
-  }
-
-  private async attackEnemy(ws: types.ISocket): Promise<{ state: Partial<IProfileEntity> }> {
-    const { reqController, userId, profile } = ws;
-
-    if (!profile) throw new errors.ProfileNotFound();
-
-    let skills = await State.redis.getCachedSkills(userId);
-
-    if (!skills) {
-      skills = (
-        await reqController.skills.getDetailed(new GetDetailedSkillsDto(profile.skills), {
-          userId,
-          tempId: '',
-        })
-      ).payload;
-    }
-    const teams: ICreateFightDto = { teams: [[], []], attacker: undefined!, skills };
-
-    const attackerStats = await reqController.stats.get(new CharacterStatsDto({ id: profile.stats }), {
-      userId,
-      tempId: '',
-    });
-
-    teams.attacker = {
-      _id: userId,
-      lvl: profile.lvl,
-      stats: attackerStats.payload,
-    };
-    const enemies = await reqController.npc.get(new GetCharacterDto({ page: 0, race: enums.ENpcRace.Troll, lvl: 2 }), {
-      userId,
-      tempId: '',
-    });
-
-    enemies.payload.forEach((u) => {
-      teams.teams[1].push({
-        character: u,
-      });
-    });
-
-    const data = new CreateFightDto(teams);
-    await reqController.fights.createFight(data, {
-      userId,
-      tempId: '',
-    });
-
-    const characterState = new ChangeCharacterStatusDto({ state: enums.ECharacterState.Fight });
-    const stateUpdate = await reqController.characterState.changeState(characterState, {
-      userId,
-      tempId: '',
-    });
-
-    return { state: stateUpdate };
   }
 
   private readMessage(data: types.IReadMessageBody, ws: types.ISocket): void {

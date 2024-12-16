@@ -18,7 +18,6 @@ export default class Broker {
   private _services: {
     [key in types.IAvailableServices]: { timeout: NodeJS.Timeout | null; retries: number; dead: boolean };
   } = {
-    [enums.EServices.Maps]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Users]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Messages]: { timeout: null, retries: 0, dead: true },
     [enums.EServices.Fights]: { timeout: null, retries: 0, dead: true },
@@ -32,9 +31,6 @@ export default class Broker {
     switch (target) {
       case enums.EServices.Users:
         await this.channel!.purgeQueue(enums.EAmqQueues.Users);
-        break;
-      case enums.EServices.Maps:
-        await this.channel!.purgeQueue(enums.EAmqQueues.Maps);
         break;
       case enums.EServices.Messages:
         await this.channel!.purgeQueue(enums.EAmqQueues.Messages);
@@ -79,14 +75,15 @@ export default class Broker {
   }
 
   getHealth(): IHealth {
-    const data = { alive: 0 };
+    const data: Partial<IHealth> = { alive: 0 };
     Object.entries(this._services).forEach(([k, v]) => {
-      data[k] = !v.dead;
+      data[k as enums.EServices] = !v.dead;
     });
     data.alive = Math.round(process.uptime());
 
-    return data;
+    return data as IHealth;
   }
+
   async init(): Promise<void> {
     await this.initCommunication();
   }
