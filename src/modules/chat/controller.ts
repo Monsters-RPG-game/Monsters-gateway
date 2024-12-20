@@ -1,10 +1,10 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
+import ReqHandler from '../../tools//abstractions/reqController.js';
 import type { IPreparedMessagesBody } from './types.js';
 import type * as types from '../../connections/websocket/types/index.js';
-import type { IGetUnreadMessagesDto, IUnreadMessage } from '../message/getUnread/types.js';
+import type { IGetUnreadMessagesDto, IUnreadMessage } from '../messages/subModules/getUnread/types.js';
 
-export default class Chat extends ReqController {
+export default class Chat extends ReqHandler {
   async getUnread(
     data: IGetUnreadMessagesDto,
     locals: {

@@ -1,8 +1,8 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type { IPartyEntity } from './get/types.js';
-import type GetPartyDto from '../../modules/party/get/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
+import type { IPartyEntity } from './entity.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
+import type GetPartyDto from './subModules/get/dto.js';
 
 export default class Party extends ReqController {
   async get(

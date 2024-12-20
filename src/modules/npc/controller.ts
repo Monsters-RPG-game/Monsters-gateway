@@ -1,13 +1,13 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type AddCharacterDto from './add/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
 import type { ICharacterEntity } from './entity.js';
-import type GetCharacterDto from './get/dto.js';
-import type RemoveCharacterDto from './remove/dto.js';
-import type UpdateCharacterDto from './update/dto.js';
+import type AddCharacterDto from './subModules/add/dto.js';
+import type GetCharacterDto from './subModules/get/dto.js';
+import type RemoveCharacterDto from './subModules/remove/dto.js';
+import type UpdateCharacterDto from './subModules/update/dto.js';
 import type * as types from '../../types/index.js';
 
-export default class User extends ReqController {
+export default class Npc extends ReqController {
   async get(
     data: GetCharacterDto,
     userInfo: types.IUserBrokerInfo,

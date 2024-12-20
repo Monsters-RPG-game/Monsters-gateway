@@ -15,14 +15,14 @@ class App {
     return this._liveness;
   }
 
-  private set liveness(value: Liveness | undefined) {
-    this._liveness = value;
+  private set liveness(val: Liveness | undefined) {
+    this._liveness = val;
   }
 
   init(): void {
     this.configLogger();
     this.handleInit().catch((err) => {
-      const { stack, message } = err as IFullError;
+      const { stack, message } = err as IFullError | Error;
       Log.error('Server', 'Err while initializing app', message, stack);
 
       this.close();
@@ -39,6 +39,7 @@ class App {
     Log.setPrefix('monsters');
   }
 
+  @Log.decorateTime('App initialized')
   private async handleInit(): Promise<void> {
     const router = new Router();
     const broker = new Broker();
@@ -55,7 +56,6 @@ class App {
     await broker.init();
     await redis.init();
     await mongo.init();
-    await State.initKeys();
     router.init();
     socket.init();
     Log.log('Server', 'Server started');

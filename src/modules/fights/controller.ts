@@ -1,11 +1,11 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type AttackDto from './attack/dto.js';
-import type CreateFightDto from './debug/dto.js';
-import type { IActionEntity, IFightEntity, IFightLogsEntity } from './entity.js';
-import type { IGetFightDto } from './getFights/types.js';
-import type { IGetFightLogsDto } from './getLogs/types.js';
-import type UseSkillDto from './useSkill/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
+import type { IActionEntity, IFight, IFightLogsEntity } from './entity.js';
+import type AttackDto from './subModules/attack/dto.js';
+import type CreateFightDto from './subModules/debug/dto.js';
+import type { IGetFightDto } from './subModules/getFight/types.js';
+import type { IGetFightLogsDto } from './subModules/getLogs/types.js';
+import type UseSkillDto from './subModules/useSkill/dto.js';
 import type * as types from '../../types/index.js';
 
 export default class Fight extends ReqController {
@@ -14,7 +14,7 @@ export default class Fight extends ReqController {
     userInfo: types.IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IFightEntity[];
+    payload: IFight[];
   }> {
     return (await this.sendReq(
       this.service,
@@ -24,7 +24,7 @@ export default class Fight extends ReqController {
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IFightEntity[];
+      payload: IFight[];
     };
   }
   async getLogs(

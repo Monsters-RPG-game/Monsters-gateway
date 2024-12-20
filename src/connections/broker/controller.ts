@@ -33,6 +33,7 @@ export default class Communicator {
         throw new Error('Unknown message target');
     }
   };
+
   get queue(): types.ICommunicationQueue {
     return this._queue;
   }

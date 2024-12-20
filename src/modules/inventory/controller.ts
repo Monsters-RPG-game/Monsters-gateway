@@ -1,11 +1,11 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type { IInventoryEntity } from './get/types.js';
-import type InventoryDropDto from '../../modules/inventory/drop/dto.js';
-import type InventoryUseDto from '../../modules/inventory/use/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
+import type { IInventoryEntity } from './entity.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
+import type InventoryDropDto from './subModules/drop/dto.js';
+import type InventoryUseDto from './subModules/use/dto.js';
 
-export default class Inventory extends ReqController {
+export default class InventoryController extends ReqController {
   async use(data: InventoryUseDto, userData: IUserBrokerInfo): Promise<void> {
     await this.sendReq(this.service, enums.EUserMainTargets.Inventory, enums.EItemsTargets.Use, userData, data);
   }

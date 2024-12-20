@@ -1,13 +1,14 @@
 {
-  "amqpURI": "rabbitUrl",
-  "mongoURI": "mongodb://user:password@address:port",
-  "redisURI": "redisUrl",
-  "corsOrigin": "*",
+  "port": 5003,
+  "mongoURI": "mongodb://user:pass@ser:port",
   "myAddress": "http://localhost",
-  "httpPort": 80,
-  "socketPort": 81,
+  "authorizationAddress": "http://localhost:2000",
+  "redisURI": "redis://user:password@adress:port",
+  "corsOrigin": ["http://localhost"],
+  "myDomain": ".domain.com",
   "session": {
     "secret": "sessionSecret",
-    "secured": false
+    "secured": false,
+    "trustProxy": true
   }
 }

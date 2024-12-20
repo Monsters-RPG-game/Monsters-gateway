@@ -1,10 +1,9 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type { ISkillsEntity } from './entity.js';
-import type { ISkillsEntityDetailed } from './getDetailed/types.js';
-import type AddSkillsDto from '../../modules/skills/add/dto.js';
-import type GetSkillsDto from '../../modules/skills/get/dto.js';
-import type GetDetailedSkillsDto from '../../modules/skills/getDetailed/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
+import type { ISkillsEntity, IDetailedSkillsEntity } from './entity.js';
+import type AddSkillsDto from './subModules/add/dto.js';
+import type GetSkillsDto from './subModules/get/dto.js';
+import type GetDetailedSkillsDto from './subModules/getDetailed/dto.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
 
 export default class Skills extends ReqController {
@@ -13,7 +12,7 @@ export default class Skills extends ReqController {
     userData: IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: ISkillsEntityDetailed;
+    payload: IDetailedSkillsEntity;
   }> {
     return (await this.sendReq(
       this.service,
@@ -23,7 +22,7 @@ export default class Skills extends ReqController {
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: ISkillsEntityDetailed;
+      payload: IDetailedSkillsEntity;
     };
   }
   async get(

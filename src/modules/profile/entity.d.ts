@@ -1,4 +1,4 @@
-import type { ECharacterState, EUserRace } from '../../enums/index.js';
+import type { ECharacterState, EUserRace } from '../../enums';
 
 export interface IProfileEntity {
   _id: string;

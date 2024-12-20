@@ -1,11 +1,13 @@
 import type ReqController from '../connections/router/reqController.js';
 import type * as enums from '../enums/index.js';
 import type { IProfileEntity } from '../modules/profile/entity.js';
-import type { IUserEntity } from '../modules/user/entity.js';
+import type { IUserEntity } from '../modules/users/entity.js';
 import type { Locals } from 'express';
 import type { Session } from 'express-session';
+import type { JWTPayload } from 'jose';
 
-export interface IUsersTokens extends Locals {
+export interface IUserLocals extends Locals {
+  reqId: string;
   reqController: ReqController;
   userId: string | undefined;
   tempId: string;
@@ -17,8 +19,11 @@ export interface IUsersTokens extends Locals {
   [key: string]: unknown;
 }
 
-export interface IUserCredentials {
-  id: string;
+export interface IUserServerTokens {
+  access_token: string;
+  expires_in: number;
+  id_token: string;
+  refresh_token: string;
 }
 
 export interface IUserSession extends Session {
@@ -39,22 +44,6 @@ export interface ICachedUser {
   profile: IProfileEntity | undefined;
 }
 
-export interface IAccessToken {
-  iat: number;
-  exp: number;
-  accountId: string;
-  grantId: string;
-  gty: string;
-  sessionUid: string;
-  clientId: string;
-  scope: string;
-  kind: string;
-  jti: string;
-}
-
-export interface IUserServerTokens {
-  access_token: string;
-  expires_in: number;
-  id_token: string;
-  refresh_token: string;
+export interface IUserAuthorizationsData extends JWTPayload {
+  login: string;
 }

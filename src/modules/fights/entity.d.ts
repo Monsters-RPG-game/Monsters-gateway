@@ -1,4 +1,5 @@
 import type { EFightAction } from '../../enums/index.js';
+import type { IFightCharacterEntity } from '../npc/entity.js';
 
 export interface IActionEntity {
   character: string;
@@ -18,18 +19,6 @@ export interface IFightTeam {
   value: number;
 }
 
-export interface ICharacterStats {
-  intelligence: number;
-  strength: number;
-  hp: number;
-}
-
-export interface IFightCharacterEntity {
-  _id: string;
-  lvl: number;
-  stats: ICharacterStats;
-}
-
 export interface IStateTeam {
   character: IFightCharacterEntity;
   stats: string;
@@ -41,12 +30,14 @@ export interface IState {
 }
 
 export interface IFightEntity {
-  _id: string;
   log: string;
   states: string;
   attacker: string;
   active: boolean;
   phase: number;
-  start: string;
-  finish: string;
+}
+
+export interface IFight extends Omit<IFightEntity, 'log' | 'states'> {
+  states: IState;
+  log: IFightLogsEntity;
 }

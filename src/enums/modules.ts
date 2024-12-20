@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
-export enum ELocalModules {
+export enum EModules {
   User = 'user',
   Client = 'client',
   OidcClient = 'oidcClient',

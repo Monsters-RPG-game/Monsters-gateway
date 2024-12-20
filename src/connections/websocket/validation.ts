@@ -1,6 +1,6 @@
-import { ECharacterState } from '../../enums/users.js';
+import { ECharacterState } from '../../enums/index.js';
 import { UserCannotMove } from '../../errors/index.js';
-import Validator from '../../tools/validation/index.js';
+import Validator from '../../tools/validation.js';
 import type {
   IGetMessageBody,
   IReadMessageBody,

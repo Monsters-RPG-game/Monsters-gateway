@@ -1,10 +1,10 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type { INpcStoryEntity, INarratorEntity } from './entity.js';
-import type GetByStageNarratorStoryDto from './getByStage/dto.js';
-import type GetIntentResponseDto from './getIntent/dto.js';
-import type GetNarratorStoryDto from './getNarratoryStory/dto.js';
-import type GetNpcStoryDto from './getNpcStory/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
+import type { INarratorStoryEntity, INpcStoryEntity } from './entity.js';
+import type GetIntentResponseDto from './subModules/getByIntent/dto.js';
+import type GetByStageNarratorStoryDto from './subModules/getByStage/dto.js';
+import type GetNarratorStoryDto from './subModules/getNarratorStory/dto.js';
+import type GetNpcStoryDto from './subModules/getNpcStory/dto.js';
 import type { IChapter, ILine } from './types.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
 
@@ -45,12 +45,12 @@ export default class Story extends ReqController {
       payload: ILine;
     };
   }
-  async getNarratoryStory(
+  async getNarratorStory(
     data: GetNarratorStoryDto,
     userData: IUserBrokerInfo,
   ): Promise<{
     type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: INarratorEntity;
+    payload: INarratorStoryEntity;
   }> {
     return (await this.sendReq(
       this.service,
@@ -60,7 +60,7 @@ export default class Story extends ReqController {
       data,
     )) as {
       type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: INarratorEntity;
+      payload: INarratorStoryEntity;
     };
   }
   async getNpcStory(

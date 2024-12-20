@@ -6,7 +6,7 @@ import { InternalError } from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
 import { generateRandomName } from '../../utils/index.js';
 import type Communicator from './controller.js';
-import type { IHealth } from '../../modules/health/types.js';
+import type { IHealth } from '../../modules/health/subModules/get/types.js';
 import type * as types from '../../types/index.js';
 
 export default class Broker {

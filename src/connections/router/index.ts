@@ -59,7 +59,7 @@ export default class Router {
    */
   private initMiddleware(): void {
     this.middleware.generateMiddleware(this.app);
-    this.middleware.initializeHandler(this.app);
+    this.middleware.initializeReqController(this.app);
   }
 
   /**

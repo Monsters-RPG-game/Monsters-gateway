@@ -1,35 +1,24 @@
-# Docker
+**/.classpath
 **/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/charts
 **/docker-compose*
 **/compose*
 **/Dockerfile*
-
-# Git
-**/.git
-**/.gitignore
-
-# Configs
-**/.env
-
-# Editors settings
-**/.vs
-**/.vscode
-.idea
-
-# Npm
 **/npm-debug.log
-
-# Tests
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
 __tests__
-
-# Modules
 node_modules
-
-# Generic
 README.md
-.editorconfig
-.prettierrc
-eslint.config.mjs
-licence.md
-makefile
-tsconfig.json

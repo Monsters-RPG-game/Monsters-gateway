@@ -1,15 +1,10 @@
-import type AddClient from './add/dto.js';
-import type mongoose from 'mongoose';
+import type { IClientEntity } from '../entity.js';
+import type AddClient from './add.js';
 
-export interface IClientEntity {
-  _id?: string | mongoose.Types.ObjectId;
+export interface IAddClient {
   clientId: string;
   failUrl: string;
   redirectUri: string;
-}
-
-export interface IClient extends IClientEntity, mongoose.Document {
-  _id: mongoose.Types.ObjectId;
 }
 
 export interface IClientRepository {

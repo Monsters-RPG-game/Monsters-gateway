@@ -5,8 +5,8 @@ import Repository from './repository.js';
 import * as enums from '../../enums/index.js';
 import getConfig from '../../tools/configLoader.js';
 import type { IProfileEntity } from '../../modules/profile/entity.js';
-import type { ISkillsEntityDetailed } from '../../modules/skills/getDetailed/types.js';
-import type { IUserEntity } from '../../modules/user/entity.js';
+import type { IDetailedSkillsEntity } from '../../modules/skills/entity.js';
+import type { IUserEntity } from '../../modules/users/entity.js';
 import type { ICachedUser, IFullError, IUserSession, ISessionTokenData } from '../../types/index.js';
 import type { ClientRateLimitInfo } from 'express-rate-limit';
 import type { RedisClientType } from 'redis';
@@ -27,12 +27,12 @@ export default class Redis {
     return this._repository;
   }
 
-  async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
+  async getCachedSkills(id: string): Promise<IDetailedSkillsEntity | undefined> {
     const cachedSkills = await this.repository.getFromHash({
       target: `${enums.ERedisTargets.CachedSkills}:${id}`,
       value: id,
     });
-    return cachedSkills ? (JSON.parse(cachedSkills) as ISkillsEntityDetailed) : undefined;
+    return cachedSkills ? (JSON.parse(cachedSkills) as IDetailedSkillsEntity) : undefined;
   }
 
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {
@@ -46,40 +46,29 @@ export default class Redis {
   }
 
   async getSession(session: string): Promise<IUserSession | null> {
-    const key = RedisKeys.session(session);
-
-    const data = await this.repository.getElement(key);
+    const data = await this.repository.getElement(`session:${session}`);
 
     return data ? (JSON.parse(data) as IUserSession) : null;
   }
 
   async getSessionToken(id: string): Promise<ISessionTokenData | null> {
-    const key = RedisKeys.sessionToken(id);
-
-    const data = await this.repository.getElement(key);
+    const data = await this.repository.getElement(`sessionToken:${id}`);
 
     return data ? (JSON.parse(data) as ISessionTokenData) : null;
   }
 
   async getSessionTokenId(userId: string): Promise<string | null> {
-    const key = RedisKeys.sessionTokenId(userId);
-
-    return this.repository.getElement(key);
+    return this.repository.getElement(`sessionTokensId:${userId}`);
   }
 
   async getSessionTokenTTL(sessionId: string): Promise<number> {
-    const key = RedisKeys.sessionToken(sessionId);
-
-    return this.repository.getTTl(key);
+    return this.repository.getTTl(`sessionToken:${sessionId}`);
   }
 
   async getUserToken(userId: string): Promise<{ accessToken: string | null; refreshToken: string | null }> {
     Log.debug('Redis', `Getting tokens for user ${userId}`);
-    const accessKey = RedisKeys.accessToken(userId);
-    const refreshKey = RedisKeys.refreshToken(userId);
-
-    const accessToken = await this.repository.getElement(accessKey);
-    const refreshToken = await this.repository.getElement(refreshKey);
+    const accessToken = await this.repository.getElement(`accessToken:${userId}`);
+    const refreshToken = await this.repository.getElement(`refreshToken:${userId}`);
 
     return { accessToken, refreshToken };
   }
@@ -89,8 +78,7 @@ export default class Redis {
   }
 
   async setRateLimit(ip: string): Promise<ClientRateLimitInfo> {
-    const key = RedisKeys.rateLimit(ip);
-    let data: ClientRateLimitInfo | string | null = await this.repository.getElement(key);
+    let data: ClientRateLimitInfo | string | null = await this.repository.getElement(`rateLimit:${ip}`);
 
     if (!data) {
       data = { totalHits: 1, resetTime: new Date(Date.now() + 60 * 1000) };
@@ -100,73 +88,15 @@ export default class Redis {
       data = { totalHits: (parsed.totalHits += 1), resetTime: new Date(Date.now() + 60 * 1000) };
     }
 
-    await this.repository.addElement(key, JSON.stringify(data));
-    await this.setExpirationDate(key, enums.ETTL.ExpressRateLimiter);
+    await this.repository.addElement(`rateLimit:${ip}`, JSON.stringify(data));
+    await this.setExpirationDate(`rateLimit:${ip}`, enums.ETTL.ExpressRateLimiter);
 
     return data;
   }
 
-  async addCachedSkills(skills: ISkillsEntityDetailed, userId: string): Promise<void> {
+  async addCachedSkills(skills: IDetailedSkillsEntity, userId: string): Promise<void> {
     await this.repository.addToHash(`${enums.ERedisTargets.CachedSkills}:${userId}`, userId, JSON.stringify(skills));
     await this.repository.setExpirationDate(`${enums.ERedisTargets.CachedSkills}:${userId}`, 60000);
-  }
-
-  async addSessionToken(id: string, sessionData: ISessionTokenData, eol: Date): Promise<void> {
-    const sessionTokenKey = RedisKeys.sessionToken(id);
-    const sessionTokenIdKey = RedisKeys.sessionTokenId(sessionData.sub!);
-
-    await this.repository.addElement(sessionTokenKey, JSON.stringify(sessionData));
-    await this.repository.setExpirationDate(sessionTokenKey, Math.floor((eol.getTime() - Date.now()) / 1000));
-    await this.repository.addElement(sessionTokenIdKey, id);
-    await this.repository.setExpirationDate(sessionTokenIdKey, Math.floor((eol.getTime() - Date.now()) / 1000));
-  }
-
-  async addAccessToken(userId: string, token: string): Promise<void> {
-    const key = RedisKeys.accessToken(userId);
-
-    await this.repository.addElement(key, token);
-    await this.repository.setExpirationDate(key, enums.ETTL.UserAccessToken);
-  }
-
-  async addRefreshToken(userId: string, token: string): Promise<void> {
-    const key = RedisKeys.refreshToken(userId);
-
-    await this.repository.addElement(key, token);
-    await this.repository.setExpirationDate(key, enums.ETTL.UserRefreshToken);
-  }
-
-  async removeAccessToken(userId: string): Promise<void> {
-    const key = RedisKeys.accessToken(userId);
-
-    await this.repository.removeElement(key);
-  }
-
-  async removeRefreshToken(userId: string): Promise<void> {
-    const key = RedisKeys.refreshToken(userId);
-
-    await this.repository.removeElement(key);
-  }
-
-  async removeSessionToken(sessionId: string): Promise<void> {
-    const key = RedisKeys.sessionToken(sessionId);
-
-    await this.repository.removeElement(key);
-  }
-
-  async removeSessionTokenId(userId: string): Promise<void> {
-    const key = RedisKeys.sessionTokenId(userId);
-
-    await this.repository.removeElement(key);
-  }
-
-  async removeUserTokens(userId: string): Promise<void> {
-    await this.removeAccessToken(userId);
-    await this.removeRefreshToken(userId);
-    const sessionTokenId = await this.getSessionTokenId(userId);
-    if (sessionTokenId) {
-      await this.removeSessionToken(sessionTokenId);
-      await this.removeSessionTokenId(userId);
-    }
   }
 
   async removeCachedUser(target: string): Promise<void> {
@@ -201,10 +131,56 @@ export default class Redis {
   }
 
   async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
-    const key = RedisKeys.userCache(user.account._id);
+    const key = RedisKeys.userCache(user.account._id as string);
 
-    await this.repository.addToHash(key, user.account._id, JSON.stringify(user));
+    await this.repository.addToHash(key, user.account._id as string, JSON.stringify(user));
     await this.repository.setExpirationDate(key, 60000);
+  }
+
+  async addSessionToken(id: string, sessionData: ISessionTokenData, eol: Date): Promise<void> {
+    await this.repository.addElement(`sessionToken:${id}`, JSON.stringify(sessionData));
+    await this.repository.setExpirationDate(`sessionToken:${id}`, Math.floor((eol.getTime() - Date.now()) / 1000));
+    await this.repository.addElement(`sessionTokensId:${sessionData.sub}`, id);
+    await this.repository.setExpirationDate(
+      `sessionTokensId:${sessionData.sub}`,
+      Math.floor((eol.getTime() - Date.now()) / 1000),
+    );
+  }
+
+  async addAccessToken(userId: string, token: string): Promise<void> {
+    await this.repository.addElement(`accessToken:${userId}`, token);
+    await this.repository.setExpirationDate(`accessToken:${userId}`, enums.ETTL.UserAccessToken);
+  }
+
+  async addRefreshToken(userId: string, token: string): Promise<void> {
+    await this.repository.addElement(`refreshToken:${userId}`, token);
+    await this.repository.setExpirationDate(`refreshToken:${userId}`, enums.ETTL.UserRefreshToken);
+  }
+
+  async removeAccessToken(userId: string): Promise<void> {
+    await this.repository.removeElement(`accessToken:${userId}`);
+  }
+
+  async removeRefreshToken(userId: string): Promise<void> {
+    await this.repository.removeElement(`refreshToken:${userId}`);
+  }
+
+  async removeSessionToken(sessionId: string): Promise<void> {
+    await this.repository.removeElement(`sessionToken:${sessionId}`);
+  }
+
+  async removeSessionTokenId(userId: string): Promise<void> {
+    await this.repository.removeElement(`sessionTokensId:${userId}`);
+  }
+
+  async removeUserTokens(userId: string): Promise<void> {
+    await this.removeAccessToken(userId);
+    await this.removeRefreshToken(userId);
+    const sessionTokenId = await this.getSessionTokenId(userId);
+    if (sessionTokenId) {
+      await this.removeSessionToken(sessionTokenId);
+      await this.removeSessionTokenId(userId);
+    }
   }
 
   async addUserTokens(userId: string, accessToken: string, refreshToken: string): Promise<void> {
@@ -213,8 +189,7 @@ export default class Redis {
   }
 
   async decrementRateLimit(ip: string): Promise<void> {
-    const key = RedisKeys.rateLimit(ip);
-    let data: ClientRateLimitInfo | string | null = await this.repository.getElement(key);
+    let data: ClientRateLimitInfo | string | null = await this.repository.getElement(`rateLimit:${ip}`);
     if (!data) return;
 
     const parsed = JSON.parse(data) as ClientRateLimitInfo;
@@ -223,8 +198,8 @@ export default class Redis {
       resetTime: new Date(Date.now() + 60 * 1000),
     };
 
-    await this.repository.addElement(key, JSON.stringify(data));
-    await this.setExpirationDate(key, enums.ETTL.ExpressRateLimiter);
+    await this.repository.addElement(`rateLimit:${ip}`, JSON.stringify(data));
+    await this.setExpirationDate(`rateLimit:${ip}`, enums.ETTL.ExpressRateLimiter);
   }
 
   async init(): Promise<void> {
@@ -243,22 +218,16 @@ export default class Redis {
   }
 
   async addSession(session: string, sessionData: IUserSession): Promise<void> {
-    const key = RedisKeys.session(session);
-
-    await this.repository.addElement(key, JSON.stringify(sessionData));
-    await this.repository.setExpirationDate(key, enums.ETTL.ExpressSession);
+    await this.repository.addElement(`session:${session}`, JSON.stringify(sessionData));
+    await this.repository.setExpirationDate(`session:${session}`, enums.ETTL.ExpressSession);
   }
 
   async removeSession(session: string): Promise<void> {
-    const key = RedisKeys.session(session);
-
-    return this.repository.removeElement(key);
+    return this.repository.removeElement(`session:${session}`);
   }
 
   async removeRateLimit(ip: string): Promise<void> {
-    const key = RedisKeys.rateLimit(ip);
-
-    return this.repository.removeElement(key);
+    return this.repository.removeElement(`rateLimit:${ip}`);
   }
 
   private initClient(): void {

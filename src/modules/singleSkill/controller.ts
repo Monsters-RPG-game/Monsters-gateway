@@ -1,8 +1,8 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type AddSingleSkillDto from './add/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
 import type { ISingleSkillEntity } from './entity.js';
-import type GetSingleSkillDto from './get/dto.js';
+import type AddSingleSkillDto from './subModules/add/dto.js';
+import type GetSingleSkillDto from './subModules/get/dto.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
 
 export default class SingleSkill extends ReqController {

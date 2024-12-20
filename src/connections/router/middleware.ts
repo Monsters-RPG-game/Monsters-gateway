@@ -5,25 +5,20 @@ import session from 'express-session';
 import helmet from 'helmet';
 import Log from 'simpleLogger';
 import ReqController from './reqController.js';
-import limitRate from './utils/index.js';
-import * as enums from '../../enums/index.js';
-import * as errors from '../../errors/index.js';
-import handleErr from '../../errors/utils.js';
-import GetDetailedSkillsDto from '../../modules/skills/getDetailed/dto.js';
-import UserDetailsDto from '../../modules/user/details/dto.js';
-import State from '../../tools/state.js';
 import SessionStore from './utils/stores/session.js';
-import GetProfileDto from '../../modules/profile/get/dto.js';
+import * as errors from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
-import type { IProfileEntity } from '../../modules/profile/entity.js';
-import type { IUserEntity } from '../../modules/user/entity.js';
 import type * as types from '../../types/index.js';
+import type { IResponse } from '../../types/requests.js';
+import type { Express } from 'express';
+import { randomUUID } from 'crypto';
 
 export default class Middleware {
   static setNoCache(_req: express.Request, res: express.Response, next: express.NextFunction): void {
     res.set('cache-control', 'no-store');
     next();
   }
+
   static userValidation(app: express.Express): void {
     app.use((_req: express.Request, _res: express.Response, next: express.NextFunction): void => {
       // if (Middleware.shouldSkipUserValidation(req)) {
@@ -55,116 +50,112 @@ export default class Middleware {
     });
   }
 
-  static validateAdmin(_req: express.Request, res: express.Response, next: express.NextFunction): void {
-    const { user } = res.locals as types.IUsersTokens;
-
-    if (!user || user.type !== enums.EUserTypes.Admin) throw new errors.NoPermission();
+  static validateAdmin(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
+    // const { user } = res.locals as types.IUsersTokens;
+    //
+    // if (!user || user.type !== enums.EUserTypes.Admin) throw new errors.NoPermission();
     next();
   }
 
-  static async initUserProfile(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-    const reqController = new ReqController();
-
-    if (Middleware.shouldSkipUserValidation(req)) {
-      return next();
-    }
-
-    try {
-      const userId = res.locals.userId as string;
-      // Validate if profile is initialized
-      let user = await State.redis.getCachedUser(userId);
-
-      if (!user) {
-        user = await Middleware.fetchUserProfile(res, userId);
-      }
-
-      res.locals.profile = user.profile;
-      res.locals.user = user.account;
-
-      let skills = await State.redis.getCachedSkills(userId);
-      if (!skills) {
-        skills = (
-          await reqController.skills.getDetailed(new GetDetailedSkillsDto(user.profile!.skills), {
-            userId,
-            tempId: '',
-          })
-        ).payload;
-
-        await State.redis.addCachedSkills(skills, userId);
-      }
-
-      return next();
-    } catch (err) {
-      return handleErr(err as types.IFullError, res);
-    }
+  static initUserProfile(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
+    // const reqController = new ReqController();
+    //
+    // if (Middleware.shouldSkipUserValidation(req)) {
+    //  return next();
+    // }
+    //
+    // try {
+    //  const userId = res.locals.userId as string;
+    //  // Validate if profile is initialized
+    //  let user = await State.redis.getCachedUser(userId);
+    //
+    //  if (!user) {
+    //    user = await Middleware.fetchUserProfile(res, userId);
+    //  }
+    //
+    //  res.locals.profile = user.profile;
+    //  res.locals.user = user.account;
+    //
+    //  let skills = await State.redis.getCachedSkills(userId);
+    //  if (!skills) {
+    //    skills = (
+    //      await reqController.skills.getDetailed(new GetDetailedSkillsDto(user.profile!.skills), {
+    //        userId,
+    //        tempId: '',
+    //      })
+    //    ).payload;
+    //
+    //    await State.redis.addCachedSkills(skills, userId);
+    //  }
+    //
+    return next();
+    // } catch (err) {
+    //  return handleErr(err as types.IFullError, res);
+    // }
   }
 
-  static async userProfileValidation(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ): Promise<void> {
-    if (Middleware.shouldSkipUserValidation(req)) {
-      return next();
-    }
-
-    try {
-      const { user } = res.locals as types.IUsersTokens;
-      let { profile } = res.locals as types.IUsersTokens;
-      if (!profile) {
-        const dbUser = await Middleware.fetchUserProfile(res, (res.locals as types.IUsersTokens).userId as string);
-        // eslint-disable-next-line prefer-destructuring
-        profile = dbUser.profile;
-      }
-
-      if (!profile?.initialized && user?.type !== enums.EUserTypes.Admin) {
-        throw new errors.ProfileNotInitialized();
-      }
-
-      return next();
-    } catch (_err) {
-      return handleErr(new errors.ProfileNotInitialized(), res);
-    }
+  static userProfileValidation(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
+    // if (Middleware.shouldSkipUserValidation(req)) {
+    return next();
+    // }
+    //
+    // try {
+    //  const { user } = res.locals as types.IUsersTokens;
+    //  let { profile } = res.locals as types.IUsersTokens;
+    //  if (!profile) {
+    //    const dbUser = await Middleware.fetchUserProfile(res, (res.locals as types.IUsersTokens).userId as string);
+    //    // eslint-disable-next-line prefer-destructuring
+    //    profile = dbUser.profile;
+    //  }
+    //
+    //  if (!profile?.initialized && user?.type !== enums.EUserTypes.Admin) {
+    //    throw new errors.ProfileNotInitialized();
+    //  }
+    //
+    //  return next();
+    // } catch (_err) {
+    //  return handleErr(new errors.ProfileNotInitialized(), res);
+    // }
   }
 
-  private static shouldSkipUserValidation(req: express.Request): boolean {
-    // Disable token validation for oidc routes
-    const oidcRoutes = ['.well-known', 'me', 'auth', 'token', 'session', 'certs'];
-    const splitRoute = req.path.split('/');
-    return splitRoute.length > 1 && oidcRoutes.includes(splitRoute[1] as string);
-  }
+  // private static shouldSkipUserValidation(req: express.Request): boolean {
+  // Disable token validation for oidc routes
+  // const oidcRoutes = ['.well-known', 'me', 'auth', 'token', 'session', 'certs'];
+  // const splitRoute = req.path.split('/');
+  // return splitRoute.length > 1 && oidcRoutes.includes(splitRoute[1] as string);
+  // }
 
-  private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
-    const reqController = new ReqController();
-    const user: types.ICachedUser = { account: undefined, profile: undefined };
+  // private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
+  //  const reqController = new ReqController();
+  //  const user: types.ICachedUser = { account: undefined, profile: undefined };
+  //
+  //  user.account = (
+  //    await reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
+  //      userId,
+  //      tempId: (res.locals.tempId ?? '') as string,
+  //    })
+  //  ).payload[0];
+  //  user.profile = (
+  //    await reqController.profile.get(new GetProfileDto(userId), {
+  //      userId,
+  //      tempId: (res.locals.tempId ?? '') as string,
+  //    })
+  //  ).payload;
+  //
+  //  if (!user.profile || !user.account) {
+  //    Log.error(
+  //      'Token validation',
+  //      'User tried to log in using token, that got validated, but there is no user related to token. Is token fake ?',
+  //    );
+  //    throw new errors.IncorrectTokenError();
+  //  }
+  //
+  //  await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
+  //  return user;
+  // }
 
-    user.account = (
-      await reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
-        userId,
-        tempId: (res.locals.tempId ?? '') as string,
-      })
-    ).payload[0];
-    user.profile = (
-      await reqController.profile.get(new GetProfileDto(userId), {
-        userId,
-        tempId: (res.locals.tempId ?? '') as string,
-      })
-    ).payload;
-
-    if (!user.profile || !user.account) {
-      Log.error(
-        'Token validation',
-        'User tried to log in using token, that got validated, but there is no user related to token. Is token fake ?',
-      );
-      throw new errors.IncorrectTokenError();
-    }
-
-    await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
-    return user;
-  }
-
-  generateMiddleware(app: express.Express): void {
-    app.use(express.json({ limit: '500kb' }));
+  generateMiddleware(app: Express): void {
+    app.use(express.json({ limit: '10kb' }));
     app.use(express.urlencoded({ extended: true }));
     app.use(cookieParser());
     if (getConfig().session.trustProxy) app.set('trust proxy', 1);
@@ -217,13 +208,7 @@ export default class Middleware {
       }),
     );
 
-    app.set('views', 'public');
-    app.use('/public', express.static('public/static'));
-    app.get('/favicon.ico', (_req, res) => {
-      res.status(404).send();
-    });
-    app.set('view engine', 'ejs');
-
+    // Log new req
     app.use((req, _res, next) => {
       try {
         const logBody: Record<string, string | Record<string, string>> = {
@@ -231,20 +216,18 @@ export default class Middleware {
           path: req.path,
           ip: req.ip as string,
         };
+
         if (req.query) logBody.query = JSON.stringify(req.query);
         if (
           req.body !== undefined &&
           typeof req.body === 'object' &&
           Object.keys(req.body as Record<string, string>).length > 0
         ) {
-          if (req.path.includes('interaction') || req.path.includes('register') || req.path.includes('remove')) {
-            logBody.body = { ...(req.body as Record<string, string>) };
+          logBody.body = req.body as Record<string, string>;
 
-            if (logBody.body.password) {
-              logBody.body.password = '***';
-            }
-          } else {
-            logBody.body = req.body as Record<string, string>;
+          // Hide password in logs
+          if (logBody.body.password) {
+            logBody.body.password = '***';
           }
         }
 
@@ -255,10 +238,20 @@ export default class Middleware {
       }
     });
 
-    app.use(limitRate);
+    // Measure req time
+    app.use((req: express.Request, res: IResponse, next: express.NextFunction) => {
+      res.locals.reqId = randomUUID();
+      Log.time(res.locals.reqId);
+
+      res.once('finish', () => {
+        Log.endTime(res.locals.reqId, { path: req.originalUrl, method: req.method });
+      });
+
+      next();
+    });
   }
 
-  generateErrHandler(app: express.Express): void {
+  generateErrHandler(app: Express): void {
     app.use(
       (
         err: express.Errback | types.IFullError,
@@ -266,7 +259,7 @@ export default class Middleware {
         res: express.Response,
         _next: express.NextFunction,
       ) => {
-        Log.error(`Caught new generic error caused by ${req.ip ?? 'unknown ip'}`, JSON.stringify(err));
+        Log.error('Caught new generic error', `Caused by ${req.ip ?? 'unknown ip'}`, JSON.stringify(err));
         const error = err as types.IFullError;
 
         if (error.message.includes('is not valid JSON')) {
@@ -275,14 +268,12 @@ export default class Middleware {
           res.status(status).json({ message, name });
           return;
         }
-
         if (error.name === 'SyntaxError') {
           Log.error('Middleware', 'Generic err', error.message, error.stack);
           const { message, code, name, status } = new errors.InternalError();
           res.status(status).json({ message, code, name });
           return;
         }
-
         if (error.code !== undefined) {
           const { message, code, name, status } = error;
           res.status(status).json({ message, code, name });
@@ -296,8 +287,8 @@ export default class Middleware {
     );
   }
 
-  initializeHandler(app: express.Express): void {
-    app.use((_req: express.Request, res: express.Response, next: express.NextFunction) => {
+  initializeReqController(app: express.Express): void {
+    app.use((_req: express.Request, res: IResponse, next: express.NextFunction) => {
       res.locals.reqController = new ReqController();
       next();
     });

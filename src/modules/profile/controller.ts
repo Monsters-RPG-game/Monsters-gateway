@@ -1,10 +1,10 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type AddExpDto from './addExp/dto.js';
+import ReqController from '../../tools/abstractions/reqController.js';
 import type { IProfileEntity } from './entity.js';
-import type AddProfileDto from '../../modules/profile/add/dto.js';
-import type GetProfileDto from '../../modules/profile/get/dto.js';
+import type AddProfileDto from './subModules/add/dto.js';
+import type AddExpDto from './subModules/addExp/dto.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
+import type GetProfileDto from './subModules/get/dto.js';
 
 export default class Profile extends ReqController {
   async get(

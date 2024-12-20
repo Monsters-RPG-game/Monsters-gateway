@@ -1,7 +1,7 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
+import ReqController from '../../tools/abstractions/reqController.js';
 import State from '../../tools/state.js';
-import type ChangeCharacterStatusDto from './changeState/dto.js';
+import type ChangeCharacterStatusDto from './subModules/changeState/dto.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
 import type { IProfileEntity } from '../profile/entity.js';
 

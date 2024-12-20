@@ -1,5 +1,3 @@
-import type { JWTPayload } from 'jose';
-
 export interface IIntrospection {
   active: boolean;
   sub: string;
@@ -10,7 +8,13 @@ export interface IIntrospection {
   scope: string;
 }
 
-export interface ISessionTokenData extends JWTPayload {
+export interface ITokenData {
+  sub: string;
+  iat: number;
+  exp: number;
+}
+
+export interface ISessionTokenData extends ITokenData {
   id: string;
   ip: string[];
 }

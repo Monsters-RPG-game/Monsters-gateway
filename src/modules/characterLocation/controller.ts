@@ -1,12 +1,12 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
-import type ChangeCharacterLocationDto from './change/dto.js';
-import type CreateCharacterLocationDto from './create/dto.js';
-import type GetCharacterLocationDto from './get/dto.js';
-import type { ICharacterLocationEntity } from './get/types.js';
+import ReqHandler from '../../tools/abstractions/reqController.js';
+import type ChangeCharacterLocationDto from './subModules/change/dto.js';
+import type CreateCharacterLocationDto from './subModules/create/dto.js';
+import type GetCharacterLocationDto from './subModules/get/dto.js';
+import type { ICharacterLocationEntity } from './subModules/get/types.js';
 import type { IUserBrokerInfo } from '../../types/index.js';
 
-export default class CharacterLocation extends ReqController {
+export default class CharacterLocation extends ReqHandler {
   async change(
     data: ChangeCharacterLocationDto,
     userData: IUserBrokerInfo,

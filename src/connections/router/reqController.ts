@@ -3,7 +3,7 @@ import CharacterState from '../../modules/character/controller.js';
 import Chat from '../../modules/chat/controller.js';
 import Fights from '../../modules/fights/controller.js';
 import Inventory from '../../modules/inventory/controller.js';
-import Message from '../../modules/message/controller.js';
+import Message from '../../modules/messages/controller.js';
 import Npc from '../../modules/npc/controller.js';
 import Party from '../../modules/party/controller.js';
 import Profile from '../../modules/profile/controller.js';
@@ -11,7 +11,7 @@ import SingleSkill from '../../modules/singleSkill/controller.js';
 import Skills from '../../modules/skills/controller.js';
 import Stats from '../../modules/stats/controller.js';
 import Story from '../../modules/story/controller.js';
-import User from '../../modules/user/controller.js';
+import User from '../../modules/users/controller.js';
 import State from '../../tools/state.js';
 import type * as types from '../../types/index.js';
 

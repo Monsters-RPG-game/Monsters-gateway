@@ -44,8 +44,12 @@ export default class Repository {
     await this.client.hSet(target, key, value);
   }
 
-  async addToList(target: enums.ERedisTargets | string, value: string[]): Promise<void> {
-    await this.client.lPush(target, value);
+  async addElement(target: enums.ERedisTargets | string, value: string): Promise<void> {
+    await this.client.set(target, value);
+  }
+
+  async removeElement(target: string): Promise<void> {
+    await this.client.del(target);
   }
 
   async removeFromHash(target: enums.ERedisTargets | string, value: string): Promise<void> {
@@ -54,12 +58,8 @@ export default class Repository {
     await this.client.hDel(target, value);
   }
 
-  async removeElement(target: string): Promise<void> {
-    await this.client.del(target);
-  }
-
-  async addElement(target: enums.ERedisTargets | string, value: string): Promise<void> {
-    await this.client.set(target, value);
+  async addToList(target: enums.ERedisTargets | string, value: string[]): Promise<void> {
+    await this.client.lPush(target, value);
   }
 
   private async checkElm(target: string): Promise<boolean> {

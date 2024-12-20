@@ -175,18 +175,11 @@ export default class WebsocketServer {
 
     if (!access) {
       Log.error('Websocket', 'Client connected without providing login token');
-      ws.ttl = setTimeout(() => {
-        ws.close(1000, unauthorizedErrorMessage);
-      }, 2000);
-      ws.send(
-        JSON.stringify({
-          type: enums.ESocketType.Error,
-          payload: new errors.AwaitingAuthorizationError(),
-        } as types.ISocketOutMessage),
-      );
-    } else {
-      await this.validateUser(ws, access);
+      ws.close(1000, unauthorizedErrorMessage);
+      return;
     }
+
+    await this.validateUser(ws, access);
   }
 
   private async validateUser(_ws: types.ISocket, _access: string): Promise<void> {

@@ -1,16 +1,11 @@
-import type AddToken from './add/dto.js';
-import type mongoose from 'mongoose';
+import type { ITokenEntity } from '../entity.js';
+import type AddToken from './add.js';
 
-export interface ITokenEntity {
-  _id?: string | mongoose.Types.ObjectId;
+export interface IAddToken {
   userId: string;
   ttl: string;
   accessToken: string;
   refreshToken: string;
-}
-
-export interface IToken extends ITokenEntity, mongoose.Document {
-  _id: mongoose.Types.ObjectId;
 }
 
 export interface ITokenRepository {

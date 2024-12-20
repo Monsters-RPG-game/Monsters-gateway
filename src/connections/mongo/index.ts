@@ -5,7 +5,7 @@ import type { ConnectOptions } from 'mongoose';
 
 export default class Mongo {
   async init(): Promise<void> {
-    process.env.NODE_ENV === 'test' ? await this.startMockServer() : await this.startServer();
+    await this.startServer();
   }
 
   disconnect(): void {
@@ -21,11 +21,5 @@ export default class Mongo {
       dbName: 'AuthorizationsClient',
     } as ConnectOptions);
     Log.log('Mongo', 'Started server');
-  }
-
-  private async startMockServer(): Promise<void> {
-    const MockServer = await import('./mock');
-    const mock = new MockServer.default();
-    await mock.init();
   }
 }

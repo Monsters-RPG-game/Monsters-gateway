@@ -3,7 +3,6 @@ import RateLimitStore from './stores/rateLimiter.js';
 import { ETTL } from '../../../enums/index.js';
 import getConfig from '../../../tools/configLoader.js';
 import type express from 'express';
-import * as process from 'process';
 
 /**
  * Rate limiter for routes access.

@@ -1,10 +1,10 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstracts/reqController.js';
+import ReqController from '../../tools/abstractions/reqController.js';
 import type { IStatsEntity } from './entity.js';
-import type CharacterStatsDto from './get/dto.js';
+import type CharacterStatsDto from './subModules/get/dto.js';
 import type * as types from '../../types/index.js';
 
-export default class User extends ReqController {
+export default class Stats extends ReqController {
   async get(
     data: CharacterStatsDto,
     userInfo: types.IUserBrokerInfo,

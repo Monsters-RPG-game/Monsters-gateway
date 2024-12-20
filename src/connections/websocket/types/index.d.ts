@@ -36,7 +36,6 @@ export interface ISocketPayload {
 }
 
 export interface ISocket extends WebSocket {
-  ttl?: NodeJS.Timeout;
   userId: string;
   reqController: ReqController;
   profile: IProfileEntity | undefined;
