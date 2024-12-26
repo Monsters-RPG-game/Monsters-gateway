@@ -1,28 +1,44 @@
 import { jwtVerify } from 'jose';
 import Log from 'simpleLogger';
-import OidcClientModel from '../../../../connections/mongo/models/oidcClient.js';
-import UserModel from '../../../../connections/mongo/models/user.js';
 import { EClientGrants } from '../../../../enums/index.js';
 import { InvalidRequest } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import getConfig from '../../../../tools/configLoader.js';
 import { generateCodeChallengeFromVerifier, generateCodeVerifier } from '../../../../tools/crypt.js';
 import { generateRandomName } from '../../../../utils/index.js';
-import OidcClientRepo from '../../../oidcClients/repository/index.js';
 import TokenController from '../../../tokens/index.js';
-import UsersRepository from '../../repository/index.js';
 import type LoginDto from './dto.js';
-import type { IUserSession, IUserServerTokens, IUserAuthorizationsData } from '../../../../types/index.js';
+import type {
+  IUserSession,
+  IUserServerTokens,
+  IUserAuthorizationsData,
+  IAbstractSubController,
+} from '../../../../types/index.js';
 import type ClientsRepository from '../../../clients/repository/index.js';
+import type OidcClientsRepository from '../../../oidcClients/repository/index.js';
+import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 import type { JWK } from 'jose';
 import type mongoose from 'mongoose';
 
-export default class LoginController extends AbstractController<
-  { url: string; accessToken: string; refreshToken: string } | string,
-  ClientsRepository
-> {
-  override async execute(
+export default class LoginController
+  implements
+    IAbstractSubController<{ url: string; accessToken: string; refreshToken: string; sessionToken: string } | string>
+{
+  constructor(
+    clientsRepository: ClientsRepository,
+    oidcClientsRepository: OidcClientsRepository,
+    usersRepository: UsersRepository,
+  ) {
+    this.clientsRepository = clientsRepository;
+    this.oidcClientRepository = oidcClientsRepository;
+    this.usersRepository = usersRepository;
+  }
+
+  private accessor oidcClientRepository: OidcClientsRepository;
+  private accessor clientsRepository: ClientsRepository;
+  private accessor usersRepository: UsersRepository;
+
+  async execute(
     data: LoginDto,
     req: express.Request,
   ): Promise<{ url: string; accessToken: string; refreshToken: string; sessionToken: string } | string> {
@@ -35,7 +51,7 @@ export default class LoginController extends AbstractController<
   }
 
   private async sendToLoginPage(data: LoginDto, req: express.Request): Promise<string> {
-    const client = await this.repository.getByName(data.client!);
+    const client = await this.clientsRepository.getByName(data.client!);
     if (!client) throw new InvalidRequest();
 
     const timestamp = Math.floor(Date.now() / 1000);
@@ -49,8 +65,7 @@ export default class LoginController extends AbstractController<
     (req.session as IUserSession).client = client.clientId;
     (req.session as IUserSession).verifier = verifier;
 
-    const oidcClientRepo = new OidcClientRepo(OidcClientModel);
-    const oidcClient = await oidcClientRepo.getByGrant(EClientGrants.AuthorizationCode);
+    const oidcClient = await this.oidcClientRepository.getByGrant(EClientGrants.AuthorizationCode);
 
     const params = new URLSearchParams({
       client_id: oidcClient!.clientId,
@@ -71,9 +86,8 @@ export default class LoginController extends AbstractController<
     req: express.Request,
     refreshToken: string,
   ): Promise<{ url: string; refreshToken: string; accessToken: string; sessionToken: string }> {
-    const userRepo = new UsersRepository(UserModel);
+    const userData = await this.usersRepository.getByUserId(userId);
 
-    const userData = await userRepo.getByUserId(userId);
     if (!userData) {
       Log.error('Login', 'User logged in, but there is no data related to him. Error ?');
       throw new InvalidRequest();
@@ -90,14 +104,13 @@ export default class LoginController extends AbstractController<
     data: LoginDto,
     req: express.Request,
   ): Promise<{ userId: string; tokenController: TokenController; refreshToken: string }> {
-    const oidcClientRepo = new OidcClientRepo(OidcClientModel);
     const verifier = (req.session as IUserSession).verifier!;
 
     delete (req.session as IUserSession).verifier;
     delete (req.session as IUserSession).nonce;
 
     // Get one client - this should probably include some custom logic
-    const oidcClient = await oidcClientRepo.getByGrant(EClientGrants.AuthorizationCode);
+    const oidcClient = await this.oidcClientRepository.getByGrant(EClientGrants.AuthorizationCode);
 
     Log.debug('Login', 'Oidc client to use', oidcClient);
 
@@ -135,9 +148,8 @@ export default class LoginController extends AbstractController<
     tokens: IUserServerTokens,
   ): Promise<{ userId: string; tokenController: TokenController; refreshToken: string }> {
     const userId = await this.decodeIdToken(tokens.id_token);
-    const userRepo = new UsersRepository(UserModel);
 
-    const userData = await userRepo.getByUserId(userId);
+    const userData = await this.usersRepository.getByUserId(userId);
     if (!userData) {
       Log.error('Login', 'User logged in, but there is no data related to him. Error ?');
       throw new InvalidRequest();
@@ -194,7 +206,7 @@ export default class LoginController extends AbstractController<
   }
 
   private async createUrl(req: express.Request): Promise<string> {
-    const client = await this.repository.getByName((req.session as IUserSession).client!);
+    const client = await this.clientsRepository.getByName((req.session as IUserSession).client!);
     delete (req.session as IUserSession).client;
 
     return client!.redirectUri;

@@ -4,7 +4,7 @@ import type { IGetProfileReq } from './types.js';
 import type { IProfileEntity } from '../../../../../modules/profile/entity.js';
 
 export default class GetProfileRouter extends AbstractRouter<IProfileEntity> {
-  override async execute(req: IGetProfileReq): Promise<IProfileEntity> {
+  async execute(req: IGetProfileReq): Promise<IProfileEntity> {
     const dto = new GetProfileDto(req.body);
 
     return this.controller.execute(dto, req);

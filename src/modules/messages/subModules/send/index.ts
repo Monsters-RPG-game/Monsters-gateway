@@ -1,13 +1,12 @@
 import SendMessagesDto from './dto.js';
 import { ESocketType } from '../../../../enums/socket.js';
 import { NoUserWithProvidedName } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import State from '../../../../tools/state.js';
 import UserDetailsDto from '../../../users/subModules/details/dto.js';
 import type * as types from '../../../../types/index.js';
 
-export default class SendMessagesController extends AbstractController<void> {
-  override async execute(data: SendMessagesDto, res: types.IResponse): Promise<void> {
+export default class SendMessagesController implements types.IAbstractSubController<void> {
+  async execute(data: SendMessagesDto, res: types.IResponse): Promise<void> {
     const { reqController, tempId, userId } = res.locals;
 
     const users = await reqController.user.getDetails(

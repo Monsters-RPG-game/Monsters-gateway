@@ -10,15 +10,15 @@ const initFightsRoutes = (router: Router): void => {
   const prefix = '/fights';
 
   router
-    .use(prefix, leave.router)
-    .use(prefix, attack.router)
-    .use(prefix, getFight.router)
-    .use(prefix, getFightLogs.router)
-    .use(prefix, useSkill.router);
+    .use(prefix, leave().router)
+    .use(prefix, attack().router)
+    .use(prefix, getFight().router)
+    .use(prefix, getFightLogs().router)
+    .use(prefix, useSkill().router);
 
   // Debug routes
   if (process.env.NODE_ENV !== 'production') {
-    router.use(`/debug${prefix}`, debug.router);
+    router.use(`/debug${prefix}`, debug().router);
   }
 };
 

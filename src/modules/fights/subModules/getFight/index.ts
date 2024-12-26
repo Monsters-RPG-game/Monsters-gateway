@@ -1,12 +1,11 @@
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import UserDetailsDto from '../../../users/subModules/details/dto.js';
-import type GetFightsDto from './dto.js';
+import type GetFightDto from './dto.js';
 import type * as types from '../../../../types/index.js';
 import type { IUserEntity } from '../../../users/entity.js';
 import type { IFight } from '../../entity.js';
 
-export default class GetFightsController extends AbstractController<IFight[]> {
-  override async execute(data: GetFightsDto, res: types.IResponse): Promise<IFight[]> {
+export default class GetFightsController implements types.IAbstractSubController<IFight[]> {
+  async execute(data: GetFightDto, res: types.IResponse): Promise<IFight[]> {
     const { reqController, tempId, userId } = res.locals;
 
     const { payload } = await reqController.fights.getFights(data, {

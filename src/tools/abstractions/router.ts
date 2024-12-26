@@ -1,26 +1,30 @@
 import express from 'express';
-import type AbstractController from './controller.js';
+import * as errors from '../../errors/index.js';
+import State from '../state.js';
+import type * as enums from '../../enums/index.js';
+import type * as types from '../../types/index.js';
 
-export default abstract class AbstractRouter<T, U = undefined> {
+export default abstract class AbstractRouter<T> {
   readonly _router: express.Router;
-  private readonly _controller: AbstractController<T, U>;
+  readonly _controller: types.IAbstractSubController<T>;
 
-  constructor(controller: AbstractController<T, U>) {
+  constructor(target: enums.EControllers, subTarget: types.IControllerActions) {
     this._router = express.Router();
-    this._controller = controller;
+
+    const controller = State.controllers.resolve(target);
+    if (!controller) throw new errors.UnregisteredControllerError(target);
+
+    const subController = controller.resolve(subTarget) as types.IAbstractSubController<T>;
+    if (!subController) throw new errors.UnregisteredControllerError(subTarget);
+
+    this._controller = subController;
   }
 
   get router(): express.Router {
     return this._router;
   }
 
-  protected get controller(): AbstractController<T, U> {
+  get controller(): types.IAbstractSubController<T> {
     return this._controller;
-  }
-
-  async execute(_req: express.Request<unknown, unknown, unknown, unknown>, ..._params: unknown[]): Promise<T> {
-    return new Promise((resolve) => {
-      resolve(undefined as T);
-    });
   }
 }

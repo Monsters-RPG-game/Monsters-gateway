@@ -497,3 +497,12 @@ export class ProfileNotFound extends FullError {
     this.status = 404;
   }
 }
+
+export class UnregisteredControllerError extends FullError {
+  constructor(target: string) {
+    super(`Controllers with target ${target} were not registered !`);
+    this.name = 'UnregisteredControllerError';
+    this.code = '025';
+    this.status = 500;
+  }
+}

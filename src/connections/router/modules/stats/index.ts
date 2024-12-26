@@ -8,7 +8,7 @@ import type { Router } from 'express';
 const initStatsRoutes = (router: Router): void => {
   const prefix = '/stats';
 
-  router.use(prefix, get.router);
+  router.use(prefix, get().router);
 };
 
 export default initStatsRoutes;

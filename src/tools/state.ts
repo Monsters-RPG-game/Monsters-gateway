@@ -1,4 +1,5 @@
 import Log from 'simpleLogger';
+import type Bootstrap from './bootstrap.js';
 import type Broker from '../connections/broker/index.js';
 import type Mongo from '../connections/mongo/index.js';
 import type Redis from '../connections/redis/index.js';
@@ -10,6 +11,7 @@ class State implements IState {
   private _router: Router | null = null;
   private _alive: boolean = false;
   private _mongo: Mongo | null = null;
+  private _controllers: Bootstrap | null = null;
   private _redis: Redis | null = null;
   private _broker: Broker | null = null;
   private _socket: WebsocketServer | null = null;
@@ -62,14 +64,24 @@ class State implements IState {
     this._redis = value;
   }
 
+  get controllers(): Bootstrap {
+    return this._controllers!;
+  }
+
+  set controllers(val: Bootstrap) {
+    this._controllers = val;
+  }
+
+  @Log.decorateSyncLog('Statet', 'Application closed')
   kill(): void {
     this.alive = false;
 
     this.router.close();
     this.mongo.disconnect();
-    this.router.close();
-
-    Log.log('Server', 'Server closed');
+    this.broker.close();
+    this.controllers.close();
+    this.socket.close();
+    this.redis.close();
   }
 }
 

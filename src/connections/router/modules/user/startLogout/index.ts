@@ -3,7 +3,7 @@ import AbstractRouter from '../../../../../tools/abstractions/router.js';
 import type { IStartLogoutReq } from './types.js';
 
 export default class UserRouter extends AbstractRouter<string> {
-  override async execute(req: IStartLogoutReq): Promise<string> {
+  async execute(req: IStartLogoutReq): Promise<string> {
     const dto = new StartLogoutDto(req.query);
 
     return this.controller.execute(dto, req);

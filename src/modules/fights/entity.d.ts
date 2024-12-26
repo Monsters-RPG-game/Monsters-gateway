@@ -1,9 +1,11 @@
-import type { EFightAction } from '../../enums/index.js';
+import type { EFightActions } from '../../enums/controllers.js';
+import type { EFightStatus } from '../../enums/fights.js';
 import type { IFightCharacterEntity } from '../npc/entity.js';
+import type { IProfileEntity } from '../profile/entity.js';
 
 export interface IActionEntity {
   character: string;
-  action: EFightAction;
+  action: EFightActions;
   target: string;
   value: number;
 }
@@ -40,4 +42,9 @@ export interface IFightEntity {
 export interface IFight extends Omit<IFightEntity, 'log' | 'states'> {
   states: IState;
   log: IFightLogsEntity;
+}
+
+export interface IAttackEntity {
+  data: { logs: IActionEntity[]; status: EFightStatus };
+  state?: Partial<IProfileEntity>;
 }

@@ -25,6 +25,9 @@ yarn.lock
 # Optional eslint cache
 .eslintcache
 
+# Typescript cache
+tsconfig.tsbuildinfo
+
 # Misc
 .DS_Store
 

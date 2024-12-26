@@ -10,7 +10,7 @@ import type { Router } from 'express';
 const initProfileRoutes = (router: Router): void => {
   const prefix = '/profile';
 
-  router.use(prefix, get.router).use(prefix, add.router).use(prefix, addExp.router);
+  router.use(prefix, get().router).use(prefix, add().router).use(prefix, addExp().router);
 };
 
 export default initProfileRoutes;

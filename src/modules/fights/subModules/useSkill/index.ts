@@ -1,24 +1,13 @@
 import * as enums from '../../../../enums/index.js';
 import * as errors from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import State from '../../../../tools/state.js';
 import ChangeCharacterStatusDto from '../../../character/subModules/changeState/dto.js';
 import type UseSkillDto from './dto.js';
 import type * as types from '../../../../types/index.js';
-import type { IProfileEntity } from '../../../profile/entity.js';
-import type { IActionEntity } from '../../entity.js';
+import type { IAttackEntity } from '../../entity.js';
 
-export default class UseSkillController extends AbstractController<{
-  data: { logs: IActionEntity[]; status: enums.EFightStatus };
-  state?: Partial<IProfileEntity>;
-}> {
-  override async execute(
-    data: UseSkillDto,
-    res: types.IResponse,
-  ): Promise<{
-    data: { logs: IActionEntity[]; status: enums.EFightStatus };
-    state?: Partial<IProfileEntity>;
-  }> {
+export default class UseSkillController implements types.IAbstractSubController<IAttackEntity> {
+  async execute(data: UseSkillDto, res: types.IResponse): Promise<IAttackEntity> {
     const { reqController, tempId, userId, profile } = res.locals;
 
     if (profile?.state !== enums.ECharacterState.Fight) {

@@ -1,17 +1,23 @@
 import Log from 'simpleLogger';
 import ClientModel from '../../../../connections/mongo/models/client.js';
 import { InvalidRequest } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import getConfig from '../../../../tools/configLoader.js';
 import ClientsRepository from '../../../clients/repository/index.js';
 import AddUser from '../../repository/add.js';
 import type FinishRegisterDto from './dto.js';
+import type { IAbstractSubController } from '../../../../types/abstractions.js';
 import type { IUserSession } from '../../../../types/user.js';
 import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 
-export default class FinishRegisterController extends AbstractController<string, UsersRepository> {
-  override async execute(data: FinishRegisterDto, req: express.Request): Promise<string> {
+export default class FinishRegisterController implements IAbstractSubController<string> {
+  constructor(repository: UsersRepository) {
+    this.repository = repository;
+  }
+
+  private accessor repository: UsersRepository;
+
+  async execute(data: FinishRegisterDto, req: express.Request): Promise<string> {
     const { nonce } = req.session as IUserSession;
     const clientId = (req.session as IUserSession).client;
     if (!nonce || !clientId) throw new InvalidRequest();

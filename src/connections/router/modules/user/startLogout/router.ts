@@ -1,21 +1,26 @@
 import Log from 'simpleLogger';
 import Router from './index.js';
+import { EControllers, EUserActions } from '../../../../../enums/controllers.js';
 import handleErr from '../../../../../errors/handler.js';
-import Controller from '../../../../../modules/users/subModules/startLogout/index.js';
 import limitRate from '../../../utils/index.js';
 import type { IStartLogoutReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 
-const service = new Router(new Controller(undefined));
+/**
+ * Initialize routes for starting logout.
+ */
+export default (): Router => {
+  const service = new Router(EControllers.Users, EUserActions.StartLogout);
 
-service.router.get('/logout/start', limitRate, async (req: IStartLogoutReq, res) => {
-  try {
-    const data = await service.execute(req);
-    Log.debug('Logout - start', `Redirecting user to logout ${data}`);
-    res.redirect(data);
-  } catch (err) {
-    handleErr(err as types.IFullError, res);
-  }
-});
+  service.router.get('/logout/start', limitRate, async (req: IStartLogoutReq, res: types.IResponse) => {
+    try {
+      const data = await service.execute(req);
+      Log.debug('Logout - start', `Redirecting user to logout ${data}`);
+      res.redirect(data);
+    } catch (err) {
+      handleErr(err as types.IFullError, res);
+    }
+  });
 
-export default service;
+  return service;
+};

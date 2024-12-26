@@ -1,17 +1,16 @@
 import CreateFightDto from './dto.js';
 import * as enums from '../../../../enums/index.js';
 import * as errors from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import State from '../../../../tools/state.js';
 import ChangeCharacterStatusDto from '../../../character/subModules/changeState/dto.js';
 import GetCharacterDto from '../../../npc/subModules/get/dto.js';
 import CharacterStatsDto from '../../../stats/subModules/get/dto.js';
 import type { ICreateFight, ICreateFightDto } from './types.js';
 import type * as types from '../../../../types/index.js';
-import type { IProfileEntity } from '../../../profile/entity.js';
+import type { IProfileUpdate } from '../../../../types/responses.js';
 
-export default class DebugFightsController extends AbstractController<{ state: Partial<IProfileEntity> }> {
-  override async execute(data: ICreateFight, res: types.IResponse): Promise<{ state: Partial<IProfileEntity> }> {
+export default class DebugFightsController implements types.IAbstractSubController<IProfileUpdate> {
+  async execute(data: ICreateFight, res: types.IResponse): Promise<IProfileUpdate> {
     const { reqController, tempId, userId, profile } = res.locals;
 
     const teams: ICreateFightDto = {

@@ -8,7 +8,11 @@ import type { Router } from 'express';
 const initMessagesRoutes = (router: Router): void => {
   const prefix = '/message';
 
-  router.use(prefix, get.router).use(prefix, send.router).use(prefix, getUnread.router).use(prefix, read.router);
+  router
+    .use(prefix, get().router)
+    .use(prefix, send().router)
+    .use(prefix, getUnread().router)
+    .use(prefix, read().router);
 };
 
 export default initMessagesRoutes;

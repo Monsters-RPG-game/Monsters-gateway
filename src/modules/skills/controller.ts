@@ -1,65 +1,17 @@
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstractions/reqController.js';
-import type { ISkillsEntity, IDetailedSkillsEntity } from './entity.js';
-import type AddSkillsDto from './subModules/add/dto.js';
-import type GetSkillsDto from './subModules/get/dto.js';
-import type GetDetailedSkillsDto from './subModules/getDetailed/dto.js';
-import type { IUserBrokerInfo } from '../../types/index.js';
+import AddStatsController from './subModules/add/index.js';
+import GetStatsController from './subModules/get/index.js';
+import GetDetailedController from './subModules/getDetailed/index.js';
+import AbstractController from '../../tools/abstractions/controller.js';
 
-export default class Skills extends ReqController {
-  async getDetailed(
-    data: GetDetailedSkillsDto,
-    userData: IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IDetailedSkillsEntity;
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.Skills,
-      enums.ESkillsTargets.GetDetailedSkills,
-      userData,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IDetailedSkillsEntity;
-    };
-  }
-  async get(
-    data: GetSkillsDto,
-    userData: IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: ISkillsEntity;
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.Skills,
-      enums.ESkillsTargets.GetSkills,
-      userData,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: ISkillsEntity;
-    };
-  }
-
-  async add(
-    data: AddSkillsDto,
-    userData: IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: ISkillsEntity;
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.Skills,
-      enums.ESkillsTargets.AddSkills,
-      userData,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: ISkillsEntity;
-    };
+export default class SkillsController extends AbstractController<enums.EControllers.Skills> {
+  /**
+   * Register skills controllers.
+   * @returns Void.
+   */
+  protected init(): void {
+    this.register(enums.ESkillsActions.Get, new GetStatsController());
+    this.register(enums.ESkillsActions.Add, new AddStatsController());
+    this.register(enums.ESkillsActions.GetDetailed, new GetDetailedController());
   }
 }

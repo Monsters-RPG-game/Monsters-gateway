@@ -4,7 +4,7 @@ import type { IDebugReq } from './types.js';
 import type { IUserEntity } from '../../../../../modules/users/entity.js';
 
 export default class UserRouter extends AbstractRouter<IUserEntity[]> {
-  override async execute(req: IDebugReq): Promise<IUserEntity[]> {
+  async execute(req: IDebugReq): Promise<IUserEntity[]> {
     const dto = new DebugDto(req.query);
 
     return this.controller.execute(dto, req);

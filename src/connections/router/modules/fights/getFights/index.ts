@@ -5,7 +5,7 @@ import type { IFight } from '../../../../../modules/fights/entity.js';
 import type { IResponse } from '../../../../../types/requests.js';
 
 export default class FightRouter extends AbstractRouter<IFight[]> {
-  override async execute(req: IGetFightReq, res: IResponse): Promise<IFight[]> {
+  async execute(req: IGetFightReq, res: IResponse): Promise<IFight[]> {
     const dto = new GetFightDto(req.body, res.locals.userId as string);
 
     return this.controller.execute(dto, res);

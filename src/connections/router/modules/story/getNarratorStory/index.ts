@@ -4,7 +4,7 @@ import type { IGetNarratorStoryReq } from './types.js';
 import type { INarratorStoryEntity } from '../../../../../modules/story/entity.js';
 
 export default class StatsRouter extends AbstractRouter<INarratorStoryEntity> {
-  override async execute(req: IGetNarratorStoryReq): Promise<INarratorStoryEntity> {
+  async execute(req: IGetNarratorStoryReq): Promise<INarratorStoryEntity> {
     const dto = new NarratorStoryDto(req.query);
 
     return this.controller.execute(dto, req);

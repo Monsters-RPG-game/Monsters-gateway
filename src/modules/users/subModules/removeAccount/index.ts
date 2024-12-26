@@ -1,20 +1,25 @@
 import Log from 'simpleLogger';
-import OidcClientModel from '../../../../connections/mongo/models/oidcClient.js';
-import UserModel from '../../../../connections/mongo/models/user.js';
 import { EClientGrants, ETokens } from '../../../../enums/index.js';
 import { InvalidRequest } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import getConfig from '../../../../tools/configLoader.js';
-import OidcClientsRepository from '../../../oidcClients/repository/index.js';
 import TokensController from '../../../tokens/index.js';
-import UsersRepository from '../../repository/index.js';
 import type RemoveAccountDto from './dto.js';
-import type ClientsRepository from '../../../clients/repository/index.js';
+import type { IAbstractSubController } from '../../../../types/abstractions.js';
+import type OidcClientsRepository from '../../../oidcClients/repository/index.js';
+import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 
-export default class RemoveAccountController extends AbstractController<void, ClientsRepository> {
-  override async execute(data: RemoveAccountDto, req: express.Request): Promise<void> {
-    const client = await this.repository.getByName(data.client);
+export default class RemoveAccountController implements IAbstractSubController<void> {
+  constructor(OidcClientsRepository: OidcClientsRepository, usersRepository: UsersRepository) {
+    this.clientsRepository = OidcClientsRepository;
+    this.usersRepository = usersRepository;
+  }
+
+  private accessor clientsRepository: OidcClientsRepository;
+  private accessor usersRepository: UsersRepository;
+
+  async execute(data: RemoveAccountDto, req: express.Request): Promise<void> {
+    const client = await this.clientsRepository.getByName(data.client);
     if (!client) throw new InvalidRequest();
 
     const cookie = (req.cookies as Record<string, string>)[ETokens.Access];
@@ -27,8 +32,7 @@ export default class RemoveAccountController extends AbstractController<void, Cl
   }
 
   private async remove(tokenController: TokensController, userId: string): Promise<void> {
-    const clientRepo = new OidcClientsRepository(OidcClientModel);
-    const client = await clientRepo.getByGrant(EClientGrants.AuthorizationCode);
+    const client = await this.clientsRepository.getByGrant(EClientGrants.AuthorizationCode);
     if (!client) throw new InvalidRequest();
 
     const tokens = await tokenController.getTokens();
@@ -61,6 +65,6 @@ export default class RemoveAccountController extends AbstractController<void, Cl
     await tokenController.removeUserTokens();
     await tokenController.logout();
     await tokenController.removeUserTokens();
-    await new UsersRepository(UserModel).removeById(userId);
+    await this.usersRepository.removeById(userId);
   }
 }

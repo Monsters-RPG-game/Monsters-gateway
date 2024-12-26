@@ -1,46 +1,41 @@
+import UsersRepository from './repository/index.js';
+import DebugController from './subModules/debug/index.js';
+import RefreshTokenController from './subModules/refreshToken/index.js';
+import RemoveAccountController from './subModules/removeAccount/index.js';
+import RegisterController from './subModules/startRegister/index.js';
+import ClientModel from '../../connections/mongo/models/client.js';
+import OidcClientModel from '../../connections/mongo/models/oidcClient.js';
+import UserModel from '../../connections/mongo/models/user.js';
 import * as enums from '../../enums/index.js';
-import ReqController from '../../tools/abstractions/reqController.js';
-import type { IUserEntity } from './entity.js';
-import type DebugGetAllUsersDto from './subModules/debug/dto.js';
-import type UserDetailsDto from './subModules/details/dto.js';
-import type * as types from '../../types/index.js';
+import AbstractController from '../../tools/abstractions/controller.js';
+import ClientsRepository from '../clients/repository/index.js';
+import DetailsController from './subModules/details/index.js';
+import FinishLogoutController from './subModules/finishLogout/index.js';
+import FinishRegisterController from './subModules/finishRegister/index.js';
+import LoginController from './subModules/login/index.js';
+import StartLogoutController from './subModules/startLogout/index.js';
+import ValidateTokenController from './subModules/validateToken/index.js';
+import OidcClientsRepository from '../oidcClients/repository/index.js';
 
-export default class User extends ReqController {
-  async getDetails(
-    data: UserDetailsDto[],
-    userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUserEntity[];
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.User,
-      enums.EUserTargets.GetName,
-      userInfo,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUserEntity[];
-    };
-  }
+export default class UsersController extends AbstractController<enums.EControllers.Users> {
+  /**
+   * Register user controllers.
+   * @returns Void.
+   */
+  protected init(): void {
+    const userRepo = new UsersRepository(UserModel);
+    const oidcClientRepo = new OidcClientsRepository(OidcClientModel);
+    const clientRepo = new ClientsRepository(ClientModel);
 
-  async debugGetAll(
-    data: DebugGetAllUsersDto,
-    userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUserEntity[];
-  }> {
-    return (await this.sendReq(
-      this.service,
-      enums.EUserMainTargets.User,
-      enums.EUserTargets.DebugGetAll,
-      userInfo,
-      data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUserEntity[];
-    };
+    this.register(enums.EUserActions.Debug, new DebugController());
+    this.register(enums.EUserActions.StartRegister, new RegisterController(clientRepo));
+    this.register(enums.EUserActions.Details, new DetailsController());
+    this.register(enums.EUserActions.FinishLogout, new FinishLogoutController(clientRepo));
+    this.register(enums.EUserActions.FinishRegister, new FinishRegisterController(userRepo));
+    this.register(enums.EUserActions.Login, new LoginController(clientRepo, oidcClientRepo, userRepo));
+    this.register(enums.EUserActions.RefreshToken, new RefreshTokenController(userRepo));
+    this.register(enums.EUserActions.RemoveAccount, new RemoveAccountController(oidcClientRepo, userRepo));
+    this.register(enums.EUserActions.StartLogout, new StartLogoutController());
+    this.register(enums.EUserActions.ValidateToken, new ValidateTokenController(userRepo));
   }
 }

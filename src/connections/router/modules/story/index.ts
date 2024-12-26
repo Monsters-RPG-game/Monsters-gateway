@@ -12,10 +12,10 @@ const initStoryRoutes = (router: Router): void => {
   const prefix = '/story';
 
   router
-    .use(prefix, getNpcStory.router)
-    .use(prefix, getByIntent.router)
-    .use(prefix, getByStage.router)
-    .use(prefix, getNarratorStory.router);
+    .use(prefix, getNpcStory().router)
+    .use(prefix, getByIntent().router)
+    .use(prefix, getByStage().router)
+    .use(prefix, getNarratorStory().router);
 };
 
 export default initStoryRoutes;

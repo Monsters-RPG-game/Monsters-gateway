@@ -1,22 +1,23 @@
 import Log from 'simpleLogger';
-import UserModel from '../../../../connections/mongo/models/user.js';
 import { ETokens } from '../../../../enums/tokens.js';
 import { InvalidRequest } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import State from '../../../../tools/state.js';
 import TokenController from '../../../tokens/index.js';
-import UsersRepository from '../../repository/index.js';
+import type { IAbstractSubController } from '../../../../types/abstractions.js';
 import type { IUserEntity } from '../../entity.js';
+import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 
-export default class RefreshTokenController extends AbstractController<
-  { sessionToken: string | undefined; refreshToken: string; accessToken: string } | string,
-  UsersRepository
-> {
-  private async getUserData(userId: string): Promise<IUserEntity> {
-    const userRepo = new UsersRepository(UserModel);
+export default class RefreshTokenController
+  implements
+    IAbstractSubController<{ sessionToken: string | undefined; refreshToken: string; accessToken: string } | string>
+{
+  constructor(repository: UsersRepository) {
+    this.repository = repository;
+  }
 
-    const userData = await userRepo.get(userId);
+  private async getUserData(userId: string): Promise<IUserEntity> {
+    const userData = await this.repository.get(userId);
     if (!userData) {
       Log.error('Login - getUserData', `User ${userId} logged in, but there is no data related to him. Error ?`);
       throw new InvalidRequest();
@@ -25,7 +26,9 @@ export default class RefreshTokenController extends AbstractController<
     return userData;
   }
 
-  override async execute(
+  private accessor repository: UsersRepository;
+
+  async execute(
     _data: null,
     req: express.Request,
   ): Promise<{ sessionToken: string | undefined; refreshToken: string; accessToken: string } | string> {

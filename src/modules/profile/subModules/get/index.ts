@@ -1,12 +1,11 @@
 import GetProfileDto from './dto.js';
 import { NoUserWithProvidedName } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import UserDetailsDto from '../../../users/subModules/details/dto.js';
 import type * as types from '../../../../types/index.js';
 import type { IProfileEntity } from '../../entity.js';
 
-export default class GetProfileController extends AbstractController<IProfileEntity> {
-  override async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity> {
+export default class GetProfileController implements types.IAbstractSubController<IProfileEntity> {
+  async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity> {
     const { reqController, tempId, userId } = res.locals;
 
     if (res.locals?.user?.login === (data.name as string)) {

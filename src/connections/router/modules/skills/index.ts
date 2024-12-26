@@ -10,7 +10,7 @@ import type { Router } from 'express';
 const initSkillsRoutes = (router: Router): void => {
   const prefix = '/skills';
 
-  router.use(prefix, get.router).use(prefix, add.router).use(prefix, getDetailed.router);
+  router.use(prefix, get().router).use(prefix, add().router).use(prefix, getDetailed().router);
 };
 
 export default initSkillsRoutes;

@@ -17,7 +17,7 @@ import type { Router } from 'express';
 export const initSecuredUserRoutes = (router: Router): void => {
   const prefix = '/user';
 
-  router.use(prefix, getDetails.router);
+  router.use(prefix, getDetails().router);
 };
 
 /**
@@ -28,17 +28,17 @@ export function initUserRoutes(router: Router): void {
   const prefix = '/user';
 
   router
-    .use(prefix, startRegister.router)
-    .use(prefix, finishRegister.router)
-    .use(prefix, login.router)
-    .use(prefix, validate.router)
-    .use(prefix, startLogout.router)
-    .use(prefix, finishLogout.router)
-    .use(prefix, removeAccount.router)
-    .use(prefix, refresh.router);
+    .use(prefix, startRegister().router)
+    .use(prefix, finishRegister().router)
+    .use(prefix, login().router)
+    .use(prefix, validate().router)
+    .use(prefix, startLogout().router)
+    .use(prefix, finishLogout().router)
+    .use(prefix, removeAccount().router)
+    .use(prefix, refresh().router);
 
   // Debug routes
   if (process.env.NODE_ENV !== 'production') {
-    router.use(prefix, debug.router);
+    router.use(prefix, debug().router);
   }
 }

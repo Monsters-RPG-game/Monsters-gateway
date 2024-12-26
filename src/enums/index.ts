@@ -1,4 +1,5 @@
 export * from './npc.js';
+export * from './controllers.js';
 export * from './connections.js';
 export * from './fights.js';
 export * from './skills.js';

@@ -4,6 +4,7 @@ import Mongo from './connections/mongo/index.js';
 import Redis from './connections/redis/index.js';
 import Router from './connections/router/index.js';
 import WebsocketServer from './connections/websocket/index.js';
+import Bootstrap from './tools/bootstrap.js';
 import Liveness from './tools/liveness.js';
 import State from './tools/state.js';
 import type { IFullError } from './types/index.js';
@@ -41,18 +42,21 @@ class App {
 
   @Log.decorateTime('App initialized')
   private async handleInit(): Promise<void> {
+    const controllers = new Bootstrap();
     const router = new Router();
     const broker = new Broker();
     const socket = new WebsocketServer();
     const mongo = new Mongo();
     const redis = new Redis();
 
+    State.controllers = controllers;
     State.router = router;
     State.broker = broker;
     State.socket = socket;
     State.redis = redis;
     State.mongo = mongo;
 
+    controllers.init();
     await broker.init();
     await redis.init();
     await mongo.init();

@@ -2,11 +2,12 @@ import GetUnreadMessagesDto from '../../../../../modules/messages/subModules/get
 import AbstractRouter from '../../../../../tools/abstractions/router.js';
 import type { IGetUnreadMessagesReq } from './types.js';
 import type { IUnreadMessage } from '../../../../../modules/messages/subModules/getUnread/types.js';
+import type { IResponse } from '../../../../../types/requests.js';
 
 export default class MessagesRouter extends AbstractRouter<IUnreadMessage[]> {
-  override async execute(req: IGetUnreadMessagesReq): Promise<IUnreadMessage[]> {
+  async execute(req: IGetUnreadMessagesReq, res: IResponse): Promise<IUnreadMessage[]> {
     const dto = new GetUnreadMessagesDto(req.query);
 
-    return this.controller.execute(dto, req);
+    return this.controller.execute(dto, res);
   }
 }

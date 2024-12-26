@@ -1,14 +1,13 @@
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import UserDetailsDto from '../../../users/subModules/details/dto.js';
 import type GetMessagesDto from './dto.js';
 import type { IPreparedMessagesBody } from './types.js';
 import type * as types from '../../../../types/index.js';
 import type { IFullMessageEntity } from '../../entity.js';
 
-export default class GetMessagesController extends AbstractController<
-  Record<string, IPreparedMessagesBody> | IFullMessageEntity[]
-> {
-  override async execute(
+export default class GetMessagesController
+  implements types.IAbstractSubController<Record<string, IPreparedMessagesBody> | IFullMessageEntity[]>
+{
+  async execute(
     data: GetMessagesDto,
     res: types.IResponse,
   ): Promise<Record<string, IPreparedMessagesBody> | IFullMessageEntity[]> {

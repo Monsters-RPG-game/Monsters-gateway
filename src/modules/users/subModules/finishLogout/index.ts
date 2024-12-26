@@ -1,12 +1,18 @@
 import { InvalidRequest } from '../../../../errors/index.js';
-import AbstractController from '../../../../tools/abstractions/controller.js';
 import TokensController from '../../../tokens/index.js';
+import type { IAbstractSubController } from '../../../../types/abstractions.js';
 import type { IUserSession } from '../../../../types/user.js';
 import type ClientsRepository from '../../../clients/repository/index.js';
 import type express from 'express';
 
-export default class LogoutController extends AbstractController<string, ClientsRepository> {
-  override async execute(req: express.Request): Promise<string> {
+export default class LogoutController implements IAbstractSubController<string> {
+  constructor(repository: ClientsRepository) {
+    this.repository = repository;
+  }
+
+  private accessor repository: ClientsRepository;
+
+  async execute(req: express.Request): Promise<string> {
     const { client } = req.session as IUserSession;
     if (!(req.session as IUserSession).logout || !(req.session as IUserSession).userId || !client) {
       throw new InvalidRequest();
