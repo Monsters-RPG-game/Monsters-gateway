@@ -15,7 +15,7 @@ export default abstract class AbstractRouter<T> {
     if (!controller) throw new errors.UnregisteredControllerError(target);
 
     const subController = controller.resolve(subTarget) as types.IAbstractSubController<T>;
-    if (!subController) throw new errors.UnregisteredControllerError(subTarget);
+    if (!subController) throw new errors.UnregisteredControllerError(subTarget as string);
 
     this._controller = subController;
   }

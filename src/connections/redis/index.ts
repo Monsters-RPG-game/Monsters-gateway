@@ -5,7 +5,6 @@ import Repository from './repository.js';
 import * as enums from '../../enums/index.js';
 import getConfig from '../../tools/configLoader.js';
 import type { IProfileEntity } from '../../modules/profile/entity.js';
-import type { IDetailedSkillsEntity } from '../../modules/skills/entity.js';
 import type { IUserEntity } from '../../modules/users/entity.js';
 import type { ICachedUser, IFullError, IUserSession, ISessionTokenData } from '../../types/index.js';
 import type { ClientRateLimitInfo } from 'express-rate-limit';
@@ -25,14 +24,6 @@ export default class Redis {
 
   private get repository(): Repository {
     return this._repository;
-  }
-
-  async getCachedSkills(id: string): Promise<IDetailedSkillsEntity | undefined> {
-    const cachedSkills = await this.repository.getFromHash({
-      target: `${enums.ERedisTargets.CachedSkills}:${id}`,
-      value: id,
-    });
-    return cachedSkills ? (JSON.parse(cachedSkills) as IDetailedSkillsEntity) : undefined;
   }
 
   async getCachedUser(id: string): Promise<ICachedUser | undefined> {
@@ -92,11 +83,6 @@ export default class Redis {
     await this.setExpirationDate(`rateLimit:${ip}`, enums.ETTL.ExpressRateLimiter);
 
     return data;
-  }
-
-  async addCachedSkills(skills: IDetailedSkillsEntity, userId: string): Promise<void> {
-    await this.repository.addToHash(`${enums.ERedisTargets.CachedSkills}:${userId}`, userId, JSON.stringify(skills));
-    await this.repository.setExpirationDate(`${enums.ERedisTargets.CachedSkills}:${userId}`, 60000);
   }
 
   async removeCachedUser(target: string): Promise<void> {

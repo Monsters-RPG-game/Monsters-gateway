@@ -1,17 +1,9 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import Middleware from './middleware.js';
-import initFightsRoutes from './modules/fights/index.js';
 import initHealthRoutes from './modules/health/index.js';
-import initInventoryRoutes from './modules/inventory/index.js';
 import initMessagesRoutes from './modules/messages/index.js';
-import initNpcRoutes from './modules/npc/index.js';
-import initPartyRoutes from './modules/party/index.js';
 import initProfileRoutes from './modules/profile/index.js';
-import initSingleSkillRoutes from './modules/singleSkill/index.js';
-import initSkillsRoutes from './modules/skills/index.js';
-import initStatsRoutes from './modules/stats/index.js';
-import initStoryRoutes from './modules/story/index.js';
 import { initSecuredUserRoutes, initUserRoutes } from './modules/user/index.js';
 import State from '../../tools/state.js';
 import type { Express, Router } from 'express';
@@ -44,16 +36,7 @@ export default class AppRouter {
     this.router.use(Middleware.userProfileValidation);
 
     initSecuredUserRoutes(this.router);
-    initPartyRoutes(this.router);
     initMessagesRoutes(this.router);
-    initInventoryRoutes(this.router);
-    initSkillsRoutes(this.router);
-    initSingleSkillRoutes(this.router);
-    initFightsRoutes(this.router);
-    initNpcRoutes(this.router);
-    initStoryRoutes(this.router);
-    initStatsRoutes(this.router);
-    initNpcRoutes(this.router);
   }
 
   initWebsocket(app: Express): void {
