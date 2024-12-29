@@ -6,6 +6,7 @@ import type * as types from '../../../../../types/index.js';
 
 /**
  * Initialize routes for health.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Health, EHealthActions.Get);

@@ -7,6 +7,7 @@ import type * as types from '../../../../../types/index.js';
 
 /**
  * Initialzie routes for removing accounts.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.RemoveAccount);

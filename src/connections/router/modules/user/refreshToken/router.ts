@@ -11,6 +11,7 @@ import type { CookieOptions } from 'express';
 
 /**
  * Initialize routes for refreshing login tokens.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.RefreshToken);

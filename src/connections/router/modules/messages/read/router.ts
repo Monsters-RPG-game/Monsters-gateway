@@ -7,6 +7,7 @@ import type * as types from '../../../../../types/index.js';
 
 /**
  * Initialize routes for reading messages.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Messages, EMessageActions.Read);

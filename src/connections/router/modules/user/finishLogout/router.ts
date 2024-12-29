@@ -9,6 +9,7 @@ import type express from 'express';
 
 /**
  * Intialize routes for finishing logout.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.FinishLogout);

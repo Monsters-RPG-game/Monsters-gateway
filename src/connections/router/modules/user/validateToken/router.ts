@@ -6,6 +6,7 @@ import type * as types from '../../../../../types/index.js';
 
 /**
  * Initialize routes for validating user token.
+ * @returns Initialized router.
  */
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.ValidateToken);
