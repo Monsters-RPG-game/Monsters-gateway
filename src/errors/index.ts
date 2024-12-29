@@ -4,20 +4,60 @@ export class FullError extends Error {
   status = 500;
 }
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     InternalError:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'InternalError'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '001'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: 'Internal error. Try again later'
+ */
 export class InternalError extends FullError {
   constructor() {
-    super('InternalError');
-    this.message = 'Internal error. Try again later';
+    super('Internal error. Try again later');
     this.name = 'InternalError';
+    this.code = '001';
     this.status = 500;
   }
 }
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     IncorrectDataType:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'IncorrectDataType'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '002'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: 'Received request is not json type'
+ */
 export class IncorrectDataType extends FullError {
   constructor() {
-    super('IncorrectDataType');
-    this.message = 'Received request is not json type';
+    super('Received request is not json type');
     this.name = 'IncorrectDataType';
+    this.code = '002';
     this.status = 400;
   }
 }
@@ -36,7 +76,7 @@ export class IncorrectDataType extends FullError {
  *         code:
  *           type: string
  *           description: Unique code associated with the error.
- *           example: '002'
+ *           example: '003'
  *         message:
  *           type: string
  *           description: Error message describing the error cause.
@@ -44,9 +84,9 @@ export class IncorrectDataType extends FullError {
  */
 export class MissingArgError extends FullError {
   constructor(param: string) {
-    super('MissingArgError');
-    this.message = `Missing param: ${param}`;
+    super(`Missing param: ${param}`);
     this.name = 'MissingArgError';
+    this.code = '003';
     this.status = 400;
   }
 }
@@ -65,17 +105,17 @@ export class MissingArgError extends FullError {
  *         code:
  *           type: string
  *           description: Unique code associated with the error.
- *           example: '003'
+ *           example: '004'
  *         message:
- *           example: 'Data not provided'
- *           description: Error message describing the incorrect parameter.
  *           type: string
+ *           description: Error message describing the incorrect parameter.
+ *           example: 'Data not provided'
  */
 export class IncorrectArgError extends FullError {
   constructor(err: string) {
-    super('IncorrectArgError');
-    this.message = err;
+    super(err);
     this.name = 'IncorrectArgError';
+    this.code = '004';
     this.status = 400;
   }
 }
@@ -96,24 +136,24 @@ export class IncorrectArgError extends FullError {
  *           description: Unique code associated with the error.
  *           example: '005'
  *         message:
- *           description: Error message describing the error cause.
  *           type: string
+ *           description: Error message describing the error cause.
  *           example: 'User not logged in'
  */
 export class UnauthorizedError extends FullError {
   constructor() {
-    super('UnauthorizedError');
-    this.message = 'User not logged in';
+    super('User not logged in');
     this.name = 'UnauthorizedError';
+    this.code = '005';
     this.status = 401;
   }
 }
 
 export class MissingProcessPlatformError extends FullError {
   constructor() {
-    super('MissingProcessPlatformError');
-    this.message = 'process.platform is missing';
+    super('process.platform is missing');
     this.name = 'MissingProcessPlatformError';
+    this.code = '006';
     this.status = 500;
   }
 }
@@ -140,9 +180,9 @@ export class MissingProcessPlatformError extends FullError {
  */
 export class IncorrectBodyTypeError extends FullError {
   constructor() {
-    super('IncorrectBodyTypeError');
-    this.message = 'Incorrect body type. Data should be of type json';
+    super('Incorrect body type. Data should be of type json');
     this.name = 'IncorrectBodyTypeError';
+    this.code = '007';
     this.status = 400;
   }
 }
@@ -169,47 +209,9 @@ export class IncorrectBodyTypeError extends FullError {
  */
 export class NoDataProvidedError extends FullError {
   constructor() {
-    super('NoDataProvidedError');
-    this.message = 'No data provided';
+    super('No data provided');
     this.name = 'NoDataProvidedError';
-    this.status = 400;
-  }
-}
-
-export class IncorrectTargetError extends FullError {
-  constructor() {
-    super('IncorrectTargetError');
-    this.message = 'Incorrect target';
-    this.name = 'IncorrectTargetError';
-    this.status = 400;
-  }
-}
-
-/**
- * @openapi
- * components:
- *   schemas:
- *     MissingArgError:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Error name describing the error cause.
- *           example: 'MissingArgError'
- *         code:
- *           type: string
- *           description: Unique code associated with the error.
- *           example: '002'
- *         message:
- *           type: string
- *           description: Error message describing the error cause.
- *           pattern: "^Missing param: .+$"
- */
-export class IncorrectTokenError extends FullError {
-  constructor() {
-    super('IncorrectTokenError');
-    this.message = 'Provided key is incorrect';
-    this.name = 'IncorrectTokenError';
+    this.code = '008';
     this.status = 400;
   }
 }
@@ -228,7 +230,7 @@ export class IncorrectTokenError extends FullError {
  *         code:
  *           type: string
  *           description: Unique code associated with the error.
- *           example: '002'
+ *           example: '009'
  *         message:
  *           type: string
  *           description: Error message describing the error cause.
@@ -236,14 +238,15 @@ export class IncorrectTokenError extends FullError {
  */
 export class IncorrectArgLengthError extends FullError {
   constructor(target: string, min: number | undefined, max: number) {
-    super('IncorrectArgLengthError');
-    this.message =
+    super(
       min === undefined
         ? `${target} should be less than ${max} characters`
         : min !== max
           ? `${target} should be more than ${min} and less than ${max} characters`
-          : `${target} should be ${min} characters`;
+          : `${target} should be ${min} characters`,
+    );
     this.name = 'IncorrectArgLengthError';
+    this.code = '009';
     this.status = 400;
   }
 }
@@ -262,7 +265,7 @@ export class IncorrectArgLengthError extends FullError {
  *         code:
  *           type: string
  *           description: Unique code associated with the error.
- *           example: '002'
+ *           example: '010'
  *         message:
  *           type: string
  *           description: Error message describing the error cause.
@@ -270,151 +273,236 @@ export class IncorrectArgLengthError extends FullError {
  */
 export class IncorrectArgTypeError extends FullError {
   constructor(err: string) {
-    super('IncorrectArgTypeError');
-    this.message = err;
+    super(err);
     this.name = 'IncorrectArgTypeError';
+    this.code = '010';
     this.status = 400;
   }
 }
 
-export class UsernameAlreadyInUseError extends FullError {
-  constructor() {
-    super('UsernameAlreadyInUseError');
-    this.message = 'Selected username is already in use';
-    this.name = 'UsernameAlreadyInUseError';
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ElementTooShortError:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'ElementTooShortError'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '011'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "^Element .+$ is too short. Minimum length is .+$"
+ */
+export class ElementTooShortError extends FullError {
+  constructor(target: string, min: number) {
+    super(`Element ${target} is too short. Minimum length is ${min}`);
+    this.name = 'ElementTooShortError';
+    this.code = '011';
     this.status = 400;
   }
 }
 
-export class ProviderNotInitialized extends FullError {
-  constructor() {
-    super('ProviderNotInitialized');
-    this.message = 'Oidc provider not initialized';
-    this.name = 'ProviderNotInitialized';
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ElementTooLongError:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'ElementTooLongError'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '012'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "^Element .+$ is too long. Maximum length is .+$"
+ */
+export class ElementTooLongError extends FullError {
+  constructor(target: string, min: number) {
+    super(`Element ${target} is too long. Maximum length is ${min}`);
+    this.name = 'ElementTooLongLongError';
+    this.code = '012';
     this.status = 400;
+  }
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     FourOhFour:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'FourOhFour'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '013'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "Resource not found or is inaccessible for you"
+ */
+export class FourOhFour extends FullError {
+  constructor() {
+    super('Resource not found or is inaccessible for you');
+    this.name = 'FourOhFour';
+    this.code = '013';
+    this.status = 404;
+  }
+}
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     InvalidRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Error name describing the error cause.
+ *           example: 'InvalidRequest'
+ *         code:
+ *           type: string
+ *           description: Unique code associated with the error.
+ *           example: '013'
+ *         message:
+ *           type: string
+ *           description: Error message describing the error cause.
+ *           pattern: "Invalid request. This error means that there was a problem with user provided client data"
+ */
+export class InvalidRequest extends FullError {
+  constructor() {
+    super('Invalid request');
+    this.name = 'InvalidRequest';
+    this.code = '014';
+    this.status = 400;
+  }
+}
+
+export class IncorrectTargetError extends FullError {
+  constructor() {
+    super('Incorrect target');
+    this.name = 'IncorrectTargetError';
+    this.status = 400;
+    this.code = '015';
   }
 }
 
 export class NoUserWithProvidedName extends FullError {
   constructor(names?: string[]) {
-    super('NoUserWithProvidedName');
-    this.message = names
-      ? names.length === 1
-        ? `User ${names.join(', ')} does not exist`
-        : `Users ${names.join(', ')} does not exist`
-      : 'No user with provided name';
+    super(
+      names
+        ? names.length === 1
+          ? `User ${names.join(', ')} does not exist`
+          : `Users ${names.join(', ')} does not exist`
+        : 'No user with provided name',
+    );
     this.name = 'NoUserWithProvidedName';
     this.status = 400;
+    this.code = '016';
   }
 }
 
 export class NoNpcWithProvidedId extends FullError {
   constructor(ids?: string[]) {
-    super('NoNpcWithProvidedId');
-    this.message = ids
-      ? ids.length === 1
-        ? `Npc ${ids.join(', ')} does not exist`
-        : `Npcs ${ids.join(', ')} does not exist`
-      : 'No user with provided name';
+    super(
+      ids
+        ? ids.length === 1
+          ? `Npc ${ids.join(', ')} does not exist`
+          : `Npcs ${ids.join(', ')} does not exist`
+        : 'No user with provided name',
+    );
     this.name = 'NoUserWithProvidedName';
+    this.code = '017';
     this.status = 400;
   }
 }
 
 export class ProfileNotInitialized extends FullError {
   constructor() {
-    super('ProfileNotInitialized');
-    this.message = 'User profile is not initialized';
+    super('User profile is not initialized');
     this.name = 'ProfileNotInitialized';
-    this.status = 400;
-  }
-}
-
-export class ElementTooShortError extends FullError {
-  constructor(target: string, min: number) {
-    super('ElementTooShortError');
-    this.message = `Element ${target} is too short. Minimum length is ${min}`;
-    this.name = 'ElementTooShortError';
-    this.code = '021';
-    this.status = 400;
-  }
-}
-
-export class ElementTooLongError extends FullError {
-  constructor(target: string, min: number) {
-    super('ElementTooShortLongError');
-    this.message = `Element ${target} is too long. Maximum length is ${min}`;
-    this.name = 'ElementTooShortLongError';
-    this.code = '022';
+    this.code = '018';
     this.status = 400;
   }
 }
 
 export class ActionNotAllowed extends FullError {
   constructor() {
-    super('ActionNotAllowed');
-    this.message = 'Action not allowed';
+    super('Action not allowed');
     this.name = 'ActionNotAllowed';
-    this.code = '014';
+    this.code = '019';
     this.status = 400;
   }
 }
 
 export class NoPermissionToRemoveAccount extends FullError {
   constructor() {
-    super('NoPermissionToRemoveAccount');
-    this.message = 'No permission to remove account';
+    super('No permission to remove account');
     this.name = 'NoPermissionToRemoveAccount';
-    this.code = '015';
+    this.code = '020';
     this.status = 400;
   }
 }
 
 export class NoPermission extends FullError {
   constructor() {
-    super('NoPermission');
-    this.message = 'No permission';
+    super('No permission');
     this.name = 'NoPermission';
-    this.code = '022';
-    this.status = 400;
+    this.code = '021';
+    this.status = 401;
   }
 }
 
 export class UserNotInFight extends FullError {
   constructor() {
-    super('UserNotInFight');
-    this.message = 'User is not fighting';
+    super('User is not fighting');
     this.name = 'UserNotInFight';
-    this.code = '024';
+    this.code = '022';
     this.status = 400;
   }
 }
 
 export class UserCannotMove extends FullError {
   constructor() {
-    super('UserCannotMove');
-    this.message = 'User cannot move';
+    super('User cannot move');
     this.name = 'UserCannotMove';
-    this.code = '025';
+    this.code = '023';
     this.status = 400;
-  }
-}
-
-export class AwaitingAuthorizationError extends FullError {
-  constructor() {
-    super('AwaitingAuthorizationError');
-    this.message = 'User not authrized. Waiting for authorization';
-    this.name = 'AwaitingAuthorizationError';
-    this.code = '026';
-    this.status = 403;
   }
 }
 
 export class ProfileNotFound extends FullError {
   constructor() {
-    super('ProfileNotFound');
-    this.message = 'User profile was not found';
+    super('User profile was not found');
     this.name = 'ProfileNotFound';
+    this.code = '024';
     this.status = 404;
+  }
+}
+
+export class UnregisteredControllerError extends FullError {
+  constructor(target: string) {
+    super(`Controllers with target ${target} were not registered !`);
+    this.name = 'UnregisteredControllerError';
+    this.code = '025';
+    this.status = 500;
   }
 }
