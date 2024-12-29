@@ -1,14 +1,16 @@
 {
-  "port": 5003,
-  "mongoURI": "mongodb://user:pass@ser:port",
-  "myAddress": "http://localhost",
-  "authorizationAddress": "http://localhost:2000",
-  "redisURI": "redis://user:password@adress:port",
-  "corsOrigin": ["http://localhost"],
-  "myDomain": ".domain.com",
+  "amqpURI": "amqp://user:password@address:port",
+  "mongoURI": "mongodb://user:password@address:port",
+  "corsOrigin": ["frontendAddress"],
+  "myAddress": "yourAddress",
+  "myDomain": "domainUsedByYourApp",
+  "authorizationAddress": "adressToAuthorizationsServer",
+  "httpPort": 8080,
+  "socketPort": 8081,
+  "redisURI": "redis://user:password@address:port",
   "session": {
-    "secret": "sessionSecret",
+    "secret": "superSecretKeyPleaseDontLeakIt",
     "secured": false,
-    "trustProxy": true
+    "trustProxy": false
   }
 }
