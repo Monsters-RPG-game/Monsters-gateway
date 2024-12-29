@@ -8,18 +8,23 @@ export default class GetProfileController implements types.IAbstractSubControlle
   async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity> {
     const { reqController, tempId, userId } = res.locals;
 
-    if (res.locals?.user?.login === (data.name as string)) {
+    if (data.name && res.locals?.user?.login === data.name) {
       return res.locals.profile as IProfileEntity;
     }
 
-    const users = await reqController.user.getDetails([new UserDetailsDto({ name: data.name as string })], {
+    const users = await reqController.user.getDetails([new UserDetailsDto({ name: data?.name, id: data?.id })], {
       userId,
       tempId,
     });
 
-    if (!users || users.payload.length === 0) {
+    if (
+      !users?.payload ||
+      users.payload.length === 0 ||
+      (typeof users.payload === 'object' && Object.keys(users.payload).length === 0)
+    ) {
       throw new NoUserWithProvidedName();
     }
+
     const user = users.payload[0]!;
     const profileDto = new GetProfileDto({ id: user._id as string });
 

@@ -7,10 +7,10 @@
   "license": "Apache-2.0",
   "private": false,
   "type": "module",
-  "main": "build/main.js",
+  "main": "build/src/main.js",
   "scripts": {
     "start": "node src/main.js",
-    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=development nodemon build/main.js'",
+    "start:dev": "concurrently 'npm run build:watch' 'cross-env NODE_ENV=development nodemon build/src/main.js'",
     "start:testDev": "cross-env NODE_ENV=testDev node src/main.js",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",

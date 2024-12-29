@@ -1,7 +1,6 @@
 import Broker from '../../../src/connections/broker/index.js';
 import type * as types from '../../../src/types/connection.js';
-import * as enums from '../../../src/enums/connection.js';
-import { EMessageTypes } from '../../../src/enums/connection.js';
+import * as enums from '../../../src/enums/index.js';
 import { IBrokerAction } from '../../types/broker.js';
 import { EUserTypes } from '../../../src/enums/index.js';
 import Log from 'simpleLogger'
@@ -52,9 +51,9 @@ export default class FakeBroker extends Broker {
     subTarget: T,
     resolve: (
       value:
-        | { type: EMessageTypes.Credentials | EMessageTypes.Send; payload: unknown }
+        | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
         | PromiseLike<{
-          type: EMessageTypes.Credentials | EMessageTypes.Send;
+          type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
           payload: unknown;
         }>,
     ) => void,
@@ -73,7 +72,7 @@ export default class FakeBroker extends Broker {
       this.stats.push({ target, subTarget, stack: (new Error()).stack as string, success: false, reason: "No callback provided" })
 
       this.actions = this.actions.filter(a => a.subTarget !== subTarget);
-      return resolve({ type: EMessageTypes.Send, payload: {} });
+      return resolve({ type: enums.EMessageTypes.Send, payload: {} });
     }
 
     if (action!.shouldFail) {
@@ -86,7 +85,7 @@ export default class FakeBroker extends Broker {
 
       this.actions = this.actions.filter(a => a.subTarget !== subTarget);
       resolve({
-        type: action.returns.target as EMessageTypes.Credentials | EMessageTypes.Send,
+        type: action.returns.target as enums.EMessageTypes.Credentials | enums.EMessageTypes.Send,
         payload: action.returns.payload,
       });
     }

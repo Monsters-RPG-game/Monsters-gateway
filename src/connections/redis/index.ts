@@ -26,14 +26,14 @@ export default class Redis {
     return this._repository;
   }
 
-  async getCachedUser(id: string): Promise<ICachedUser | undefined> {
+  async getCachedUser(id: string): Promise<ICachedUser | null> {
     const key = RedisKeys.userCache(id);
 
     const cachedUser = await this.repository.getFromHash({
       target: key,
       value: id,
     });
-    return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : undefined;
+    return cachedUser ? (JSON.parse(cachedUser) as ICachedUser) : null;
   }
 
   async getSession(session: string): Promise<IUserSession | null> {

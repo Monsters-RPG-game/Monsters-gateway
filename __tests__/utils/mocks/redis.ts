@@ -1,117 +1,165 @@
-import Redis from '../../../src/connections/redis/index.js';
-import type { IUserEntity } from '../../../src/modules/user/entity.js';
-import type { IProfileEntity } from '../../../src/modules/profile/entity.js';
-import type { ICachedUser } from '../../../src/types/index.js';
-import * as enums from '../../../src/enums/index.js';
-import type { ISkillsEntityDetailed } from '../../../src/modules/skills/getDetailed/types.js';
+import { ClientRateLimitInfo } from 'express-rate-limit';
+import Redis from '../../../src/connections/redis/index.js'
+import { ERedisTargets } from '../../../src/enums/redis.js';
+import { ISessionTokenData } from '../../../src/types/tokens.js';
+import { ICachedUser, IUserSession } from '../../../src/types/user.js';
+import { IUserEntity } from '../../../src/modules/users/entity.js';
+import { IProfileEntity } from '../../../src/modules/profile/entity.js';
 
 export default class FakeRedis extends Redis {
-  private _cachedUsers: ICachedUser[] = [];
-  private _skills: ISkillsEntityDetailed[] = [];
-  private _accountsToRemove: string[] = [];
-  private _accessTokens: AdapterPayload[] = [];
+  private accessor fakeParams: Record<string, unknown[]> = {}
 
-  constructor() {
-    super();
+  override async init(): Promise<void> {
+    //
   }
 
-  get accessTokens(): AdapterPayload[] {
-    return this._accessTokens;
+  override async getCachedUser(_id: string): Promise<ICachedUser | null> {
+    return new Promise(resolve => {
+      resolve(this.fakeParams.cachedUsers![0] as ICachedUser | null)
+    })
   }
 
-  set accessTokens(value: AdapterPayload[]) {
-    this._accessTokens = value;
+  override async getSession(_session: string): Promise<IUserSession | null> {
+    return new Promise(resolve => {
+      resolve(this.fakeParams.sessions![0] as IUserSession | null)
+    })
   }
 
-  get accountsToRemove(): string[] {
-    return this._accountsToRemove;
+  override async getSessionToken(_id: string): Promise<ISessionTokenData | null> {
+    return new Promise(resolve => {
+      resolve(this.fakeParams.sessionTokens![0] as ISessionTokenData | null)
+    })
   }
 
-  set accountsToRemove(value: string[]) {
-    this._accountsToRemove = value;
+  override async getSessionTokenId(_userId: string): Promise<string | null> {
+    return new Promise(resolve => {
+      resolve(this.fakeParams.sessionTokenId![0] as string | null)
+    })
   }
 
-  get cachedUsers(): ICachedUser[] {
-    return this._cachedUsers;
+  override async getSessionTokenTTL(_sessionId: string): Promise<number> {
+    return new Promise(resolve => {
+      resolve(1)
+    })
   }
 
-  set cachedUsers(value: ICachedUser[]) {
-    this._cachedUsers = value;
+  override async getUserToken(_userId: string): Promise<{ accessToken: string | null; refreshToken: string | null }> {
+    return new Promise(resolve =>  {
+      resolve(this.fakeParams.userToken![0] as { accessToken: string | null; refreshToken: string | null })
+    })
   }
 
-  public get skills(): ISkillsEntityDetailed[] {
-    return this._skills;
+  override setExpirationDate(_target: ERedisTargets | string, _ttl: number): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async addCachedUser(user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
-    return new Promise((resolve) => {
-      this.cachedUsers.push(user);
-      resolve();
-    });
+override   async setRateLimit(_ip: string): Promise<ClientRateLimitInfo> {
+    return new Promise(resolve => {
+      resolve(this.fakeParams.rateLimit![0] as ClientRateLimitInfo)
+    })
   }
 
-  override async addCachedSkills(skills: ISkillsEntityDetailed, _userId: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.skills.push(skills);
-      resolve();
-    });
+override   async removeCachedUser(_target: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async getCachedSkills(id: string): Promise<ISkillsEntityDetailed | undefined> {
-    return new Promise((resolve) => {
-      resolve(this.skills.find((t) => t.owner === id));
-    });
-  }
-  override async removeCachedUser(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.cachedUsers = this.cachedUsers.filter((u) => u.account?._id !== id);
-      resolve();
-    });
-  }
-
-  override async removeOidcElement(_target: string): Promise<void> {
-    return new Promise((resolve) => {
-      resolve();
-    });
+override   async updateCachedUser(
+    _id: string,
+    _value: {
+      profile?: Partial<IProfileEntity>;
+      account?: Partial<IUserEntity>;
+    },
+  ): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async addAccountToRemove(target: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.accountsToRemove.push(target);
-      resolve();
-    });
+override   async addCachedUser(_user: { account: IUserEntity; profile: IProfileEntity }): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async removeAccountToRemove(target: string): Promise<void> {
-    return new Promise((resolve) => {
-      this.accountsToRemove = this.accountsToRemove.filter((t) => t !== target);
-      resolve();
-    });
+override   async addSessionToken(_id: string, _sessionData: ISessionTokenData, _eol: Date): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async addOidc(_target: string, _id: string, value: unknown): Promise<void> {
-    return new Promise((resolve) => {
-      this.accessTokens.push(value as AdapterPayload);
-      resolve();
-    });
+override   async addAccessToken(_userId: string, _token: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-
-  override async getAccountToRemove(target: string): Promise<string | undefined> {
-    return new Promise((resolve) => {
-      resolve(this.accountsToRemove.find((t) => t === target));
-    });
+override   async addRefreshToken(_userId: string, _token: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async setExpirationDate(_target: enums.ERedisTargets | string, _ttl: number): Promise<void> {
-    return new Promise((resolve) => {
-      resolve();
-    });
+override   async removeAccessToken(_userId: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 
-  override async getCachedUser(id: string): Promise<ICachedUser | undefined> {
-    return new Promise((resolve) => {
-      resolve(this.cachedUsers.find((u) => u.account?._id === id));
-    });
+override   async removeRefreshToken(_userId: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async removeSessionToken(_sessionId: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async removeSessionTokenId(_userId: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async removeUserTokens(_userId: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async addUserTokens(_userId: string, _accessToken: string, _refreshToken: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async decrementRateLimit(_ip: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async addSession(_session: string, _sessionData: IUserSession): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async removeSession(_session: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
+  }
+
+override   async removeRateLimit(_ip: string): Promise<void> {
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 }

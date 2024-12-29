@@ -40,6 +40,7 @@ export default class Router {
     this.initRouter();
     this.initServer();
     this.initSecuredRouter();
+    this.initFourOhFour();
     this.initErrHandler();
   }
 
@@ -95,6 +96,13 @@ export default class Router {
    */
   private initWebsocket(): void {
     this.router.initWebsocket(this.app);
+  }
+
+  /**
+   * Init websocket upgrade route.
+   */
+  private initFourOhFour(): void {
+    this.router.initFourOhFour(this.app);
   }
 
   /**

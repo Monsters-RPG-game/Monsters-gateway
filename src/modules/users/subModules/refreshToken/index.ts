@@ -29,7 +29,6 @@ export default class RefreshTokenController
   private accessor repository: UsersRepository;
 
   async execute(
-    _data: null,
     req: express.Request,
   ): Promise<{ sessionToken: string | undefined; refreshToken: string; accessToken: string } | string> {
     const refreshToken = (req.cookies as Record<string, string>)[ETokens.Refresh];

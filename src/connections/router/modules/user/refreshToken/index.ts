@@ -7,6 +7,6 @@ export default class UserRouter extends AbstractRouter<
   async execute(
     req: express.Request,
   ): Promise<{ sessionToken: string | undefined; refreshToken: string; accessToken: string } | string> {
-    return this.controller.execute(null, req);
+    return this.controller.execute(req);
   }
 }

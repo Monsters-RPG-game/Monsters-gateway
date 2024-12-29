@@ -50,9 +50,9 @@ export default (): Router => {
    *                 - $ref: '#/components/schemas/MissingArgError'
    *                 - $ref: '#/components/schemas/IncorrectArgError'
    */
-  service.router.get('/details', async (req: IUserDetailsReq, res) => {
+  service.router.get('/details', async (req: IUserDetailsReq, res: types.IResponse) => {
     try {
-      const data = await service.execute(req);
+      const data = await service.execute(req, res);
       res.status(200).send({ data });
     } catch (err) {
       handleErr(err as types.IFullError, res);

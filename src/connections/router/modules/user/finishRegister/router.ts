@@ -11,7 +11,7 @@ import type * as types from '../../../../../types/index.js';
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.FinishRegister);
 
-  service.router.get('/register/finish', limitRate, async (req: IFinishRegisterReq, res) => {
+  service.router.get('/register/finish', limitRate, async (req: IFinishRegisterReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req);
       res.redirect(data);

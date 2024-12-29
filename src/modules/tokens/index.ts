@@ -1,4 +1,4 @@
-import { jwtVerify, SignJWT } from 'jose';
+import { jwtVerify, SignJWT, importJWK } from 'jose';
 import Log from 'simpleLogger';
 import AddToken from './repository/add.js';
 import TokenRepository from './repository/index.js';
@@ -72,9 +72,10 @@ export default class TokensController {
   }
 
   static async validateToken(token: string): Promise<ITokenData> {
-    const key = await this.getKey(token);
+    const privateKey = await this.getKey(token);
+    const publicKey = await importJWK(privateKey, 'RS256');
 
-    const result = await jwtVerify(token, key);
+    const result = await jwtVerify(token, publicKey);
     const parsed = result.payload as ITokenData;
 
     if (new Date(parsed.exp * 1000).getTime() - Date.now() < 0) {
