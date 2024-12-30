@@ -85,9 +85,9 @@ export default class Broker {
     subTarget: T,
     resolve: (
       value:
-        | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
+        | { type: Omit<enums.EMessageTypes, enums.EMessageTypes.Heartbeat>; payload: unknown }
         | PromiseLike<{
-            type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+            type: Omit<enums.EMessageTypes, enums.EMessageTypes.Heartbeat>;
             payload: unknown;
           }>,
     ) => void,

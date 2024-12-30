@@ -12,7 +12,7 @@ export default class Communicator {
     const body: types.IRabbitMessage = {
       user: undefined,
       payload: undefined,
-      subTarget: enums.EMessagesTargets.Send,
+      subTarget: enums.EMessagesSubTargets.Send,
       target: enums.EMessageTypes.Heartbeat,
     };
 

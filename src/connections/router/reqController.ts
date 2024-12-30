@@ -22,10 +22,7 @@ export default class ReqController {
       subTarget: T,
       userData: types.IUserBrokerInfo,
       data?: types.IRabbitConnectionData[T],
-    ): Promise<{
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: unknown;
-    }> => this.send(service, mainTarget, subTarget, userData, data);
+    ): Promise<types.IBaseBrokerResponse> => this.send(service, mainTarget, subTarget, userData, data);
 
     this.user = new User(enums.EServices.Users, action);
     this.chat = new Chat(enums.EServices.Messages, action);
@@ -39,10 +36,7 @@ export default class ReqController {
     subTarget: T,
     userData: types.IUserBrokerInfo,
     data?: types.IRabbitConnectionData[T],
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: unknown;
-  }> {
+  ): Promise<types.IBaseBrokerResponse> {
     return new Promise((resolve, reject) => {
       State.broker.sendLocally(mainTarget, subTarget, resolve, reject, userData, service, data);
     });

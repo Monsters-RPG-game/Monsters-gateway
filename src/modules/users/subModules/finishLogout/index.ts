@@ -5,7 +5,7 @@ import type { IUserSession } from '../../../../types/user.js';
 import type ClientsRepository from '../../../clients/repository/index.js';
 import type express from 'express';
 
-export default class LogoutController implements IAbstractSubController<string> {
+export default class FinishLogoutController implements IAbstractSubController<string> {
   constructor(repository: ClientsRepository) {
     this.repository = repository;
   }

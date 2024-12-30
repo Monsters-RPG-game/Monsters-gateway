@@ -1,11 +1,10 @@
 import GetProfileDto from './dto.js';
-import { NoUserWithProvidedName } from '../../../../errors/index.js';
 import UserDetailsDto from '../../../users/subModules/details/dto.js';
 import type * as types from '../../../../types/index.js';
 import type { IProfileEntity } from '../../entity.js';
 
-export default class GetProfileController implements types.IAbstractSubController<IProfileEntity> {
-  async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity> {
+export default class GetProfileController implements types.IAbstractSubController<IProfileEntity | null> {
+  async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity | null> {
     const { reqController, tempId, userId } = res.locals;
 
     if (data.name && res.locals?.user?.login === data.name) {
@@ -22,7 +21,7 @@ export default class GetProfileController implements types.IAbstractSubControlle
       users.payload.length === 0 ||
       (typeof users.payload === 'object' && Object.keys(users.payload).length === 0)
     ) {
-      throw new NoUserWithProvidedName();
+      return null;
     }
 
     const user = users.payload[0]!;

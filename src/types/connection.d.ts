@@ -11,32 +11,32 @@ import type DebugGetAllUsersDto from '../modules/users/subModules/debug/dto.js';
 import type UserDetailsDto from '../modules/users/subModules/details/dto';
 
 export type IRabbitSubTargets =
-  | enums.EProfileTargets
-  | enums.EUserTargets
-  | enums.EMessagesTargets
-  | enums.EChatTargets;
+  | enums.EProfileSubTargets
+  | enums.EUserSubTargets
+  | enums.EMessagesSubTargets
+  | enums.EChatSubTargets;
 
 export interface IProfileConnectionData {
-  [enums.EProfileTargets.Get]: GetProfileDto;
+  [enums.EProfileSubTargets.Get]: GetProfileDto;
 }
 
 export interface IUserConnectionData {
-  [enums.EUserTargets.GetName]: UserDetailsDto[];
-  [enums.EUserTargets.DebugGetAll]: DebugGetAllUsersDto;
+  [enums.EUserSubTargets.GetName]: UserDetailsDto[];
+  [enums.EUserSubTargets.DebugGetAll]: DebugGetAllUsersDto;
 }
 
 export interface IMessageConnectionData {
-  [enums.EMessagesTargets.Get]: GetMessagesDto;
-  [enums.EMessagesTargets.GetUnread]: GetUnreadMessagesDto;
-  [enums.EMessagesTargets.Read]: ReadMessagesDto;
-  [enums.EMessagesTargets.Send]: SendMessagesDto;
+  [enums.EMessagesSubTargets.Get]: GetMessagesDto;
+  [enums.EMessagesSubTargets.GetUnread]: GetUnreadMessagesDto;
+  [enums.EMessagesSubTargets.Read]: ReadMessagesDto;
+  [enums.EMessagesSubTargets.Send]: SendMessagesDto;
 }
 
 export interface IChatConnectionData {
-  [enums.EChatTargets.Get]: types.IGetMessageBody;
-  [enums.EChatTargets.GetUnread]: IGetUnreadMessagesDto;
-  [enums.EChatTargets.Read]: types.IReadMessageBody;
-  [enums.EChatTargets.Send]: types.ISendMessageDto;
+  [enums.EChatSubTargets.Get]: types.IGetMessageBody;
+  [enums.EChatSubTargets.GetUnread]: IGetUnreadMessagesDto;
+  [enums.EChatSubTargets.Read]: types.IReadMessageBody;
+  [enums.EChatSubTargets.Send]: types.ISendMessageDto;
 }
 
 export interface IRabbitConnectionData
@@ -45,7 +45,7 @@ export interface IRabbitConnectionData
     IMessageConnectionData,
     IChatConnectionData {}
 
-export type IRabbitTargets = enums.EMessageTypes | enums.EUserMainTargets;
+export type IRabbitTargets = enums.EMessageTypes | enums.EConnectionMainTargets;
 
 export interface IRabbitMessage {
   user: IUserBrokerInfo | undefined;

@@ -51,9 +51,9 @@ export default class FakeBroker extends Broker {
     subTarget: T,
     resolve: (
       value:
-        | { type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send; payload: unknown }
+        | { type: Omit<enums.EMessageTypes, enums.EMessageTypes.Heartbeat>; payload: unknown }
         | PromiseLike<{
-          type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
+          type: Omit<enums.EMessageTypes, enums.EMessageTypes.Heartbeat>;
           payload: unknown;
         }>,
     ) => void,
@@ -85,7 +85,7 @@ export default class FakeBroker extends Broker {
 
       this.actions = this.actions.filter(a => a.subTarget !== subTarget);
       resolve({
-        type: action.returns.target as enums.EMessageTypes.Credentials | enums.EMessageTypes.Send,
+        type: action.returns.target as Omit<enums.EMessageTypes, enums.EMessageTypes.Heartbeat>,
         payload: action.returns.payload,
       });
     }
