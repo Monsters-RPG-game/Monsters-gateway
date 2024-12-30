@@ -1,4 +1,4 @@
-export enum EUserMainTargets {
+export enum EConnectionMainTargets {
   User = 'user',
   Chat = 'chat',
   Fight = 'fight',
@@ -6,23 +6,23 @@ export enum EUserMainTargets {
   Message = 'message',
 }
 
-export enum EUserTargets {
+export enum EUserSubTargets {
   GetName = 'getName',
   DebugGetAll = 'debugGetAll',
 }
 
-export enum EProfileTargets {
+export enum EProfileSubTargets {
   Get = 'getProfile',
 }
 
-export enum EMessagesTargets {
+export enum EMessagesSubTargets {
   Send = 'send',
   Get = 'get',
   Read = 'read',
   GetUnread = 'getUnread',
 }
 
-export enum EChatTargets {
+export enum EChatSubTargets {
   Send = 'sendChatMessage',
   Get = 'getChatMessage',
   Read = 'readChatMessage',

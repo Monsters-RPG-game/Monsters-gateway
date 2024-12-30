@@ -57,7 +57,11 @@ export default (): Router => {
   service.router.get('/debug', async (req: IDebugReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req, res);
-      res.status(200).send({ data });
+      if (!data || data.length === 0) {
+        res.status(204).send();
+      } else {
+        res.status(200).send({ data });
+      }
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

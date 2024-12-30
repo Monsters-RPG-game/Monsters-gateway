@@ -8,10 +8,7 @@ export default abstract class ReqController {
     subTarget: T,
     userData: types.IUserBrokerInfo,
     data?: types.IRabbitConnectionData[T],
-  ) => Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: unknown;
-  }>;
+  ) => Promise<types.IBaseBrokerResponse>;
   private readonly _service: enums.EServices;
 
   constructor(
@@ -22,10 +19,7 @@ export default abstract class ReqController {
       subTarget: T,
       userData: types.IUserBrokerInfo,
       data?: types.IRabbitConnectionData[T],
-    ) => Promise<{
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: unknown;
-    }>,
+    ) => Promise<types.IBaseBrokerResponse>,
   ) {
     this._sendReq = sendReq;
     this._service = service;
@@ -37,10 +31,7 @@ export default abstract class ReqController {
     subTarget: T,
     userData: types.IUserBrokerInfo,
     data?: types.IRabbitConnectionData[T],
-  ) => Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: unknown;
-  }> {
+  ) => Promise<types.IBaseBrokerResponse> {
     return this._sendReq;
   }
 

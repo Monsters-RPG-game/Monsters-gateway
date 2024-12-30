@@ -5,7 +5,7 @@ import type StartLogoutDto from './dto.js';
 import type { IAbstractSubController, IUserSession } from '../../../../types/index.js';
 import type express from 'express';
 
-export default class LogoutController implements IAbstractSubController<string> {
+export default class StartLogoutController implements IAbstractSubController<string> {
   async execute(dto: StartLogoutDto, req: express.Request): Promise<string> {
     const cookie = (req.cookies as Record<string, string>)[ETokens.Access];
     if (!cookie) throw new InvalidRequest();

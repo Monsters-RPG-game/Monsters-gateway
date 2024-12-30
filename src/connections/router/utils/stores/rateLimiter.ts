@@ -10,12 +10,14 @@ export default class RateLimitStore implements Store {
   }
   /**
    * Increment request count for a given IP address.
+   * If target is local address like ::1 or other, its by default inserted.
    * @param key Client's ip address or key .
    * @returns Incremented session data.
    */
   @Log.decorateDebug('RateLimiter', 'Incrementing')
   async increment(key: string): Promise<IncrementResponse> {
-    return State.redis.setRateLimit(key.match(this.filter)![0]);
+    const target = key === '::1' ? key : key.match(this.filter)![0];
+    return State.redis.setRateLimit(target);
   }
 
   /**
@@ -24,7 +26,8 @@ export default class RateLimitStore implements Store {
    */
   @Log.decorateDebug('RateLimiter', 'Resetting keys')
   async resetKey(key: string): Promise<void> {
-    await State.redis.removeRateLimit(key.match(this.filter)![0]);
+    const target = key === '::1' ? key : key.match(this.filter)![0];
+    await State.redis.removeRateLimit(target);
   }
 
   /**
@@ -33,6 +36,7 @@ export default class RateLimitStore implements Store {
    */
   @Log.decorateDebug('RateLimiter', 'Decrementing')
   async decrement(key: string): Promise<void> {
-    await State.redis.decrementRateLimit(key.match(this.filter)![0]);
+    const target = key === '::1' ? key : key.match(this.filter)![0];
+    await State.redis.decrementRateLimit(target);
   }
 }

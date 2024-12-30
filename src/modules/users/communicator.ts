@@ -9,38 +9,26 @@ export default class User extends ReqController {
   async getDetails(
     data: UserDetailsDto[],
     userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUserEntity[];
-  }> {
+  ): Promise<types.IDataBrokerResponse<IUserEntity[]>> {
     return (await this.sendReq(
       this.service,
-      enums.EUserMainTargets.User,
-      enums.EUserTargets.GetName,
+      enums.EConnectionMainTargets.User,
+      enums.EUserSubTargets.GetName,
       userInfo,
       data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUserEntity[];
-    };
+    )) as types.IDataBrokerResponse<IUserEntity[]>;
   }
 
   async debugGetAll(
     data: DebugGetAllUsersDto,
     userInfo: types.IUserBrokerInfo,
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUserEntity[];
-  }> {
+  ): Promise<types.IDataBrokerResponse<IUserEntity[]>> {
     return (await this.sendReq(
       this.service,
-      enums.EUserMainTargets.User,
-      enums.EUserTargets.DebugGetAll,
+      enums.EConnectionMainTargets.User,
+      enums.EUserSubTargets.DebugGetAll,
       userInfo,
       data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUserEntity[];
-    };
+    )) as types.IDataBrokerResponse<IUserEntity[]>;
   }
 }

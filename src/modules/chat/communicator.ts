@@ -2,6 +2,7 @@ import * as enums from '../../enums/index.js';
 import ReqHandler from '../../tools//abstractions/reqController.js';
 import type { IPreparedMessagesBody } from './types.js';
 import type * as types from '../../connections/websocket/types/index.js';
+import type { IDataBrokerResponse } from '../../types/responses.js';
 import type { IGetUnreadMessagesDto, IUnreadMessage } from '../messages/subModules/getUnread/types.js';
 
 export default class Chat extends ReqHandler {
@@ -12,21 +13,16 @@ export default class Chat extends ReqHandler {
       userId: string | undefined;
       type: enums.EUserTypes;
     },
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: IUnreadMessage[];
-  }> {
+  ): Promise<IDataBrokerResponse<IUnreadMessage[]>> {
     return (await this.sendReq(
       this.service,
-      enums.EUserMainTargets.Message,
-      enums.EChatTargets.GetUnread,
+      enums.EConnectionMainTargets.Message,
+      enums.EChatSubTargets.GetUnread,
       locals,
       data,
-    )) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: IUnreadMessage[];
-    };
+    )) as IDataBrokerResponse<IUnreadMessage[]>;
   }
+
   async send(
     data: types.ISendMessageDto,
     locals: {
@@ -35,7 +31,7 @@ export default class Chat extends ReqHandler {
       type: enums.EUserTypes;
     },
   ): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Chat, enums.EChatTargets.Send, locals, data);
+    await this.sendReq(this.service, enums.EConnectionMainTargets.Chat, enums.EChatSubTargets.Send, locals, data);
   }
 
   async read(
@@ -46,7 +42,7 @@ export default class Chat extends ReqHandler {
       type: enums.EUserTypes;
     },
   ): Promise<void> {
-    await this.sendReq(this.service, enums.EUserMainTargets.Chat, enums.EChatTargets.Read, locals, data);
+    await this.sendReq(this.service, enums.EConnectionMainTargets.Chat, enums.EChatSubTargets.Read, locals, data);
   }
 
   async get(
@@ -56,13 +52,13 @@ export default class Chat extends ReqHandler {
       userId: string | undefined;
       type: enums.EUserTypes;
     },
-  ): Promise<{
-    type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-    payload: Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[];
-  }> {
-    return (await this.sendReq(this.service, enums.EUserMainTargets.Message, enums.EChatTargets.Get, locals, data)) as {
-      type: enums.EMessageTypes.Credentials | enums.EMessageTypes.Send;
-      payload: Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[];
-    };
+  ): Promise<IDataBrokerResponse<Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[]>> {
+    return (await this.sendReq(
+      this.service,
+      enums.EConnectionMainTargets.Message,
+      enums.EChatSubTargets.Get,
+      locals,
+      data,
+    )) as IDataBrokerResponse<Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[]>;
   }
 }
