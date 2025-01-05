@@ -1,6 +1,6 @@
 {
   "amqpURL": "amqp://user:password@address:port",
-  "mongoURl": "mongodb://user:password@address:port",
+  "mongoURL": "mongodb://user:password@address:port",
   "corsOrigin": ["frontendAddress"],
   "myAddress": "yourAddress",
   "myDomain": "domainUsedByYourApp",
