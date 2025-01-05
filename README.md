@@ -9,11 +9,25 @@ TLDR:
 
 ## 1. How to start
 
-### Install dependencies
+- Install dependencies
 
 ```bash
 npm install / yarn
 ```
+
+- Initialize database
+
+```bash
+npm run migrate:dev / yarn migrate:dev
+```
+
+- start 
+
+```bash
+npm run start:dev / yarn start:dev
+```
+
+Above scripts will let you start this application. You can find more detailed guide in `/docs/HowToStart.md`
 
 ## 2. How to build
 
