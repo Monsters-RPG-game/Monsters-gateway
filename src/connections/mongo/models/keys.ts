@@ -2,17 +2,9 @@ import mongoose from 'mongoose';
 import type { IKey } from '../types/index.js';
 
 export const keySchema = new mongoose.Schema({
-  kid: {
-    type: String,
-    required: [true, 'Kid not provided'],
-  },
   kty: {
     type: String,
     required: [true, 'Kty not provided'],
-  },
-  alg: {
-    type: String,
-    required: [true, 'Alg not provided'],
   },
   e: {
     type: String,

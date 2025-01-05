@@ -17,6 +17,7 @@ export default class Keys {
 
     const key = await this.getKey();
     const newKey = new AddKey(key);
+    Log.debug('Keys controller', 'Adding new key', newKey);
     await repo.add(newKey);
   }
 }

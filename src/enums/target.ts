@@ -8,7 +8,9 @@ export enum EConnectionMainTargets {
 
 export enum EUserSubTargets {
   GetName = 'getName',
+  Register = 'register',
   DebugGetAll = 'debugGetAll',
+  RemoveAccount = 'removeAccount',
 }
 
 export enum EProfileSubTargets {

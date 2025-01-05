@@ -18,7 +18,7 @@ export default (): Router => {
 
   service.router.get('/refresh', limitRate, async (req: express.Request, res: types.IResponse) => {
     try {
-      const token = await service.execute(req);
+      const token = await service.execute(req, res);
       const options: CookieOptions = {
         maxAge: ETTL.UserAccessToken * 1000,
         httpOnly: getConfig().session.secured ? true : false,

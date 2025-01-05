@@ -11,19 +11,18 @@ TLDR:
 
 ### Install dependencies
 
-```shell
+```bash
 npm install / yarn
 ```
 
-### Prepare environment
-
 ## 2. How to build
 
-```shell
+```bash
 npm run build / yarn build
 ```
 
-If you even encounter strange build behavior, tsconfig is set to create build with cache. Set option `incremental` in tsConfig to false
+> [!IMPORTANT]
+> If you even encounter strange build behavior, tsconfig is set to create build with cache. Set option `incremental` in tsConfig to false
 
 ## 3. Useful information
 
@@ -53,16 +52,17 @@ yarn test:db = run 'database' tests
 yarn test:unit = run 'unit' tests
 ```
 
-To run all tests, use makefile script
+> [!TIP]
+> To run all tests, use makefile script
 
-```text
+```bash
 make test
 ```
 
 ### 3.3 Hooks
 
 Instead of adding additional packages like husky, its easier to add hooks manually. If you want your code to check its quality and test itself before committing code, you can add this code to `.git/hooks/pre-commit`
-```sh
+```bash
 #!/bin/sh
 
 set -e
@@ -128,9 +128,9 @@ TestConfig will be used, if you run your application on dev servers. This config
 Each config includes few elements:
 ```json
 {
-  "amqpURI": "rabbitUrl",
-  "redisURI": "redis://:password@adress:port",
-  "mongoURI": "mongodb://user:password@adress:port",
+  "amqpURL": "rabbitUrl",
+  "redisURL": "redis://:password@adress:port",
+  "mongoURL": "mongodb://user:password@adress:port",
   "authorizationAddress": "http://localhost",
   "myAddress": "http://localhost",
   "corsOrigin": ["http://localhost"]
@@ -158,11 +158,11 @@ MyAddress is address, that will be used to host this application. Make sure to i
 
 CorsOrigin is list of website that will use this application. If you do not care about it, set ["*"]
 
-mongoURI is address for mongoDB
+mongoURL is address for mongoDB
 
 authorizationAddress is address for authorization server, which should be utilized
 
-redisURI is address for redis, which is used to cache data like user sessions and connection params
+redisURL is address for redis, which is used to cache data like user sessions and connection params
 
 myDomain is domain, that this application will work on. It should be prefixed with dot. This config is used to set cookies, for production for whole domain with subdomains. Either add some random domain in /etc/hosts, or comment all ( atm 2 ) occurrences.
 
@@ -205,9 +205,9 @@ This application is ready for probing in k8s / other systems. You can find liven
 
 When I write my apps, I prefer to have some kind of global state, which allows my app to have access to every external connection from any point in code. You can find this "state" in `/src/tools/state`. This state is used to keep external connections and to manage them. For example, instead of dependency injecting each connection to each route, I prefer to just access them from that global state 
 
-### 4.6 Testing
+### 4.6 Additional docs
 
-This application has multiple tests written in jest. 
+Additional docs can be found in `docs` folder 
 
 [Tests](./docs/tests.md)
 

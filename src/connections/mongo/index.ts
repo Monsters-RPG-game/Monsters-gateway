@@ -23,8 +23,9 @@ export default class Mongo {
   protected async startServer(): Promise<void> {
     Log.debug('Mongo', 'Connecting to mongo');
 
-    await mongoose.connect(getConfig().mongoURI, {
-      dbName: 'AuthorizationsClient',
+    await mongoose.connect(getConfig().mongoURL, {
+      dbName: 'Gateway',
+      serverSelectionTimeoutMS: 5000,
     } as ConnectOptions);
     Log.log('Mongo', 'Started server');
   }

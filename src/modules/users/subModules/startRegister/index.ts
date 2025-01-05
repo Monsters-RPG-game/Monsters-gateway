@@ -27,7 +27,7 @@ export default class StartRegisterController implements IAbstractSubController<s
 
     const params = new URLSearchParams({
       client_id: 'register',
-      redirect_uri: `${getConfig().myAddress}/user/register/finish`,
+      redirect_url: `${getConfig().myAddress}/user/register/finish`,
       home: client.failUrl,
       nonce,
     });

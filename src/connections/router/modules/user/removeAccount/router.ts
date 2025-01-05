@@ -6,7 +6,7 @@ import type { IRemoveAccountReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 
 /**
- * Initialzie routes for removing accounts.
+ * Initializie routes for removing accounts.
  * @returns Initialized router.
  */
 export default (): Router => {
@@ -14,7 +14,7 @@ export default (): Router => {
 
   service.router.delete('/', limitRate, async (req: IRemoveAccountReq, res: types.IResponse) => {
     try {
-      await service.execute(req);
+      await service.execute(req, res);
       res.sendStatus(200);
     } catch (err) {
       handleErr(err as types.IFullError, res);

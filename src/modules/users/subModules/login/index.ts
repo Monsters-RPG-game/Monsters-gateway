@@ -6,16 +6,17 @@ import getConfig from '../../../../tools/configLoader.js';
 import { generateCodeChallengeFromVerifier, generateCodeVerifier } from '../../../../tools/crypt.js';
 import { generateRandomName } from '../../../../utils/index.js';
 import TokenController from '../../../tokens/index.js';
+import UserDetailsDto from '../details/dto.js';
 import type LoginDto from './dto.js';
 import type {
   IUserSession,
   IUserServerTokens,
   IUserAuthorizationsData,
   IAbstractSubController,
+  IResponse,
 } from '../../../../types/index.js';
 import type ClientsRepository from '../../../clients/repository/index.js';
 import type OidcClientsRepository from '../../../oidcClients/repository/index.js';
-import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 import type { JWK } from 'jose';
 import type mongoose from 'mongoose';
@@ -24,27 +25,22 @@ export default class LoginController
   implements
     IAbstractSubController<{ url: string; accessToken: string; refreshToken: string; sessionToken: string } | string>
 {
-  constructor(
-    clientsRepository: ClientsRepository,
-    oidcClientsRepository: OidcClientsRepository,
-    usersRepository: UsersRepository,
-  ) {
+  constructor(clientsRepository: ClientsRepository, oidcClientsRepository: OidcClientsRepository) {
     this.clientsRepository = clientsRepository;
     this.oidcClientRepository = oidcClientsRepository;
-    this.usersRepository = usersRepository;
   }
 
   private accessor oidcClientRepository: OidcClientsRepository;
   private accessor clientsRepository: ClientsRepository;
-  private accessor usersRepository: UsersRepository;
 
   async execute(
     data: LoginDto,
     req: express.Request,
+    res: IResponse,
   ): Promise<{ url: string; accessToken: string; refreshToken: string; sessionToken: string } | string> {
     if (data.code) {
-      const { userId, tokenController, refreshToken } = await this.login(data, req);
-      return this.createTokens(userId, tokenController, req, refreshToken);
+      const { userId, tokenController, refreshToken } = await this.login(data, req, res);
+      return this.createTokens(userId, tokenController, req, res, refreshToken);
     }
 
     return this.sendToLoginPage(data, req);
@@ -52,7 +48,10 @@ export default class LoginController
 
   private async sendToLoginPage(data: LoginDto, req: express.Request): Promise<string> {
     const client = await this.clientsRepository.getByName(data.client!);
-    if (!client) throw new InvalidRequest();
+    if (!client) {
+      Log.debug('Login', `No client with provided name '${data.client}'`);
+      throw new InvalidRequest();
+    }
 
     const timestamp = Math.floor(Date.now() / 1000);
     const randomValue = generateRandomName(30);
@@ -67,9 +66,12 @@ export default class LoginController
 
     const oidcClient = await this.oidcClientRepository.getByGrant(EClientGrants.AuthorizationCode);
 
+    Log.debug('Login', `Using client ${EClientGrants.AuthorizationCode} to send user to login page`, oidcClient);
+    if (!oidcClient) throw new InvalidRequest();
+
     const params = new URLSearchParams({
-      client_id: oidcClient!.clientId,
-      redirect_uri: `${getConfig().myAddress}/user/login`,
+      client_id: oidcClient.clientId,
+      redirect_url: `${getConfig().myAddress}/user/login`,
       nonce,
       response_type: 'code',
       scope: 'openid',
@@ -84,9 +86,15 @@ export default class LoginController
     userId: string,
     tokenController: TokenController,
     req: express.Request,
+    res: IResponse,
     refreshToken: string,
   ): Promise<{ url: string; refreshToken: string; accessToken: string; sessionToken: string }> {
-    const userData = await this.usersRepository.getByUserId(userId);
+    const userData = (
+      await res.locals.reqController.user.getDetails([new UserDetailsDto({ oidcId: userId })], {
+        userId,
+        tempId: res.locals.tempId,
+      })
+    ).payload[0];
 
     if (!userData) {
       Log.error('Login', 'User logged in, but there is no data related to him. Error ?');
@@ -103,6 +111,7 @@ export default class LoginController
   private async login(
     data: LoginDto,
     req: express.Request,
+    response: IResponse,
   ): Promise<{ userId: string; tokenController: TokenController; refreshToken: string }> {
     const verifier = (req.session as IUserSession).verifier!;
 
@@ -112,8 +121,7 @@ export default class LoginController
     // Get one client - this should probably include some custom logic
     const oidcClient = await this.oidcClientRepository.getByGrant(EClientGrants.AuthorizationCode);
 
-    Log.debug('Login', 'Oidc client to use', oidcClient);
-
+    Log.debug('Login', `Using oidc client ${EClientGrants.AuthorizationCode} to get tokens`, oidcClient);
     if (!oidcClient) throw new InvalidRequest();
 
     const body = new URLSearchParams({
@@ -121,7 +129,7 @@ export default class LoginController
       client_secret: oidcClient.clientSecret,
       code: data.code!,
       grant_type: oidcClient.clientGrant,
-      redirect_uri: oidcClient.redirectUri,
+      redirect_url: oidcClient.redirectUrl,
       code_verifier: verifier,
     });
 
@@ -136,7 +144,7 @@ export default class LoginController
     });
 
     if (res.ok) {
-      return this.saveToken((await res.json()) as IUserServerTokens);
+      return this.saveToken((await res.json()) as IUserServerTokens, response);
     }
 
     const err = await res.json();
@@ -146,10 +154,16 @@ export default class LoginController
 
   private async saveToken(
     tokens: IUserServerTokens,
+    res: IResponse,
   ): Promise<{ userId: string; tokenController: TokenController; refreshToken: string }> {
     const userId = await this.decodeIdToken(tokens.id_token);
 
-    const userData = await this.usersRepository.getByUserId(userId);
+    const userData = (
+      await res.locals.reqController.user.getDetails([new UserDetailsDto({ oidcId: userId })], {
+        userId,
+        tempId: res.locals.tempId,
+      })
+    ).payload[0];
     if (!userData) {
       Log.error('Login', 'User logged in, but there is no data related to him. Error ?');
       throw new InvalidRequest();
@@ -209,6 +223,6 @@ export default class LoginController
     const client = await this.clientsRepository.getByName((req.session as IUserSession).client!);
     delete (req.session as IUserSession).client;
 
-    return client!.redirectUri;
+    return `${client!.redirectUrl}/?feedback=success`;
   }
 }

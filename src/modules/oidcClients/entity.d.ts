@@ -6,5 +6,5 @@ export interface IOidcClientEntity {
   clientSecret: string;
   redirectLogoutUrl: string;
   clientGrant: string;
-  redirectUri: string;
+  redirectUrl: string;
 }

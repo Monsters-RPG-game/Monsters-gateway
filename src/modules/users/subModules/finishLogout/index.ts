@@ -1,3 +1,4 @@
+import Log from 'simpleLogger';
 import { InvalidRequest } from '../../../../errors/index.js';
 import TokensController from '../../../tokens/index.js';
 import type { IAbstractSubController } from '../../../../types/abstractions.js';
@@ -19,7 +20,11 @@ export default class FinishLogoutController implements IAbstractSubController<st
     }
 
     const clientData = await this.repository.getByName(client);
-    if (!clientData) throw new InvalidRequest();
+
+    if (!clientData) {
+      Log.debug('Login', `No client with provided name '${client}'`);
+      throw new InvalidRequest();
+    }
 
     const tokenController = new TokensController((req.session as IUserSession).userId!);
     await tokenController.logout();
@@ -29,6 +34,6 @@ export default class FinishLogoutController implements IAbstractSubController<st
     delete (req.session as IUserSession).client;
     delete (req.session as IUserSession).userId;
 
-    return clientData.redirectUri;
+    return `${clientData.redirectUrl}/?feedback=success`;
   }
 }

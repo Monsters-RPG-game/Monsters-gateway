@@ -4,5 +4,5 @@ export interface IClientEntity {
   _id?: string | mongoose.Types.ObjectId;
   clientId: string;
   failUrl: string;
-  redirectUri: string;
+  redirectUrl: string;
 }

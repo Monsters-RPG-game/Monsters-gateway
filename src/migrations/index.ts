@@ -27,7 +27,7 @@ export default class Migrations {
 
   private async getLastMigration(): Promise<string[]> {
     const Model = getModel(this.migrationClient as Connection);
-    const entry = await Model.find({ dbName: 'AuthorizationsClient' });
+    const entry = await Model.find({ dbName: 'Gateway' });
 
     return !entry || entry.length === 0 ? [] : (entry[0] as IMigration).changes;
   }
@@ -85,7 +85,7 @@ export default class Migrations {
 
   private async saveChanges(changes: string[]): Promise<void> {
     const Model = getModel(this.migrationClient as Connection);
-    const newElement = new Model({ changes, dbName: 'AuthorizationsClient' });
+    const newElement = new Model({ changes, dbName: 'Gateway' });
     await newElement.save();
   }
 }

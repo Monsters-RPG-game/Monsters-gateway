@@ -1,7 +1,6 @@
 import type { IClientEntity } from '../../../modules/clients/entity';
 import type { IOidcClientEntity } from '../../../modules/oidcClients/entity';
 import type { ITokenEntity } from '../../../modules/tokens/entity';
-import type { IUserEntity } from '../../../modules/users/entity';
 import type { JWK } from 'jose';
 import type mongoose from 'mongoose';
 
@@ -10,10 +9,6 @@ export interface IClient extends IClientEntity, mongoose.Document {
 }
 
 export interface IOidcClient extends IOidcClientEntity, mongoose.Document {
-  _id: mongoose.Types.ObjectId;
-}
-
-export interface IUser extends IUserEntity, mongoose.Document {
   _id: mongoose.Types.ObjectId;
 }
 

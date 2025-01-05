@@ -14,13 +14,13 @@ export const oidcClientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'ClientGrant not provided'],
   },
-  redirectUri: {
+  redirectUrl: {
     type: String,
-    required: [true, 'RedirectUris not provided'],
+    required: [true, 'RedirectUrls not provided'],
   },
   redirectLogoutUrl: {
     type: String,
-    required: [true, 'RedirectUris not provided'],
+    required: [true, 'RedirectUrls not provided'],
   },
 });
 

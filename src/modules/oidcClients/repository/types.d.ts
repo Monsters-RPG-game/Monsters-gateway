@@ -5,7 +5,7 @@ import type { EClientGrants } from '../../../enums/grants.js';
 export interface IAddOidcClient {
   clientId: string;
   clientSecret: string;
-  redirectUri: string;
+  redirectUrl: string;
   clientGrant: string;
 }
 

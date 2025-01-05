@@ -8,7 +8,7 @@ import type * as types from '../../../../../types/index.js';
 import type express from 'express';
 
 /**
- * Intialize routes for finishing logout.
+ * Initialize routes for finishing logout.
  * @returns Initialized router.
  */
 export default (): Router => {

@@ -22,21 +22,21 @@ import type { IUserDetailsDto } from './types.js';
 export default class UserDetailsDto implements IUserDetailsDto {
   name?: string;
   id?: string;
+  oidcId?: string;
 
   constructor(data: IUserDetailsDto) {
     this.name = data?.name;
     this.id = data?.id;
+    this.oidcId = data?.oidcId;
 
     this.validate();
   }
 
   validate(): void {
-    if (!this.name && !this.id) throw new MissingArgError('name');
+    if (!this.name && !this.id && !this.oidcId) throw new MissingArgError('name');
 
-    if (!this.name) {
-      new Validation(this.id, 'id').isDefined();
-    } else {
-      new Validation(this.name, 'name').isDefined();
-    }
+    if (this.name) new Validation(this.name, 'name').isDefined();
+    if (this.id) new Validation(this.id, 'id').isDefined();
+    if (this.oidcId) new Validation(this.oidcId, 'oidcId').isDefined();
   }
 }

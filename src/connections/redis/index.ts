@@ -218,7 +218,7 @@ export default class Redis {
 
   private initClient(): void {
     this._client = createClient({
-      url: getConfig().redisURI,
+      url: getConfig().redisURL,
     });
   }
 

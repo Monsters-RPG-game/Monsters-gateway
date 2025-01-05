@@ -9,6 +9,7 @@ import type SendMessagesDto from '../modules/messages/subModules/send/dto.js';
 import type GetProfileDto from '../modules/profile/subModules/get/dto.js';
 import type DebugGetAllUsersDto from '../modules/users/subModules/debug/dto.js';
 import type UserDetailsDto from '../modules/users/subModules/details/dto';
+import type { RegisterRequestDto } from '../modules/users/subModules/finishRegister/dto.js';
 
 export type IRabbitSubTargets =
   | enums.EProfileSubTargets
@@ -23,6 +24,8 @@ export interface IProfileConnectionData {
 export interface IUserConnectionData {
   [enums.EUserSubTargets.GetName]: UserDetailsDto[];
   [enums.EUserSubTargets.DebugGetAll]: DebugGetAllUsersDto;
+  [enums.EUserSubTargets.Register]: RegisterRequestDto;
+  [enums.EUserSubTargets.RemoveAccount]: undefined;
 }
 
 export interface IMessageConnectionData {
