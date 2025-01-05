@@ -2,6 +2,8 @@
 
 This file represents simplified startup flow of this application.
 
+Last update: 05.01.2025
+
 ```text
 ┌───────────────────────────────────────────┐    
 │Start                                      │    
