@@ -8,15 +8,15 @@ import fs from 'fs';
  */
 const preValidate = (config: types.IConfigInterface): void => {
   const configKeys = [
-    'amqpURI',
-    'mongoURI',
+    'amqpURL',
+    'mongoURL',
     'corsOrigin',
     'myAddress',
     'myDomain',
     'authorizationAddress',
     'httpPort',
     'socketPort',
-    'redisURI',
+    'redisURL',
     'session',
   ];
 

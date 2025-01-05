@@ -11,9 +11,9 @@ import type * as types from '../../../../../types/index.js';
 export default (): Router => {
   const service = new Router(EControllers.Users, EUserActions.ValidateToken);
 
-  service.router.get('/validate', limitRate, async (req, res) => {
+  service.router.get('/validate', limitRate, async (req, res: types.IResponse) => {
     try {
-      const data = await service.execute(req);
+      const data = await service.execute(req, res);
 
       res.send({ data });
     } catch (err) {

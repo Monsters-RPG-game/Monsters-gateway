@@ -6,11 +6,11 @@ export const clientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Client_id not provided'],
   },
-  redirectUri: {
+  redirectUrl: {
     type: String,
-    required: [true, 'Redirect_uris not provided'],
+    required: [true, 'Redirect_urls not provided'],
   },
-  failUri: {
+  failUrl: {
     type: String,
     required: [true, 'Fail url not provided'],
   },

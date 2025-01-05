@@ -15,7 +15,7 @@ export default class KeyRepository
   }
 
   override async add(data: AddKey): Promise<string> {
-    const newElement = new this.model(data.key);
+    const newElement = new this.model(data);
     const callback = await newElement.save();
     return callback._id.toString();
   }

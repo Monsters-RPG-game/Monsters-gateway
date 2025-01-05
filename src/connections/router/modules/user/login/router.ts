@@ -17,7 +17,7 @@ export default (): Router => {
 
   service.router.get('/login', limitRate, async (req: ILoginReq, res: types.IResponse) => {
     try {
-      const data = await service.execute(req);
+      const data = await service.execute(req, res);
       if (typeof data === 'string') {
         res.redirect(data);
         return;

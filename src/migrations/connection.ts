@@ -25,14 +25,14 @@ export default class MongoConnection {
   }
 
   private async startServer(): Promise<void> {
-    await mongoose.connect(getConfig().mongoURI, {
-      dbName: 'AuthorizationsClient',
+    await mongoose.connect(getConfig().mongoURL, {
+      dbName: 'Gateway',
     } as ConnectOptions);
     Log.log('Mongo', 'Started server');
   }
 
   private createMigrationClient(): Connection {
-    return mongoose.createConnection(getConfig().mongoURI, {
+    return mongoose.createConnection(getConfig().mongoURL, {
       dbName: 'Migrations',
     } as ConnectOptions);
   }

@@ -4,7 +4,7 @@ import type AddClient from './add.js';
 export interface IAddClient {
   clientId: string;
   failUrl: string;
-  redirectUri: string;
+  redirectUrl: string;
 }
 
 export interface IClientRepository {

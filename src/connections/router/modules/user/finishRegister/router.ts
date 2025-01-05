@@ -14,7 +14,7 @@ export default (): Router => {
 
   service.router.get('/register/finish', limitRate, async (req: IFinishRegisterReq, res: types.IResponse) => {
     try {
-      const data = await service.execute(req);
+      const data = await service.execute(req, res);
       res.redirect(data);
     } catch (err) {
       handleErr(err as types.IFullError, res);

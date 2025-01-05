@@ -4,21 +4,20 @@ import { InvalidRequest } from '../../../../errors/index.js';
 import getConfig from '../../../../tools/configLoader.js';
 import TokensController from '../../../tokens/index.js';
 import type RemoveAccountDto from './dto.js';
+import type ReqController from '../../../../connections/router/reqController.js';
 import type { IAbstractSubController } from '../../../../types/abstractions.js';
+import type { IResponse } from '../../../../types/requests.js';
 import type OidcClientsRepository from '../../../oidcClients/repository/index.js';
-import type UsersRepository from '../../repository/index.js';
 import type express from 'express';
 
 export default class RemoveAccountController implements IAbstractSubController<void> {
-  constructor(OidcClientsRepository: OidcClientsRepository, usersRepository: UsersRepository) {
+  constructor(OidcClientsRepository: OidcClientsRepository) {
     this.clientsRepository = OidcClientsRepository;
-    this.usersRepository = usersRepository;
   }
 
   private accessor clientsRepository: OidcClientsRepository;
-  private accessor usersRepository: UsersRepository;
 
-  async execute(data: RemoveAccountDto, req: express.Request): Promise<void> {
+  async execute(data: RemoveAccountDto, req: express.Request, res: IResponse): Promise<void> {
     const client = await this.clientsRepository.getByName(data.client);
     if (!client) throw new InvalidRequest();
 
@@ -28,15 +27,21 @@ export default class RemoveAccountController implements IAbstractSubController<v
 
     const user = await TokensController.validateToken(cookie);
 
-    await this.remove(new TokensController(user.sub), user.sub);
+    const { tempId, reqController } = res.locals;
+    await this.remove(new TokensController(user.sub), user.sub, tempId, reqController);
   }
 
-  private async remove(tokenController: TokensController, userId: string): Promise<void> {
+  private async remove(
+    tokenController: TokensController,
+    userId: string,
+    tempId: string,
+    reqController: ReqController,
+  ): Promise<void> {
     const client = await this.clientsRepository.getByGrant(EClientGrants.AuthorizationCode);
     if (!client) throw new InvalidRequest();
 
     const tokens = await tokenController.getTokens();
-    if (!tokens?.refreshToken) return this.removeLocalData(tokenController, userId);
+    if (!tokens?.refreshToken) return this.removeLocalData(tokenController, userId, tempId, reqController);
 
     const body = JSON.stringify({
       client_id: client.clientId,
@@ -58,13 +63,21 @@ export default class RemoveAccountController implements IAbstractSubController<v
     }
 
     Log.log('Logout', 'Logged out from oidc');
-    return this.removeLocalData(tokenController, userId);
+    return this.removeLocalData(tokenController, userId, tempId, reqController);
   }
 
-  private async removeLocalData(tokenController: TokensController, userId: string): Promise<void> {
+  private async removeLocalData(
+    tokenController: TokensController,
+    userId: string,
+    tempId: string,
+    reqController: ReqController,
+  ): Promise<void> {
     await tokenController.removeUserTokens();
     await tokenController.logout();
     await tokenController.removeUserTokens();
-    await this.usersRepository.removeById(userId);
+    await reqController.user.remove({
+      userId,
+      tempId,
+    });
   }
 }
