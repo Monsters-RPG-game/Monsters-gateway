@@ -1,7 +1,7 @@
 # Monsters - gateway
 
 TLDR:
-1. [How to install](#1-how-to-install)
+1. [How to start](#1-how-to-start)
 2. [How to build](#2-how-to-build)
 3. [Useful information](#3-useful-information)
 4. [Docs](#4-docs)

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { EDbCollections } from '../../enums/index.js';
 import type { IKey } from './types.js';
 
 export const keySchema = new mongoose.Schema({
@@ -40,5 +41,5 @@ export const keySchema = new mongoose.Schema({
   },
 });
 
-const Key = mongoose.model<IKey>('Keys', keySchema);
+const Key = mongoose.model<IKey>('Keys', keySchema, EDbCollections.Keys);
 export default Key;

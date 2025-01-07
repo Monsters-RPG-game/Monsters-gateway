@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { EDbCollections } from '../../enums/index.js';
 import type { IOidcClient } from './types.js';
 
 export const oidcClientSchema = new mongoose.Schema({
@@ -24,5 +25,5 @@ export const oidcClientSchema = new mongoose.Schema({
   },
 });
 
-const OidcClient = mongoose.model<IOidcClient>('OidcClients', oidcClientSchema, 'oidcClients');
+const OidcClient = mongoose.model<IOidcClient>('OidcClients', oidcClientSchema, EDbCollections.OidcClients);
 export default OidcClient;

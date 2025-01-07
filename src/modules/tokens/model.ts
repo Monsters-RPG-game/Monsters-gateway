@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { EDbCollections } from '../../enums/index.js';
 import type { IToken } from './types.js';
 
 export const tokenSchema = new mongoose.Schema(
@@ -23,5 +24,5 @@ export const tokenSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Token = mongoose.model<IToken>('Tokens', tokenSchema);
+const Token = mongoose.model<IToken>('Tokens', tokenSchema, EDbCollections.Tokens);
 export default Token;
