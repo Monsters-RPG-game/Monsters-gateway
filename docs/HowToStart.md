@@ -1,5 +1,7 @@
 # How to start - docs
 
+Last update: 07.01.2025
+
 This file will try to explain, how to start this project, setup configs and databases.
 
 > [!IMPORTANT]
@@ -10,6 +12,7 @@ TLDR;
 1. [External connections](#1-external-connections)
 2. [Configs](#2-configs)
 3. [Preparing data](#3-preparing-data)
+4. [Networking](#4-networking)
 
 ## 1. External connections
 
@@ -99,7 +102,7 @@ In order for this app to fully work, you will need to set up databases. Most lik
 > [!IMPORTANT]
 > If you did not migrate data yet, read #3.1, otherwise, read #3.2
 
-## 3.1 Modyfing migrations to create data
+### 3.1 Modyfing migrations to create data
 
 You can find existing data migrations in `/src/migrations`. We are interested in file `actions/202441116000000_init_sample_client`. You should see 2 functions. We are interested in `up` function. Code should look something like this.
 
@@ -120,5 +123,11 @@ const oidcClient = new OidcClient({
 
 Modify it based on configs, explained in `Oidc.md` in part #2. This file includes everything you need to know. 
 
-## 3.2 Modyfing data manually in collections 
+### 3.2 Modyfing data manually in collections 
+
+In  order to modify existing data in mongooDB collection, you can either manually access it via `mongoosh`, or by using gui client, like mongo compass. Database name is `Gateway`
+
+## 4. Networking
+
+This app is constructed to work behind a reverse proxy. If you won't set it up, authorization might not work, but everything else should. This is done, to keep this app as close to production as possible. If you are working on linux, you can just set up nginx on your machine and map this app. You can find great example of how to map this, in `/docs/Oidc.md`
 

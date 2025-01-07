@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { EDbCollections } from '../../enums/index.js';
 import type { IClient } from './types.js';
 
 export const clientSchema = new mongoose.Schema({
@@ -16,5 +17,5 @@ export const clientSchema = new mongoose.Schema({
   },
 });
 
-const Client = mongoose.model<IClient>('Clients', clientSchema);
+const Client = mongoose.model<IClient>('Clients', clientSchema, EDbCollections.Clients);
 export default Client;

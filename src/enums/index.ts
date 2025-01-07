@@ -1,6 +1,7 @@
 export * from './controllers.js';
 export * from './connections.js';
 export * from './socket.js';
+export * from './db.js';
 export * from './target.js';
 export * from './redis.js';
 export * from './grants.js';
