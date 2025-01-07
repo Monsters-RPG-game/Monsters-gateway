@@ -27,21 +27,16 @@ export default class RemoveAccountController implements IAbstractSubController<v
 
     const user = await TokensController.validateToken(cookie);
 
-    const { tempId, reqController } = res.locals;
-    await this.remove(new TokensController(user.sub), user.sub, tempId, reqController);
+    const { reqController } = res.locals;
+    await this.remove(new TokensController(user.sub), user.sub, reqController);
   }
 
-  private async remove(
-    tokenController: TokensController,
-    userId: string,
-    tempId: string,
-    reqController: ReqController,
-  ): Promise<void> {
+  private async remove(tokenController: TokensController, userId: string, reqController: ReqController): Promise<void> {
     const client = await this.clientsRepository.getByGrant(EClientGrants.AuthorizationCode);
     if (!client) throw new InvalidRequest();
 
     const tokens = await tokenController.getTokens();
-    if (!tokens?.refreshToken) return this.removeLocalData(tokenController, userId, tempId, reqController);
+    if (!tokens?.refreshToken) return this.removeLocalData(tokenController, userId, reqController);
 
     const body = JSON.stringify({
       client_id: client.clientId,
@@ -63,13 +58,12 @@ export default class RemoveAccountController implements IAbstractSubController<v
     }
 
     Log.log('Logout', 'Logged out from oidc');
-    return this.removeLocalData(tokenController, userId, tempId, reqController);
+    return this.removeLocalData(tokenController, userId, reqController);
   }
 
   private async removeLocalData(
     tokenController: TokensController,
     userId: string,
-    tempId: string,
     reqController: ReqController,
   ): Promise<void> {
     await tokenController.removeUserTokens();
@@ -77,7 +71,6 @@ export default class RemoveAccountController implements IAbstractSubController<v
     await tokenController.removeUserTokens();
     await reqController.user.remove({
       userId,
-      tempId,
     });
   }
 }

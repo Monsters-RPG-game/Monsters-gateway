@@ -18,10 +18,11 @@ export default class Router {
   }
 
   private getMessage(data: types.IGetMessageBody, ws: types.ISocket): void {
+    Log.debug('Websocket', 'Get message', data);
     this.validator.validateGetMessage(data);
 
     ws.reqController.chat
-      .get(data, { userId: ws.userId, tempId: '' })
+      .get(data, { userId: ws.userId })
       .then((callback) => {
         ws.send(
           JSON.stringify({
@@ -37,10 +38,11 @@ export default class Router {
   }
 
   private getUnread(data: types.IGetMessageBody, ws: types.ISocket): void {
+    Log.debug('Websocket', 'Get unread messages', data);
     this.validator.validateGetMessage(data);
 
     ws.reqController.chat
-      .getUnread(data, { userId: ws.userId, tempId: '' })
+      .getUnread(data, { userId: ws.userId })
       .then((callback) => {
         ws.send(
           JSON.stringify({
@@ -56,6 +58,7 @@ export default class Router {
   }
 
   handleChatMessage(message: types.ISocketInMessage, ws: types.ISocket): void {
+    Log.debug('Websocket', 'New message in handler', message);
     this.validator.preValidate(message);
 
     switch (message.subTarget) {
@@ -88,7 +91,9 @@ export default class Router {
   }
 
   private sendMessage(data: types.ISocketSendMessageBody, ws: types.ISocket): void {
+    Log.debug('Websocket', 'Send message', data);
     this.validator.validateSendMessage(data);
+
     const prepared: types.ISendMessageDto = {
       body: data.message,
       receiver: data.target,
@@ -96,7 +101,7 @@ export default class Router {
     };
 
     ws.reqController.chat
-      .send(prepared, { userId: ws.userId, tempId: '' })
+      .send(prepared, { userId: ws.userId })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
 
@@ -111,10 +116,11 @@ export default class Router {
   }
 
   private readMessage(data: types.IReadMessageBody, ws: types.ISocket): void {
+    Log.debug('Websocket', 'Read message', data);
     this.validator.validateReadMessage(data);
 
     ws.reqController.chat
-      .read(data, { userId: ws.userId, tempId: '' })
+      .read(data, { userId: ws.userId })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
       })

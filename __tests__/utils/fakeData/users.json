@@ -3,44 +3,37 @@
     {
       "_id": "63e55edbe8a800060941121d",
       "login": "Sebastien",
-      "email": "seb@gmail.uk",
-      "password": "Password123."
+      "userId": "63e55edbe8a800060941121d"
     },
     {
       "_id": "63e55edbe8a800060941121e",
       "login": "Ann",
-      "email": "a2@asb.zzz",
-      "password": "ILoveYou223!"
+      "userId": "63e55edbe8a800060941121e"
     },
     {
       "_id": "63e55edbe8a800060941123d",
       "login": "Jakob",
-      "email": "jakobt@k.com",
-      "password": "4dfghjGIKJ-9-SJPA"
+      "userId": "63e55edbe8a800060941123d"
     },
     {
       "_id": "63e55edbe8a800060941124d",
       "login": "Marshal",
-      "email": "marhalbaney@amazon.com",
-      "password": "qwerty111xX@"
+      "userId": "63e55edbe8a800060941124d"
     },
     {
       "_id": "63e55edbe8a800060941125d",
       "login": "Stephan",
-      "email": "randomemail123@gmail.com",
-      "password": "bananaMan3!"
+      "userId": "63e55edbe8a800060941125d"
     },
     {
       "_id": "63e55edbe8a800060941126d",
       "login": "Jack",
-      "email": "jk8@wp.pl",
-      "password": "GreenTee9."
+      "userId": "63e55edbe8a800060941126d"
     },
     {
       "_id": "63e55edbe8a800060941127d",
       "login": "Mary",
-      "email": "marystephens@horyzont.eu",
-      "password": "Test123,"
+      "userId": "63e55edbe8a800060941127d"
     }
   ]
 }

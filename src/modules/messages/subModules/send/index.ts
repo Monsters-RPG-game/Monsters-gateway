@@ -7,11 +7,11 @@ import type * as types from '../../../../types/index.js';
 
 export default class SendMessagesController implements types.IAbstractSubController<void> {
   async execute(data: SendMessagesDto, res: types.IResponse): Promise<void> {
-    const { reqController, tempId, userId } = res.locals;
+    const { reqController, userId } = res.locals;
 
     const users = await reqController.user.getDetails(
       [new UserDetailsDto({ name: data.receiver }), new UserDetailsDto({ id: userId })],
-      { userId, tempId },
+      { userId },
     );
     if (!users || users.payload.length === 0) {
       throw new NoUserWithProvidedName();
@@ -31,7 +31,7 @@ export default class SendMessagesController implements types.IAbstractSubControl
         },
         userId as string,
       ),
-      { userId, tempId },
+      { userId },
     );
 
     State.socket.sendToUser(

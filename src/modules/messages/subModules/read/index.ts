@@ -3,8 +3,8 @@ import type * as types from '../../../../types/index.js';
 
 export default class ReadMessagesController implements types.IAbstractSubController<void> {
   async execute(data: ReadMessagesDto, res: types.IResponse): Promise<void> {
-    const { reqController, tempId, userId } = res.locals;
+    const { reqController, userId } = res.locals;
 
-    await reqController.message.read(data, { userId, tempId });
+    await reqController.message.read(data, { userId });
   }
 }

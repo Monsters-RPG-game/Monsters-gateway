@@ -92,7 +92,6 @@ export default class LoginController
     const userData = (
       await res.locals.reqController.user.getDetails([new UserDetailsDto({ oidcId: userId })], {
         userId,
-        tempId: res.locals.tempId,
       })
     ).payload[0];
 
@@ -161,7 +160,6 @@ export default class LoginController
     const userData = (
       await res.locals.reqController.user.getDetails([new UserDetailsDto({ oidcId: userId })], {
         userId,
-        tempId: res.locals.tempId,
       })
     ).payload[0];
     if (!userData) {

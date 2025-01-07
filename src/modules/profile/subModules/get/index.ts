@@ -5,7 +5,7 @@ import type { IProfileEntity } from '../../entity.js';
 
 export default class GetProfileController implements types.IAbstractSubController<IProfileEntity | null> {
   async execute(data: GetProfileDto, res: types.IResponse): Promise<IProfileEntity | null> {
-    const { reqController, tempId, userId } = res.locals;
+    const { reqController, userId } = res.locals;
 
     if (data.name && res.locals?.user?.login === data.name) {
       return res.locals.profile as IProfileEntity;
@@ -13,7 +13,6 @@ export default class GetProfileController implements types.IAbstractSubControlle
 
     const users = await reqController.user.getDetails([new UserDetailsDto({ name: data?.name, id: data?.id })], {
       userId,
-      tempId,
     });
 
     if (
@@ -30,7 +29,6 @@ export default class GetProfileController implements types.IAbstractSubControlle
     return (
       await reqController.profile.get(profileDto, {
         userId,
-        tempId,
       })
     ).payload;
   }

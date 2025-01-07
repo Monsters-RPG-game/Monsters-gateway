@@ -13,6 +13,10 @@ export default class FakeRedis extends Redis {
     //
   }
 
+  cleanUp(): void {
+    this.fakeParams = {}
+  }
+
   override async getCachedUser(_id: string): Promise<ICachedUser | null> {
     return new Promise(resolve => {
       if(!this.fakeParams.cachedUsers) this.fakeParams.cachedUsers = []

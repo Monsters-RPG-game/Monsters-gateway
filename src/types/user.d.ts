@@ -34,7 +34,7 @@ export interface IUserSession extends Session {
 
 export interface IUserBrokerInfo {
   userId: string | undefined;
-  tempId: string | undefined;
+  tempId?: string;
 }
 
 export interface ICachedUser {

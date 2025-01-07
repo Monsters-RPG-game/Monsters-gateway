@@ -4,6 +4,7 @@ import * as enums from '../../../src/enums/index.js';
 import { IBrokerAction } from '../../types/broker.js';
 import Log from 'simpleLogger'
 import chalk from 'chalk';
+import { IUserBrokerInfo } from '../../../src/types/user.js';
 
 export default class FakeBroker extends Broker {
   private _actions: { action: IBrokerAction, subTarget: types.IRabbitSubTargets }[] = [];
@@ -57,15 +58,14 @@ export default class FakeBroker extends Broker {
         }>,
     ) => void,
     reject: (reason?: unknown) => void,
-    _locals: {
-      tempId: string;
-      userId: string | undefined;
-    },
+    _locals: IUserBrokerInfo,
     _service: enums.EServices,
     _payload?: types.IRabbitConnectionData[T],
   ): void {
     const actionIndex = (this.actions.findIndex(a => a.subTarget === subTarget));
     const action = this.actions[actionIndex]?.action
+
+    Log.debug('Fake broker', `Action for target: ${target} and subTarget: ${subTarget}`, action)
 
     delete this.actions[actionIndex]
     this.actions = this.actions.filter(a => a)
@@ -95,6 +95,7 @@ export default class FakeBroker extends Broker {
   }
 
   addAction(action: IBrokerAction, subTarget: types.IRabbitSubTargets): void {
+    Log.debug("Fake broker", 'Adding new action', action, subTarget)
     this.actions.push({ action, subTarget })
   }
 

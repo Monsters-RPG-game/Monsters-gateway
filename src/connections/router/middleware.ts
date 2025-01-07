@@ -56,7 +56,7 @@ export default class Middleware {
       let user = await State.redis.getCachedUser(userId);
 
       if (!user) {
-        user = await Middleware.fetchUserProfile(res, userId);
+        user = await Middleware.fetchUserProfile(userId);
       }
 
       res.locals.profile = user.profile;
@@ -67,20 +67,18 @@ export default class Middleware {
     }
   }
 
-  private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
+  private static async fetchUserProfile(userId: string): Promise<types.ICachedUser> {
     const reqController = new ReqController();
     const user: types.ICachedUser = { account: undefined, profile: undefined };
 
     user.account = (
       await reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
         userId,
-        tempId: (res.locals.tempId ?? '') as string,
       })
     ).payload[0];
     user.profile = (
       await reqController.profile.get(new GetProfileDto({ id: userId }), {
         userId,
-        tempId: (res.locals.tempId ?? '') as string,
       })
     ).payload as IProfileEntity;
 

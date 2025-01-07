@@ -17,7 +17,6 @@ export default class RefreshTokenController
     const userData = (
       await res.locals.reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
         userId,
-        tempId: res.locals.tempId,
       })
     ).payload[0];
 
@@ -75,7 +74,6 @@ export default class RefreshTokenController
     const userData = (
       await res.locals.reqController.user.getDetails([new UserDetailsDto({ id: session.sub })], {
         userId: session.sub,
-        tempId: res.locals.tempId,
       })
     ).payload[0];
 

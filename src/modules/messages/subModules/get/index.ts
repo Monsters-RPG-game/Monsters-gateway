@@ -11,9 +11,9 @@ export default class GetMessagesController
     data: GetMessagesDto,
     res: types.IResponse,
   ): Promise<Record<string, IPreparedMessagesBody> | IFullMessageEntity[]> {
-    const { reqController, tempId, userId } = res.locals;
+    const { reqController, userId } = res.locals;
 
-    const messages = (await reqController.message.get(data, { userId, tempId })).payload;
+    const messages = (await reqController.message.get(data, { userId })).payload;
 
     if (Array.isArray(messages)) {
       const userIds = messages.map((m) => (m.receiver === userId ? m.sender : m.receiver));
@@ -21,7 +21,6 @@ export default class GetMessagesController
       const users = (
         await reqController.user.getDetails(cleaned, {
           userId,
-          tempId,
         })
       ).payload;
       return messages.map((m) => {
@@ -39,7 +38,6 @@ export default class GetMessagesController
     const users = (
       await reqController.user.getDetails(cleaned, {
         userId,
-        tempId,
       })
     ).payload;
     const prepared: Record<string, IPreparedMessagesBody> = {};
