@@ -6,6 +6,7 @@ TLDR:
 3. [Useful information](#3-useful-information)
 4. [Docs](#4-docs)
 5. [Style](#5-style)
+6. [Issues](#6-issues)
 
 ## 1. How to start
 
@@ -221,7 +222,7 @@ When I write my apps, I prefer to have some kind of global state, which allows m
 
 ### 4.6 Sigterm, Sigint
 
-This application uses handlers for sigint and sigterm. What are those ? Application is listening for "kill process" system received by operating system or user. In short term, its listning for `ctr + c` and makes sure to close all connections after it dies. Why did I implement it ? If this won't be implemented, socket.io clients will spam `reconnect`. This way, clients will receive `disconnect` request and not spam server. Why ? If backend crashes and restarts, front in current state does not recreates uneeq session. This will make force frontend clients to regenerate uneeq session.
+This application uses handlers for sigint and sigterm. What are those ? Application is listening for "kill process" system received by operating system or user. In short term, its listning for `ctr + c` and makes sure to close all connections after it dies. 
 
 ### 4.7 Tests
 
@@ -238,6 +239,15 @@ This application has multiple tests written in jest. In addition to that, you ca
 [Pipelines](./docs/Pipelines.md)
 
 Additional docs can be found in `docs` folder 
+
+### 4.9 Errors
+
+If you are planning on adding custom errors, please double check their codes. Each service has specific codes for errors. In case of this service:
+
+- 1-99 - Generic errors
+- 100 - 199 - Errors specific to this service
+- 200 - 299 - Errors specific to Users service
+- 300 - 388 - Errors specific to Messages service
 
 ## 5. Style
 
