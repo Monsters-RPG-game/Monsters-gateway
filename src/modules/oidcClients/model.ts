@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { IOidcClient } from '../types/index.js';
+import type { IOidcClient } from './types.js';
 
 export const oidcClientSchema = new mongoose.Schema({
   clientId: {

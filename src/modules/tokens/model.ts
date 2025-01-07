@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { IToken } from '../types/index.js';
+import type { IToken } from './types.js';
 
 export const tokenSchema = new mongoose.Schema(
   {

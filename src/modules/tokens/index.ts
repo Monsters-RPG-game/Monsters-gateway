@@ -1,15 +1,15 @@
 import { jwtVerify, SignJWT, importJWK } from 'jose';
 import Log from 'simpleLogger';
+import TokenModel from './model.js';
 import AddToken from './repository/add.js';
 import TokenRepository from './repository/index.js';
-import KeyModel from '../../connections/mongo/models/keys.js';
-import OidcClientModel from '../../connections/mongo/models/oidcClient.js';
-import TokenModel from '../../connections/mongo/models/token.js';
 import { EClientGrants, ETTL, ETokenType } from '../../enums/index.js';
 import { InternalError, InvalidRequest } from '../../errors/index.js';
 import getConfig from '../../tools/configLoader.js';
 import State from '../../tools/state.js';
+import KeyModel from '../keys/model.js';
 import KeyRepository from '../keys/repository/index.js';
+import OidcClientModel from '../oidcClients/model.js';
 import OidcClientsRepository from '../oidcClients/repository/index.js';
 import type { ITokenEntity } from './entity.js';
 import type { IIntrospection, ISessionTokenData, ITokenData, IUserServerTokens } from '../../types/index.js';

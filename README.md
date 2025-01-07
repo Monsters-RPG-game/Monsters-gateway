@@ -198,7 +198,7 @@ This application utilizes `NODE_ENV` env, which is set in package.json. `start` 
 
 ### 4.2 Api docs
 
-This project is using swagger docs for api documentation. You can access them by route http://localhost:{port}/docs
+This project is using swagger docs for api documentation. You can access them by route [http://localhost:{port}/docs](http://localhost:8080/docs)
 
 Instead of adding json/yaml configs, this template is built on swagger-jsdoc package, which utilizes jsdoc comments. If you prefer to remove comments from compiled code in tsconfig, make sure to rewrite docs to other tool.
 
@@ -219,12 +219,53 @@ This application is ready for probing in k8s / other systems. You can find liven
 
 When I write my apps, I prefer to have some kind of global state, which allows my app to have access to every external connection from any point in code. You can find this "state" in `/src/tools/state`. This state is used to keep external connections and to manage them. For example, instead of dependency injecting each connection to each route, I prefer to just access them from that global state 
 
-### 4.6 Additional docs
+### 4.6 Sigterm, Sigint
+
+This application uses handlers for sigint and sigterm. What are those ? Application is listening for "kill process" system received by operating system or user. In short term, its listning for `ctr + c` and makes sure to close all connections after it dies. Why did I implement it ? If this won't be implemented, socket.io clients will spam `reconnect`. This way, clients will receive `disconnect` request and not spam server. Why ? If backend crashes and restarts, front in current state does not recreates uneeq session. This will make force frontend clients to regenerate uneeq session.
+
+### 4.7 Tests
+
+This application has multiple tests written in jest. In addition to that, you can run test mode. Test mode is kind of 'dry-run' of this application, which allows you to manipulate data responses from databases and other modules, simply by modifying local files. 
+
+[Fake run](./docs/TestMode.md)
+[How to write good tests](./docs/WriteGoodTests.md)
+[How mocks work](./docs/Mocks.md)
+
+### 4.8 Additional docs
+
+[Dataflow in application](./docs/diagrams/dataflow.md)
+[Deploying application](./docs/Deployment.md)
+[Pipelines](./docs/Pipelines.md)
 
 Additional docs can be found in `docs` folder 
 
-[Tests](./docs/tests.md)
-
 ## 5. Style
 
-This application uses my personal eslint settings. They are EXTREMALLY strict and will force you to write specific type of code with unified style across whole project. This is `MY` config. You may not like it so please, modify it to your heart desire.
+This application uses my personal eslint settings. They are EXTREMELY strict and will force you to write specific type of code with unified style across whole project. This is `MY` config. You may not like it so please, modify it to your heart desire.
+
+## 6. Issues 
+
+> [!TIP]
+> This category will try to explain basic issues, that you might encounter with this app. This will not include every possible issues, that was created on github, rather basic problems, that you might not expect
+
+- `Start:dev` throws `Cannot find module`
+
+There are 3 reason, why this might happen.
+
+> [!NOTE]
+> You started this app for the first time
+
+1. Due to limitations with libraries, this command will throw an error, if you run it first time. Simply return it again.
+
+> [!NOTE]
+> You've been working on this app for a while
+
+2. Something got cached in the background, after you've been working on this app for a while. This can happen, but its rare. There is a note related to it in tip under point #2. All you need to do is to remove cache. If your terminal supports make ( linux, macos, windows bash terminal and others ), simply run:
+
+```bash
+make clean
+```
+
+If you are unable to run make command, remove build folder
+
+3. There is an error with imported code. Because this app is written in ESM, it might crash if imported ts file does not have `file.js` ( .js ) extension. This is a limitation of ESM and you might not get any errors. There should be error related to it in log files, because logger catches most of issues. If you won't find any related info in logs folder ( explained in #3.1 ) and you won't be able to fix it, please create an issue for it on github.

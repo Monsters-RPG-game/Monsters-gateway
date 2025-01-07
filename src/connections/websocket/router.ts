@@ -21,7 +21,7 @@ export default class Router {
     this.validator.validateGetMessage(data);
 
     ws.reqController.chat
-      .get(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .get(data, { userId: ws.userId, tempId: '' })
       .then((callback) => {
         ws.send(
           JSON.stringify({
@@ -40,7 +40,7 @@ export default class Router {
     this.validator.validateGetMessage(data);
 
     ws.reqController.chat
-      .getUnread(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .getUnread(data, { userId: ws.userId, tempId: '' })
       .then((callback) => {
         ws.send(
           JSON.stringify({
@@ -96,7 +96,7 @@ export default class Router {
     };
 
     ws.reqController.chat
-      .send(prepared, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .send(prepared, { userId: ws.userId, tempId: '' })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
 
@@ -114,7 +114,7 @@ export default class Router {
     this.validator.validateReadMessage(data);
 
     ws.reqController.chat
-      .read(data, { userId: ws.userId, tempId: '', type: enums.EUserTypes.User })
+      .read(data, { userId: ws.userId, tempId: '' })
       .then(() => {
         ws.send(JSON.stringify({ type: enums.ESocketType.Success } as types.ISocketOutMessage));
       })

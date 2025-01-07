@@ -1,9 +1,9 @@
 import AbstractRepository from '../../../tools/abstractions/repository.js';
+import type OidcClient from '../model.js';
 import type { IOidcClientRepository } from './types.js';
-import type OidcClient from '../../../connections/mongo/models/oidcClient.js';
-import type { IOidcClient } from '../../../connections/mongo/types/index.js';
 import type * as enums from '../../../enums/index.js';
 import type { IOidcClientEntity } from '../entity.js';
+import type { IOidcClient } from '../types.js';
 import type mongoose from 'mongoose';
 import type { FilterQuery } from 'mongoose';
 

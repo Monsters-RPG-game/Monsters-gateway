@@ -29,7 +29,7 @@ export default class ValidateTokenController
     if (!user) {
       Log.error(
         'Token validation',
-        `User token is valid, but there is no user related to it. This SHOULD NOT have happend and this is CRITICAL error. User sub ${tokenData.sub}`,
+        `User token is valid, but there is no user related to it. This SHOULD NOT have happen and this is CRITICAL error. User sub ${tokenData.sub}`,
       );
       throw new NoUserWithProvidedName();
     }

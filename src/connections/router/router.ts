@@ -34,8 +34,6 @@ export default class AppRouter {
 
     initProfileRoutes(this.router);
 
-    this.router.use(Middleware.userProfileValidation);
-
     initSecuredUserRoutes(this.router);
     initMessagesRoutes(this.router);
   }

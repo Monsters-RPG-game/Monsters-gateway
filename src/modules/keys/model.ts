@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import type { IKey } from '../types/index.js';
+import type { IKey } from './types.js';
 
 export const keySchema = new mongoose.Schema({
   kty: {

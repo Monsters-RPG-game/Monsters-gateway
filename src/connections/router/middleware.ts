@@ -6,8 +6,16 @@ import helmet from 'helmet';
 import Log from 'simpleLogger';
 import ReqController from './reqController.js';
 import SessionStore from './utils/stores/session.js';
+import * as enums from '../../enums/controllers.js';
+import handleErr from '../../errors/handler.js';
 import * as errors from '../../errors/index.js';
+import GetProfileDto from '../../modules/profile/subModules/get/dto.js';
+import UserDetailsDto from '../../modules/users/subModules/details/dto.js';
 import getConfig from '../../tools/configLoader.js';
+import State from '../../tools/state.js';
+import type { IProfileEntity } from '../../modules/profile/entity.js';
+import type { IUserEntity } from '../../modules/users/entity.js';
+import type ValidateTokenController from '../../modules/users/subModules/validateToken/index.js';
 import type * as types from '../../types/index.js';
 import type { IResponse } from '../../types/requests.js';
 import type { Express } from 'express';
@@ -20,139 +28,73 @@ export default class Middleware {
   }
 
   static userValidation(app: express.Express): void {
-    app.use((_req: express.Request, _res: express.Response, next: express.NextFunction): void => {
-      // if (Middleware.shouldSkipUserValidation(req)) {
-      //  return next();
-      // }
-      //
-      // try {
-      //  const token =
-      //    ((req.cookies as Record<string, string>)['monsters.uid'] as string) ??
-      //    (req.headers.authorization !== undefined
-      //      ? (req.headers.authorization.split('Bearer')?.[1] ?? '').trim()
-      //      : undefined);
-      //  const userToken = await validateToken(token);
-      //  res.locals.userId = userToken.accountId;
-      // } catch (_err) {
-      //  // Access token is invalid. Check if session is valid
-      //  const sessionId = (req.cookies as Record<string, string>)._session as string;
-      //  const userSession = await State.provider.Session.find(sessionId);
-      //
-      //  if (!userSession) {
-      //    Log.error('Token validation error', 'No token nor session');
-      //    return handleErr(new errors.UnauthorizedError(), res);
-      //  }
-      //
-      //  res.locals.userId = userSession.accountId;
-      // }
+    app.use((req: express.Request, res: IResponse, next: express.NextFunction): void => {
+      const controller = State.controllers.resolve(enums.EControllers.Users);
+      if (!controller) throw new errors.UnregisteredControllerError(enums.EControllers.Users);
 
-      return next();
+      const subController = controller.resolve(enums.EUserActions.ValidateToken) as ValidateTokenController;
+      if (!subController) throw new errors.UnregisteredControllerError(enums.EUserActions.ValidateToken);
+
+      subController
+        .execute(req, res)
+        .then(({ login }) => {
+          res.locals.userId = login;
+          next();
+        })
+        .catch((err) => {
+          Log.error('Middleware', 'Token validation failed');
+          Log.debug('Middleware', (err as Error).message, (err as Error).stack);
+          handleErr(new errors.UnauthorizedError(), res);
+        });
     });
   }
 
-  static validateAdmin(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
-    // const { user } = res.locals as types.IUsersTokens;
-    //
-    // if (!user || user.type !== enums.EUserTypes.Admin) throw new errors.NoPermission();
-    next();
+  static async initUserProfile(_req: express.Request, res: IResponse, next: express.NextFunction): Promise<void> {
+    try {
+      const userId = res.locals.userId as string;
+      // Validate if profile is initialized
+      let user = await State.redis.getCachedUser(userId);
+
+      if (!user) {
+        user = await Middleware.fetchUserProfile(res, userId);
+      }
+
+      res.locals.profile = user.profile;
+      res.locals.user = user.account;
+      next();
+    } catch (err) {
+      handleErr(err as types.IFullError, res);
+    }
   }
 
-  static initUserProfile(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
-    // const reqController = new ReqController();
-    //
-    // if (Middleware.shouldSkipUserValidation(req)) {
-    //  return next();
-    // }
-    //
-    // try {
-    //  const userId = res.locals.userId as string;
-    //  // Validate if profile is initialized
-    //  let user = await State.redis.getCachedUser(userId);
-    //
-    //  if (!user) {
-    //    user = await Middleware.fetchUserProfile(res, userId);
-    //  }
-    //
-    //  res.locals.profile = user.profile;
-    //  res.locals.user = user.account;
-    //
-    //  let skills = await State.redis.getCachedSkills(userId);
-    //  if (!skills) {
-    //    skills = (
-    //      await reqController.skills.getDetailed(new GetDetailedSkillsDto(user.profile!.skills), {
-    //        userId,
-    //        tempId: '',
-    //      })
-    //    ).payload;
-    //
-    //    await State.redis.addCachedSkills(skills, userId);
-    //  }
-    //
-    return next();
-    // } catch (err) {
-    //  return handleErr(err as types.IFullError, res);
-    // }
+  private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
+    const reqController = new ReqController();
+    const user: types.ICachedUser = { account: undefined, profile: undefined };
+
+    user.account = (
+      await reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
+        userId,
+        tempId: (res.locals.tempId ?? '') as string,
+      })
+    ).payload[0];
+    user.profile = (
+      await reqController.profile.get(new GetProfileDto({ id: userId }), {
+        userId,
+        tempId: (res.locals.tempId ?? '') as string,
+      })
+    ).payload as IProfileEntity;
+
+    if (!user.profile || !user.account) {
+      Log.error(
+        'Token validation',
+        `User token is valid, but there is no user related to it. This SHOULD NOT have happen and this is CRITICAL error. User sub ${userId}`,
+      );
+      throw new errors.UnauthorizedError();
+    }
+
+    await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
+    return user;
   }
-
-  static userProfileValidation(_req: express.Request, _res: express.Response, next: express.NextFunction): void {
-    // if (Middleware.shouldSkipUserValidation(req)) {
-    return next();
-    // }
-    //
-    // try {
-    //  const { user } = res.locals as types.IUsersTokens;
-    //  let { profile } = res.locals as types.IUsersTokens;
-    //  if (!profile) {
-    //    const dbUser = await Middleware.fetchUserProfile(res, (res.locals as types.IUsersTokens).userId as string);
-    //    // eslint-disable-next-line prefer-destructuring
-    //    profile = dbUser.profile;
-    //  }
-    //
-    //  if (!profile?.initialized && user?.type !== enums.EUserTypes.Admin) {
-    //    throw new errors.ProfileNotInitialized();
-    //  }
-    //
-    //  return next();
-    // } catch (_err) {
-    //  return handleErr(new errors.ProfileNotInitialized(), res);
-    // }
-  }
-
-  // private static shouldSkipUserValidation(req: express.Request): boolean {
-  // Disable token validation for oidc routes
-  // const oidcRoutes = ['.well-known', 'me', 'auth', 'token', 'session', 'certs'];
-  // const splitRoute = req.path.split('/');
-  // return splitRoute.length > 1 && oidcRoutes.includes(splitRoute[1] as string);
-  // }
-
-  // private static async fetchUserProfile(res: express.Response, userId: string): Promise<types.ICachedUser> {
-  //  const reqController = new ReqController();
-  //  const user: types.ICachedUser = { account: undefined, profile: undefined };
-  //
-  //  user.account = (
-  //    await reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
-  //      userId,
-  //      tempId: (res.locals.tempId ?? '') as string,
-  //    })
-  //  ).payload[0];
-  //  user.profile = (
-  //    await reqController.profile.get(new GetProfileDto(userId), {
-  //      userId,
-  //      tempId: (res.locals.tempId ?? '') as string,
-  //    })
-  //  ).payload;
-  //
-  //  if (!user.profile || !user.account) {
-  //    Log.error(
-  //      'Token validation',
-  //      'User tried to log in using token, that got validated, but there is no user related to token. Is token fake ?',
-  //    );
-  //    throw new errors.IncorrectTokenError();
-  //  }
-  //
-  //  await State.redis.addCachedUser(user as { account: IUserEntity; profile: IProfileEntity });
-  //  return user;
-  // }
 
   generateMiddleware(app: Express): void {
     app.use(express.json({ limit: '10kb' }));

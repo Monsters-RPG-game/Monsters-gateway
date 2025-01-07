@@ -11,7 +11,6 @@ export default class Chat extends ReqHandler {
     locals: {
       tempId: string;
       userId: string | undefined;
-      type: enums.EUserTypes;
     },
   ): Promise<IDataBrokerResponse<IUnreadMessage[]>> {
     return (await this.sendReq(
@@ -28,7 +27,6 @@ export default class Chat extends ReqHandler {
     locals: {
       tempId: string;
       userId: string | undefined;
-      type: enums.EUserTypes;
     },
   ): Promise<void> {
     await this.sendReq(this.service, enums.EConnectionMainTargets.Chat, enums.EChatSubTargets.Send, locals, data);
@@ -39,7 +37,6 @@ export default class Chat extends ReqHandler {
     locals: {
       tempId: string;
       userId: string | undefined;
-      type: enums.EUserTypes;
     },
   ): Promise<void> {
     await this.sendReq(this.service, enums.EConnectionMainTargets.Chat, enums.EChatSubTargets.Read, locals, data);
@@ -50,7 +47,6 @@ export default class Chat extends ReqHandler {
     locals: {
       tempId: string;
       userId: string | undefined;
-      type: enums.EUserTypes;
     },
   ): Promise<IDataBrokerResponse<Record<string, IPreparedMessagesBody> | types.IFullChatMessageEntity[]>> {
     return (await this.sendReq(
