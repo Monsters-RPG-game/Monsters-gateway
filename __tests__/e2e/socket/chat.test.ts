@@ -17,8 +17,6 @@ import { UnauthorizedError } from '../../../src/errors/index.js';
 import MocSocket from 'moc-socket';
 import { IClient } from 'moc-socket'
 import WsProvider from 'moc-socket/lib/modules/servers/ws.js';
-import { ISocketIoServer, IWebsocketServer } from 'moc-socket/types/servers.js';
-import { SocketIoServer, WsServer } from 'moc-socket/lib/modules/servers/index.js';
 
 describe('Socket - chat', () => {
   const fakeBroker = State.broker as FakeBroker;
@@ -70,13 +68,7 @@ describe('Socket - chat', () => {
     };
 
     // I should finally fix this package...
-    const socket = (MocSocket as unknown as {
-      default: {
-         createWsClient(server: IWebsocketServer): WsServer;
-         createSocketIoServer(server: ISocketIoServer): SocketIoServer
-      }
-    }).default
-    server = socket.createWsClient((State.socket as FakeSocketServer).server);
+    server = MocSocket.createWsClient((State.socket as FakeSocketServer).server);
     client = server.createClient()
     await client.connect(clientOptions);
   })
@@ -104,11 +96,11 @@ describe('Socket - chat', () => {
       });
 
       it(`User not logged in`, async () => {
-        await client2.connect();
+        await client2.connect(client2Options);
         const target = new UnauthorizedError();
 
         await sleep(50);
-        const [message] = client2.getLastMessages() as ISocketOutMessage[];
+        const [message] = client2.getLastMessages(10, true) as ISocketOutMessage[];
         const { name } = message?.payload as IFullError;
         client2.disconnect();
 
@@ -125,7 +117,7 @@ describe('Socket - chat', () => {
     afterEach(async () => client2.disconnect());
 
     it(`No messages`, async () => {
-      await client2.connect();
+      await client2.connect(client2Options);
       const data = await client2.sendAsyncMessage(message, { timeout: 100 });
       expect(data).toEqual(undefined);
       client2.disconnect();

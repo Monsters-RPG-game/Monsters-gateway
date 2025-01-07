@@ -4,9 +4,9 @@ clean:
 
 test:
 	clear \
+	&& npm run test:e2e \
 	&& npm run test:unit \
-	&& npm run test:db \
-	&& npm run test:e2e
+	&& npm run test:db
 
 buildDocker:
 	docker build -t monsters/monsters-gateway .
