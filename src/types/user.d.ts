@@ -1,5 +1,4 @@
 import type ReqController from '../connections/router/reqController.js';
-import type * as enums from '../enums/index.js';
 import type { IProfileEntity } from '../modules/profile/entity.js';
 import type { IUserEntity } from '../modules/users/entity.js';
 import type { Locals } from 'express';
@@ -12,7 +11,6 @@ export interface IUserLocals extends Locals {
   userId: string | undefined;
   tempId: string;
   initializedProfile: boolean;
-  type: enums.EUserTypes;
   profile: IProfileEntity | undefined;
   user: IUserEntity | undefined;
 
@@ -36,7 +34,7 @@ export interface IUserSession extends Session {
 
 export interface IUserBrokerInfo {
   userId: string | undefined;
-  tempId: string | undefined;
+  tempId?: string;
 }
 
 export interface ICachedUser {

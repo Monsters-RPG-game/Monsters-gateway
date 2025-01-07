@@ -1,5 +1,5 @@
-import Client from '../../connections/mongo/models/client.js';
-import OidcClient from '../../connections/mongo/models/oidcClient.js';
+import Client from '../../modules/clients/model.js';
+import OidcClient from '../../modules/oidcClients/model.js';
 
 export default {
   async up(): Promise<undefined | number> {

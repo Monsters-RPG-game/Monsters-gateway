@@ -1,9 +1,9 @@
 import AbstractRepository from '../../../tools/abstractions/repository.js';
 import type AddKey from './add.js';
 import type { IKeyRepository } from './types.js';
-import type Key from '../../../connections/mongo/models/keys.js';
-import type { IKey } from '../../../connections/mongo/types/index.js';
 import type * as enums from '../../../enums/index.js';
+import type Key from '../model.js';
+import type { IKey } from '../types.js';
 import type { JWK } from 'jose';
 
 export default class KeyRepository
@@ -18,5 +18,9 @@ export default class KeyRepository
     const newElement = new this.model(data);
     const callback = await newElement.save();
     return callback._id.toString();
+  }
+
+  async remove(_id: string): Promise<void> {
+    await this.model.findOneAndDelete({ _id });
   }
 }

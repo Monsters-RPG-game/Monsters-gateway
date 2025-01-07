@@ -9,10 +9,7 @@
  *           type: string
  *         login:
  *           type: string
- *         verified:
- *           type: string
  *       required:
  *         - _id
  *         - login
- *         - verified
  */

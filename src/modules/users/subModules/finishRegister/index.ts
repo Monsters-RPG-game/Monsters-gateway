@@ -25,10 +25,9 @@ export default class FinishRegisterController implements IAbstractSubController<
 
     const client = await this.repository.getByName(clientId);
 
-    const { tempId, reqController } = res.locals;
+    const { reqController } = res.locals;
     await reqController.user.register(new RegisterRequestDto(data), {
       userId: data.userId,
-      tempId,
     });
 
     return `${client!.redirectUrl}/?feedback=success`;

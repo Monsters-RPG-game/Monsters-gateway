@@ -1,9 +1,9 @@
 import AbstractRepository from '../../../tools/abstractions/repository.js';
 import type { IClientEntity } from '../entity.js';
 import type { IClientRepository } from './types.js';
-import type Client from '../../../connections/mongo/models/client.js';
-import type { IClient } from '../../../connections/mongo/types/index.js';
 import type * as enums from '../../../enums/index.js';
+import type Client from '../model.js';
+import type { IClient } from '../types.js';
 import type mongoose from 'mongoose';
 import type { FilterQuery } from 'mongoose';
 

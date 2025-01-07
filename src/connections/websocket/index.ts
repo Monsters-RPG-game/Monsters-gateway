@@ -3,10 +3,14 @@ import { WebSocketServer } from 'ws';
 import Router from './router.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
+import GetProfileDto from '../../modules/profile/subModules/get/dto.js';
+import UserDetailsDto from '../../modules/users/subModules/details/dto.js';
 import getConfig from '../../tools/configLoader.js';
 import State from '../../tools/state.js';
+import ReqController from '../router/reqController.js';
 import type * as types from './types/index.js';
 import type { ESocketType } from '../../enums/index.js';
+import type ValidateTokenController from '../../modules/users/subModules/validateToken/index.js';
 import type { IFullError } from '../../types/index.js';
 
 export default class WebsocketServer {
@@ -25,7 +29,7 @@ export default class WebsocketServer {
     this._server = value;
   }
 
-  private accessor users: types.ISocketUser[] = [];
+  protected accessor users: types.ISocketUser[] = [];
   private accessor heartbeat: NodeJS.Timer | undefined;
 
   get router(): Router {
@@ -101,7 +105,7 @@ export default class WebsocketServer {
     });
   }
 
-  private onUserConnected(ws: types.ISocket, cookies: string | undefined): void {
+  protected onUserConnected(ws: types.ISocket, cookies: string | undefined): void {
     this.preValidateUser(ws, { cookies })
       .then(() => {
         ws.on('message', (message: string) => this.errorWrapper(() => this.handleUserMessage(message, ws), ws));
@@ -111,7 +115,7 @@ export default class WebsocketServer {
         ws.on('close', () => this.userDisconnected(ws));
       })
       .catch((err) => {
-        Log.error("Couldn't validate user token in websocket", err);
+        Log.error('Websocket', "Couldn't validate user token", (err as Error).message, (err as Error).stack);
         ws.close(
           1000,
           JSON.stringify({
@@ -165,7 +169,7 @@ export default class WebsocketServer {
     const preparedCookie = auth.cookies
       .split(';')
       .map((e) => e.split('='))
-      .find((e) => e[0]!.trim() === 'monsters.uid');
+      .find((e) => (e[0]!.trim() as enums.ETokens) === enums.ETokens.Access);
 
     if (!preparedCookie || preparedCookie.length === 0) {
       ws.close(1000, unauthorizedErrorMessage);
@@ -182,87 +186,73 @@ export default class WebsocketServer {
     await this.validateUser(ws, access);
   }
 
-  private async validateUser(_ws: types.ISocket, _access: string): Promise<void> {
-    // const payload = await validateToken(access);
-    // this.initializeUser(ws);
-    // if (ws.ttl) clearTimeout(ws.ttl);
-    //
-    // if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'testDev') {
-    //  const cachedToken = await State.redis.getOidcHash(`oidc:AccessToken:${payload.jti}`, payload.jti);
-    //
-    //  if (!cachedToken) {
-    //    Log.error(
-    //      'User tried to log in using token, which does not exists in redis. Might just expired between validation and redis',
-    //    );
-    //    throw new errors.IncorrectTokenError();
-    //  }
-    //  const t = JSON.parse(cachedToken) as AdapterPayload;
-    //  if (Date.now() - new Date((t.exp as number) * 1000).getTime() > 0) {
-    //    Log.error('User tried to log in using expired token, which for some reason is in redis', {
-    //      token: payload.jti,
-    //    });
-    //    throw new errors.IncorrectTokenError();
-    //  }
-    // }
-    //
-    // ws.userId = payload.accountId;
-    // const user = await State.redis.getCachedUser(payload.accountId);
-    // if (user) {
-    //  ws.profile = user.profile;
-    // } else {
-    //  const account = (
-    //    await ws.reqController.user.getDetails([new UserDetailsDto({ id: payload.accountId })], {
-    //      userId: payload.accountId,
-    //      tempId: '',
-    //    })
-    //  ).payload[0] as IUserEntity;
-    //  const profile = (
-    //    await ws.reqController.profile.get(new GetProfileDto(payload.accountId), {
-    //      userId: payload.accountId,
-    //      tempId: '',
-    //    })
-    //  ).payload;
-    //
-    //  if (!profile || !account) {
-    //    Log.error(
-    //      'Token validation',
-    //      'User tried to log in using token, that got validated, but there is no user or profile related to token. Is token fake ?',
-    //    );
-    //    ws.close(
-    //      1000,
-    //      JSON.stringify({
-    //        type: enums.ESocketType.Error,
-    //        payload: new errors.UnauthorizedError(),
-    //      }),
-    //    );
-    //    return;
-    //  }
-    //
-    //  await State.redis.addCachedUser({ account, profile });
-    //  ws.profile = profile;
-    // }
-    //
-    // const isAlreadyOnline = this.users.findIndex((u) => {
-    //  return u.userId === payload.accountId;
-    // });
-    //
-    // // #TODO This is broken and incorrectly sends messages back to user, who is logged in on 2 devices
-    // if (isAlreadyOnline > -1) {
-    //  this._users[isAlreadyOnline] = {
-    //    ...this.users[isAlreadyOnline],
-    //    userId: this.users[isAlreadyOnline]!.userId,
-    //    clients: [...this.users[isAlreadyOnline]!.clients, ws],
-    //    retry: this.users[isAlreadyOnline]!.retry,
-    //  };
-    //  return;
-    // }
-    //
-    // this._users.push({ clients: [ws], userId: payload.accountId, retry: 0 });
+  private async validateUser(ws: types.ISocket, access: string): Promise<void> {
+    this.initializeUser(ws);
+
+    const controller = State.controllers.resolve(enums.EControllers.Users);
+    if (!controller) throw new errors.UnregisteredControllerError(enums.EControllers.Users);
+
+    const subController = controller.resolve(enums.EUserActions.ValidateToken) as ValidateTokenController;
+    if (!subController) throw new errors.UnregisteredControllerError(enums.EUserActions.ValidateToken);
+
+    const { login, userId } = await subController.executeWebsocket(ws, access);
+
+    ws.userId = userId;
+    const user = await State.redis.getCachedUser(userId);
+    if (user) {
+      ws.profile = user.profile;
+    } else {
+      const account = ((
+        await ws.reqController.user.getDetails([new UserDetailsDto({ id: userId })], {
+          userId,
+        })
+      ).payload ?? [])?.[0];
+      const profile = (
+        await ws.reqController.profile.get(new GetProfileDto({ id: userId }), {
+          userId,
+        })
+      ).payload;
+
+      if (!profile || !account) {
+        Log.error(
+          'Token validation',
+          `User token is valid, but there is no user related to it. This SHOULD NOT have happen and this is CRITICAL error. User sub ${login}`,
+        );
+        ws.close(
+          1000,
+          JSON.stringify({
+            type: enums.ESocketType.Error,
+            payload: new errors.UnauthorizedError(),
+          }),
+        );
+        return;
+      }
+
+      await State.redis.addCachedUser({ account, profile });
+      ws.profile = profile;
+    }
+
+    const isAlreadyOnline = this.users.findIndex((u) => {
+      return u.userId === userId;
+    });
+
+    // #TODO This is broken and incorrectly sends messages back to user, who is logged in on 2 devices
+    if (isAlreadyOnline > -1) {
+      this.users[isAlreadyOnline] = {
+        ...this.users[isAlreadyOnline],
+        userId: this.users[isAlreadyOnline]!.userId,
+        clients: [...this.users[isAlreadyOnline]!.clients, ws],
+        retry: this.users[isAlreadyOnline]!.retry,
+      };
+      return;
+    }
+
+    this.users.push({ clients: [ws], userId, retry: 0 });
   }
 
-  // private initializeUser(ws: types.ISocket): void {
-  //  ws.reqController = new ReqController();
-  // }
+  private initializeUser(ws: types.ISocket): void {
+    ws.reqController = new ReqController();
+  }
 
   private handleUserMessage(mess: string, ws: types.ISocket): void {
     let message: Partial<types.ISocketInMessage> = { payload: undefined, subTarget: undefined!, target: undefined! };
