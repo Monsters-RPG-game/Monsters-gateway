@@ -19,7 +19,7 @@
       "exactOptionalPropertyTypes": false,
       "experimentalDecorators": false,
       "forceConsistentCasingInFileNames": true,
-      "importHelpers": true,
+      "importHelpers": false,
       "incremental": true,
       "inlineSources": false,
       "inlineSourceMap": false,
