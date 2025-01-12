@@ -279,3 +279,7 @@ make clean
 If you are unable to run make command, remove build folder
 
 3. There is an error with imported code. Because this app is written in ESM, it might crash if imported ts file does not have `file.js` ( .js ) extension. This is a limitation of ESM and you might not get any errors. There should be error related to it in log files, because logger catches most of issues. If you won't find any related info in logs folder ( explained in #3.1 ) and you won't be able to fix it, please create an issue for it on github.
+
+- Why are there 2 tsconfig files ?
+
+Dues to issues with jest ( or possibly one of my node modules ), running tests throws errors, that my simpleLogger does not include any d.ts files. This does work perfectly in code, but not in jest. tsconfig.test.json only disabled d.ts validation.

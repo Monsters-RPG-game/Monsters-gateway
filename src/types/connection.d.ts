@@ -8,7 +8,7 @@ import type ReadMessagesDto from '../modules/messages/subModules/read/dto.js';
 import type SendMessagesDto from '../modules/messages/subModules/send/dto.js';
 import type GetProfileDto from '../modules/profile/subModules/get/dto.js';
 import type DebugGetAllUsersDto from '../modules/users/subModules/debug/dto.js';
-import type UserDetailsDto from '../modules/users/subModules/details/dto';
+import type UserDetailsDto from '../modules/users/subModules/details/dto.js';
 import type { RegisterRequestDto } from '../modules/users/subModules/finishRegister/dto.js';
 
 export type IRabbitSubTargets =
