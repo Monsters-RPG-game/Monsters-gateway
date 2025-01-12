@@ -4,15 +4,16 @@ import type { IUserEntity } from '../modules/users/entity.js';
 import type { Locals } from 'express';
 import type { Session } from 'express-session';
 import type { JWTPayload } from 'jose';
+import type { ClientLog } from 'simpleLogger';
 
 export interface IUserLocals extends Locals {
   reqId: string;
   reqController: ReqController;
-  userId: string | undefined;
+  logger: ClientLog;
   tempId: string;
   initializedProfile: boolean;
   profile: IProfileEntity | undefined;
-  user: IUserEntity | undefined;
+  user: { userId: string; login: string } | undefined;
 
   [key: string]: unknown;
 }

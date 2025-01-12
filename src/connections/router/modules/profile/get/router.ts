@@ -6,7 +6,7 @@ import type { IGetProfileReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 
 /**
- * Initialize routes for geting profiles.
+ * Initialize routes for getting profiles.
  * @returns Initialized router.
  */
 export default (): Router => {

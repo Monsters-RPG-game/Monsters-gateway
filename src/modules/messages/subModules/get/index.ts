@@ -11,16 +11,16 @@ export default class GetMessagesController
     data: GetMessagesDto,
     res: types.IResponse,
   ): Promise<Record<string, IPreparedMessagesBody> | IFullMessageEntity[]> {
-    const { reqController, userId } = res.locals;
+    const { reqController, user } = res.locals;
 
-    const messages = (await reqController.message.get(data, { userId })).payload;
+    const messages = (await reqController.message.get(data, { userId: user?.userId })).payload;
 
     if (Array.isArray(messages)) {
-      const userIds = messages.map((m) => (m.receiver === userId ? m.sender : m.receiver));
-      const cleaned = [...new Set(userIds), userId].map((id) => new UserDetailsDto({ id }));
+      const userIds = messages.map((m) => (m.receiver === user!.userId ? m.sender : m.receiver));
+      const cleaned = [...new Set(userIds), user?.userId].map((id) => new UserDetailsDto({ id }));
       const users = (
         await reqController.user.getDetails(cleaned, {
-          userId,
+          userId: user?.userId,
         })
       ).payload;
       return messages.map((m) => {
@@ -32,12 +32,12 @@ export default class GetMessagesController
       });
     }
     const userIds = Object.values(messages).map((m) => {
-      return m.receiver === userId ? m.sender : m.receiver;
+      return m.receiver === user!.userId ? m.sender : m.receiver;
     });
-    const cleaned = [...new Set(userIds), userId].map((id) => new UserDetailsDto({ id }));
+    const cleaned = [...new Set(userIds), user?.userId].map((id) => new UserDetailsDto({ id }));
     const users = (
       await reqController.user.getDetails(cleaned, {
-        userId,
+        userId: user?.userId,
       })
     ).payload;
     const prepared: Record<string, IPreparedMessagesBody> = {};

@@ -9,6 +9,8 @@ export default class GetProfileRouter extends AbstractRouter<EControllers.Profil
   async execute(req: IGetProfileReq, res: IResponse): Promise<IProfileEntity | null> {
     const dto = new GetProfileDto(req.query);
 
+    res.locals.logger.createContext({ userId: res.locals.user!.userId, profileName: dto.name });
+
     return this.controller.execute(dto, res);
   }
 }

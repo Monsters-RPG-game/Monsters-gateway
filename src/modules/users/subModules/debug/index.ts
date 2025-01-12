@@ -4,11 +4,11 @@ import type { IUserEntity } from '../../entity.js';
 
 export default class DebugGetAllUsersController implements types.IAbstractSubController<IUserEntity[]> {
   async execute(data: GetAllUsersDto, res: types.IResponse): Promise<IUserEntity[]> {
-    const { reqController, userId } = res.locals;
+    const { reqController, user } = res.locals;
 
     return (
       await reqController.user.debugGetAll(data, {
-        userId,
+        userId: user?.userId,
       })
     ).payload;
   }

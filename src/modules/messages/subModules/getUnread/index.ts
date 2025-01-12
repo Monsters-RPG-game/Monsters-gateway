@@ -4,11 +4,11 @@ import type * as types from '../../../../types/index.js';
 
 export default class GetUnreadMessagesController implements types.IAbstractSubController<IUnreadMessage[]> {
   async execute(data: GetUnreadMessagesDto, res: types.IResponse): Promise<IUnreadMessage[]> {
-    const { reqController, userId } = res.locals;
+    const { reqController, user } = res.locals;
 
     return (
       await reqController.message.getUnread(data, {
-        userId,
+        userId: user?.userId,
       })
     ).payload;
   }

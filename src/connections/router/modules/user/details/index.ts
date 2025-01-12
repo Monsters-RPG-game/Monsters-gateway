@@ -9,6 +9,8 @@ export default class UserRouter extends AbstractRouter<EControllers.Users, EUser
   async execute(req: IUserDetailsReq, res: IResponse): Promise<IUserEntity[]> {
     const dto = new UserDetailsDto(req.query);
 
+    res.locals.logger.createContext({ id: dto.id, name: dto.name, oidcId: dto.oidcId });
+
     return this.controller.execute(dto, res);
   }
 }
