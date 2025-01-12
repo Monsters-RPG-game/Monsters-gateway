@@ -208,12 +208,14 @@ export default class Middleware {
           res.status(status).json({ message, name });
           return;
         }
+
         if (error.name === 'SyntaxError') {
           Log.error('Middleware', 'Generic err', error.message, error.stack);
           const { message, code, name, status } = new errors.InternalError();
           res.status(status).json({ message, code, name });
           return;
         }
+
         if (error.code !== undefined) {
           const { message, code, name, status } = error;
           res.status(status).json({ message, code, name });
