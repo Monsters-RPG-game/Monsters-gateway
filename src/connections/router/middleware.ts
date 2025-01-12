@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
-import Log from 'simpleLogger';
+import Log, { ClientLog } from 'simpleLogger';
 import ReqController from './reqController.js';
 import SessionStore from './utils/stores/session.js';
 import * as enums from '../../enums/controllers.js';
@@ -37,8 +37,14 @@ export default class Middleware {
 
       subController
         .execute(req, res)
-        .then(({ login }) => {
-          res.locals.userId = login;
+        .then(({ login, userId }) => {
+          if (!res.locals.user) {
+            res.locals.user = { userId, login };
+          } else {
+            res.locals.user.login = login;
+            res.locals.user.userId = userId;
+          }
+          res.locals.logger.createContext({ login });
           next();
         })
         .catch((err) => {
@@ -51,12 +57,11 @@ export default class Middleware {
 
   static async initUserProfile(_req: express.Request, res: IResponse, next: express.NextFunction): Promise<void> {
     try {
-      const userId = res.locals.userId as string;
       // Validate if profile is initialized
-      let user = await State.redis.getCachedUser(userId);
+      let user = await State.redis.getCachedUser(res.locals.user!.userId);
 
       if (!user) {
-        user = await Middleware.fetchUserProfile(userId);
+        user = await Middleware.fetchUserProfile(res.locals.user!.userId);
       }
 
       res.locals.profile = user.profile;
@@ -229,9 +234,10 @@ export default class Middleware {
     );
   }
 
-  initializeReqController(app: express.Express): void {
+  initializeControllers(app: express.Express): void {
     app.use((_req: express.Request, res: IResponse, next: express.NextFunction) => {
       res.locals.reqController = new ReqController();
+      res.locals.logger = new ClientLog();
       next();
     });
   }
