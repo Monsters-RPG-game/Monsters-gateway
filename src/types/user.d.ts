@@ -4,7 +4,7 @@ import type { IUserEntity } from '../modules/users/entity.js';
 import type { Locals } from 'express';
 import type { Session } from 'express-session';
 import type { JWTPayload } from 'jose';
-import type { ClientLog } from 'simpleLogger';
+import type { ClientLog } from 'simpl-loggar';
 
 export interface IUserLocals extends Locals {
   reqId: string;

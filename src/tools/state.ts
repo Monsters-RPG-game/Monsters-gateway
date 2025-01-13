@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import type Bootstrap from './bootstrap.js';
 import type Broker from '../connections/broker/index.js';
 import type Mongo from '../connections/mongo/index.js';

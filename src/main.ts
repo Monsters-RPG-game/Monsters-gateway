@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import Broker from './connections/broker/index.js';
 import Mongo from './connections/mongo/index.js';
 import Redis from './connections/redis/index.js';

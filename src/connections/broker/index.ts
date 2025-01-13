@@ -1,5 +1,5 @@
 import amqplib from 'amqplib';
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import Controller from './controller.js';
 import * as enums from '../../enums/index.js';
 import { InternalError } from '../../errors/index.js';

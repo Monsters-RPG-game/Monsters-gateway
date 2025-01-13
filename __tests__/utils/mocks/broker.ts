@@ -2,7 +2,7 @@ import Broker from '../../../src/connections/broker/index.js';
 import type * as types from '../../../src/types/connection.js';
 import * as enums from '../../../src/enums/index.js';
 import { IBrokerAction } from '../../types/broker.js';
-import Log from 'simpleLogger'
+import Log from 'simpl-loggar'
 import chalk from 'chalk';
 import { IUserBrokerInfo } from '../../../src/types/user.js';
 

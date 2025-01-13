@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
-import Log, { ClientLog } from 'simpleLogger';
+import Log, { ClientLog } from 'simpl-loggar';
 import ReqController from './reqController.js';
 import SessionStore from './utils/stores/session.js';
 import * as enums from '../../enums/controllers.js';

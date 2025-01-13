@@ -1,5 +1,5 @@
 import { jwtVerify, SignJWT, importJWK } from 'jose';
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import TokenModel from './model.js';
 import AddToken from './repository/add.js';
 import TokenRepository from './repository/index.js';

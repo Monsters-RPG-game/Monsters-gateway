@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import { WebSocketServer } from 'ws';
 import Router from './router.js';
 import * as enums from '../../enums/index.js';

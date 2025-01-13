@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import { RegisterRequestDto } from './dto.js';
 import { InvalidRequest } from '../../../../errors/index.js';
 import getConfig from '../../../../tools/configLoader.js';

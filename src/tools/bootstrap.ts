@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import * as enums from '../enums/index.js';
 import HealthController from '../modules/health/controller.js';
 import MessagesController from '../modules/messages/controller.js';

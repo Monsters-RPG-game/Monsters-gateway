@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import { InvalidRequest } from '../../../../errors/index.js';
 import TokensController from '../../../tokens/index.js';
 import type { IAbstractSubController } from '../../../../types/abstractions.js';

@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import { ETokens } from '../../../../enums/tokens.js';
 import { InvalidRequest, NoUserWithProvidedName } from '../../../../errors/index.js';
 import TokenController from '../../../tokens/index.js';

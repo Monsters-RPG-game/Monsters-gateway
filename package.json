@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Main point of access for monsters microservice. This project is a REST API",
   "productName": "Gateway",
   "author": "https://github.com/Virus288",
@@ -43,7 +43,7 @@
     "jose": "^5.9.6",
     "mongoose": "8.9.2",
     "redis": "^4.7.0",
-    "simpleLogger": "github:Virus288/SimpleLogger",
+    "simpl-loggar": "^0.5.3",
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1",
     "ws": "8.18.0"

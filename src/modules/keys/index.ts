@@ -1,5 +1,5 @@
 import { exportJWK, generateKeyPair } from 'jose';
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import KeyModel from './model.js';
 import AddKey from './repository/add.js';
 import KeysRepository from './repository/index.js';

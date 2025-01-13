@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import Mongo from '../connections/mongo/index.js';
 import KeysController from '../modules/keys/index.js';
 
