@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import Router from './index.js';
 import { EControllers, ETTL, ETokens, EUserActions } from '../../../../../enums/index.js';
 import handleErr from '../../../../../errors/handler.js';

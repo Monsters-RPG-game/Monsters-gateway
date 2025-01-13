@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';
 import { generateTempId } from '../../utils/index.js';

@@ -282,4 +282,4 @@ If you are unable to run make command, remove build folder
 
 - Why are there 2 tsconfig files ?
 
-Dues to issues with jest ( or possibly one of my node modules ), running tests throws errors, that my simpleLogger does not include any d.ts files. This does work perfectly in code, but not in jest. tsconfig.test.json only disabled d.ts validation.
+Dues to issues with jest ( or possibly one of my node modules ), running tests throws errors, that my simpl-loggar does not include any d.ts files. This does work perfectly in code, but not in jest. tsconfig.test.json only disabled d.ts validation.

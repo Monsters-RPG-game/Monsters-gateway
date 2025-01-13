@@ -1,5 +1,5 @@
 import WebsocketServer from '../../../src/connections/websocket/index.js';
-import Log from 'simpleLogger'
+import Log from 'simpl-loggar'
 import { WebSocketServer } from 'ws';
 import * as errors from '../../../src/errors/index.js';
 import type * as types from '../../../src/connections/websocket/types/index.js';

@@ -1,4 +1,4 @@
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import Validation from './validation.js';
 import * as enums from '../../enums/index.js';
 import * as errors from '../../errors/index.js';

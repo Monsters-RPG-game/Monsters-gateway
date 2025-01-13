@@ -1,5 +1,5 @@
 import { jwtVerify } from 'jose';
-import Log from 'simpleLogger';
+import Log from 'simpl-loggar';
 import { EClientGrants } from '../../../../enums/index.js';
 import { InvalidRequest } from '../../../../errors/index.js';
 import getConfig from '../../../../tools/configLoader.js';
