@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
-import fakeUsers from '../../utils/fakeData/users.json'
-import ReqController from '../../../src/connections/router/reqController.js';
-import GetProfileDto from '../../../src/modules/profile/subModules/get/dto';
-import { IGetProfileDto } from '../../../src/modules/profile/subModules/get/types';
-import { IProfileEntity } from '../../../src/modules/profile/entity';
+import fakeUsers from '../../../utils/fakeData/users.json'
+import ReqController from '../../../../src/connections/router/reqController.js';
+import GetProfileDto from '../../../../src/modules/profile/subModules/get/dto';
+import { IGetProfileDto } from '../../../../src/modules/profile/subModules/get/types';
+import { IProfileEntity } from '../../../../src/modules/profile/entity';
 
 describe('Get profile', () => {
   const reqController = new ReqController()

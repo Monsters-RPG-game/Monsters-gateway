@@ -3,7 +3,7 @@ export enum EConnectionMainTargets {
   Chat = 'chat',
   Fight = 'fight',
   Profile = 'profile',
-  Message = 'message',
+  Message = 'messages',
 }
 
 export enum EUserSubTargets {

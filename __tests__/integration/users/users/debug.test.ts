@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import fakeUsers from '../../utils/fakeData/users.json'
-import { IDebugGetAllUsersDto } from '../../../src/modules/users/subModules/debug/types.js';
-import ReqController from '../../../src/connections/router/reqController.js';
-import DebugGetAllUsersDto from '../../../src/modules/users/subModules/debug/dto';
+import fakeUsers from '../../../utils/fakeData/users.json'
+import { IDebugGetAllUsersDto } from '../../../../src/modules/users/subModules/debug/types.js';
+import ReqController from '../../../../src/connections/router/reqController.js';
+import DebugGetAllUsersDto from '../../../../src/modules/users/subModules/debug/dto';
 
 describe('Debug get all', () => {
   const reqController = new ReqController()

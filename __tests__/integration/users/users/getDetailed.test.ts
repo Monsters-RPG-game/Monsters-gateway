@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import fakeUsers from '../../utils/fakeData/users.json'
-import ReqController from '../../../src/connections/router/reqController.js';
-import { IUserDetailsDto } from '../../../src/modules/users/subModules/details/types';
-import UserDetailsDto from '../../../src/modules/users/subModules/details/dto';
+import fakeUsers from '../../../utils/fakeData/users.json'
+import ReqController from '../../../../src/connections/router/reqController.js';
+import { IUserDetailsDto } from '../../../../src/modules/users/subModules/details/types';
+import UserDetailsDto from '../../../../src/modules/users/subModules/details/dto';
 
 describe('Get detailed', () => {
   const reqController = new ReqController()
