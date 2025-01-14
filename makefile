@@ -15,10 +15,10 @@ buildTestDocker:
 	docker build --build-arg NODE_ENV=testDev -t monsters/monsters-gateway-test .
 
 integrationTestsMessages:
-	npx cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config  __tests__/integration/messages/jest.config.integration.ts
+	npx cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config  __tests__/jest.config.integration.ts
 
 integrationTestsUsers:
-	npx cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config  __tests__/integration/messages/jest.config.integration.ts
+	npx cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config  __tests__/jest.config.integration.ts
 
 integrationTests:
 	make integrationTestsUsers \
