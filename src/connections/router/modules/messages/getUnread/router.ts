@@ -56,7 +56,7 @@ export default (): Router => {
   service.router.get('/unread', limitRate, async (req: IGetUnreadMessagesReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req, res);
-      return sendResponse(res, data)
+      sendResponse(res, data);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

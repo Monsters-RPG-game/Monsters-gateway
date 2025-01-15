@@ -25,7 +25,7 @@ export default (): Router => {
   service.router.get('/', async (_req, res: types.IResponse) => {
     try {
       const data = await service.execute();
-      return sendResponse(res, data)
+      sendResponse(res, data);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

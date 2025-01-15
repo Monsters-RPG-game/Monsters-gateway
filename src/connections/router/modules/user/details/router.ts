@@ -1,9 +1,9 @@
 import Router from './index.js';
 import { EControllers, EUserActions } from '../../../../../enums/controllers.js';
 import handleErr from '../../../../../errors/handler.js';
+import { limitRate, sendResponse } from '../../../utils/index.js';
 import type { IUserDetailsReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
-import { limitRate, sendResponse } from '../../../utils/index.js';
 
 /**
  * Initialize routes for getting detailed user info.
@@ -55,7 +55,7 @@ export default (): Router => {
   service.router.get('/details', limitRate, async (req: IUserDetailsReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req, res);
-      return sendResponse(res, data)
+      sendResponse(res, data);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

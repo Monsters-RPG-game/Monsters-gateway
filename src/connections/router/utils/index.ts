@@ -2,8 +2,8 @@ import rateLimit from 'express-rate-limit';
 import RateLimitStore from './stores/rateLimiter.js';
 import { ETTL } from '../../../enums/index.js';
 import getConfig from '../../../tools/configLoader.js';
+import type { IResponse } from '../../../types/requests.js';
 import type express from 'express';
-import { IResponse } from '../../../types/requests.js';
 
 /**
  * Rate limiter for routes access.
@@ -26,9 +26,13 @@ export const limitRate =
       });
 
 export const sendResponse = (res: IResponse, data: unknown): void => {
-    if (!data || Array.isArray(data) && data.length === 0 || typeof data === 'object' && Object.keys(data).length === 0) {
-        res.status(204).send();
-      } else {
-        res.status(200).send({ data });
-      }
-}
+  if (
+    !data ||
+    (Array.isArray(data) && data.length === 0) ||
+    (typeof data === 'object' && Object.keys(data).length === 0)
+  ) {
+    res.status(204).send();
+  } else {
+    res.status(200).send({ data });
+  }
+};

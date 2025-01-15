@@ -57,7 +57,7 @@ export default (): Router => {
       res.cookie(ETokens.Access, accessToken, accessOptions);
       res.cookie(ETokens.Refresh, refreshToken, refreshOptions);
       res.cookie(ETokens.SessionToken, sessionToken, sessionOptions);
-      return sendResponse(res, undefined)
+      sendResponse(res, undefined);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

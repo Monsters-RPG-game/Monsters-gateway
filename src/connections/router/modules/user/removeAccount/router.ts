@@ -15,7 +15,7 @@ export default (): Router => {
   service.router.delete('/', limitRate, async (req: IRemoveAccountReq, res: types.IResponse) => {
     try {
       await service.execute(req, res);
-      return sendResponse(res, undefined);
+      sendResponse(res, undefined);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }
