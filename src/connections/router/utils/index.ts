@@ -3,6 +3,7 @@ import RateLimitStore from './stores/rateLimiter.js';
 import { ETTL } from '../../../enums/index.js';
 import getConfig from '../../../tools/configLoader.js';
 import type express from 'express';
+import { IResponse } from '../../../types/requests.js';
 
 /**
  * Rate limiter for routes access.
@@ -11,7 +12,7 @@ import type express from 'express';
  * @param _res Express.Response.
  * @param next Express.Next.
  */
-const limiter =
+export const limitRate =
   process.env.NODE_ENV === 'test'
     ? (_req: express.Request, _res: express.Response, next: express.NextFunction): void => {
         next();
@@ -24,4 +25,10 @@ const limiter =
         validate: { trustProxy: getConfig().session.trustProxy },
       });
 
-export default limiter;
+export const sendResponse = (res: IResponse, data: unknown): void => {
+    if (!data || Array.isArray(data) && data.length === 0 || typeof data === 'object' && Object.keys(data).length === 0) {
+        res.status(204).send();
+      } else {
+        res.status(200).send({ data });
+      }
+}

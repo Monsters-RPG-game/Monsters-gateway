@@ -3,7 +3,7 @@ import Router from './index.js';
 import { EControllers, ETTL, ETokens, EUserActions } from '../../../../../enums/index.js';
 import handleErr from '../../../../../errors/handler.js';
 import getConfig from '../../../../../tools/configLoader.js';
-import limitRate from '../../../utils/index.js';
+import { limitRate } from '../../../utils/index.js';
 import type { ILoginReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 import type { CookieOptions } from 'express';

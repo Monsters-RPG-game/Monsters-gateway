@@ -1,7 +1,7 @@
 import Router from './index.js';
 import { EControllers, EProfileActions } from '../../../../../enums/controllers.js';
 import handleErr from '../../../../../errors/handler.js';
-import limitRate from '../../../utils/index.js';
+import { sendResponse, limitRate } from '../../../utils/index.js';
 import type { IGetProfileReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 
@@ -54,11 +54,7 @@ export default (): Router => {
   service.router.get('/', limitRate, async (req: IGetProfileReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req, res);
-      if (!data) {
-        res.status(204).send();
-      } else {
-        res.status(200).send({ data });
-      }
+      return sendResponse(res, data)
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

@@ -3,6 +3,7 @@ import { EControllers, EUserActions } from '../../../../../enums/controllers.js'
 import handleErr from '../../../../../errors/handler.js';
 import type { IUserDetailsReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
+import { limitRate, sendResponse } from '../../../utils/index.js';
 
 /**
  * Initialize routes for getting detailed user info.
@@ -51,14 +52,10 @@ export default (): Router => {
    *                 - $ref: '#/components/schemas/MissingArgError'
    *                 - $ref: '#/components/schemas/IncorrectArgError'
    */
-  service.router.get('/details', async (req: IUserDetailsReq, res: types.IResponse) => {
+  service.router.get('/details', limitRate, async (req: IUserDetailsReq, res: types.IResponse) => {
     try {
       const data = await service.execute(req, res);
-      if (!data || data.length === 0) {
-        res.status(204).send();
-      } else {
-        res.status(200).send({ data });
-      }
+      return sendResponse(res, data)
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }
