@@ -4,7 +4,7 @@ import { ETokens } from '../../../../../enums/tokens.js';
 import { ETTL } from '../../../../../enums/ttl.js';
 import handleErr from '../../../../../errors/handler.js';
 import getConfig from '../../../../../tools/configLoader.js';
-import limitRate from '../../../utils/index.js';
+import { limitRate, sendResponse } from '../../../utils/index.js';
 import type * as types from '../../../../../types/index.js';
 import type express from 'express';
 import type { CookieOptions } from 'express';
@@ -57,7 +57,7 @@ export default (): Router => {
       res.cookie(ETokens.Access, accessToken, accessOptions);
       res.cookie(ETokens.Refresh, refreshToken, refreshOptions);
       res.cookie(ETokens.SessionToken, sessionToken, sessionOptions);
-      res.sendStatus(200);
+      sendResponse(res, undefined);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }

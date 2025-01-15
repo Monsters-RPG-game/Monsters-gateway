@@ -2,8 +2,8 @@ import RemoveAccountDto from '../../../../../modules/users/subModules/removeAcco
 import AbstractRouter from '../../../../../tools/abstractions/router.js';
 import type { IRemoveAccountReq } from './types.js';
 import type { EControllers, EUserActions } from '../../../../../enums/controllers.js';
+import type { IResponse } from '../../../../../types/requests.js';
 import type express from 'express';
-import { IResponse } from '../../../../../types/requests.js';
 
 export default class UserRouter extends AbstractRouter<EControllers.Users, EUserActions.RemoveAccount> {
   async execute(req: IRemoveAccountReq, res: IResponse): Promise<void> {

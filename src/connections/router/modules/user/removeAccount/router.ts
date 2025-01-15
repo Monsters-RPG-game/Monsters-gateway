@@ -1,7 +1,7 @@
 import Router from './index.js';
 import { EControllers, EUserActions } from '../../../../../enums/controllers.js';
 import handleErr from '../../../../../errors/handler.js';
-import limitRate from '../../../utils/index.js';
+import { limitRate, sendResponse } from '../../../utils/index.js';
 import type { IRemoveAccountReq } from './types.js';
 import type * as types from '../../../../../types/index.js';
 
@@ -15,7 +15,7 @@ export default (): Router => {
   service.router.delete('/', limitRate, async (req: IRemoveAccountReq, res: types.IResponse) => {
     try {
       await service.execute(req, res);
-      res.sendStatus(200);
+      sendResponse(res, undefined);
     } catch (err) {
       handleErr(err as types.IFullError, res);
     }
