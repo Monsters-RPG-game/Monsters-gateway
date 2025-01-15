@@ -2,12 +2,10 @@ FROM node:20
 ARG NODE_ENV
 ENV NODE_ENV ${NODE_ENV:-production}
 
-RUN apt update && apt install git
-
 WORKDIR /usr/src/app
 ADD package.json /usr/src/app
 
-RUN npm install
+RUN npm install --omit=dev
 
 COPY config /usr/src/app/config
 
