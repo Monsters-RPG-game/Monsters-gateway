@@ -38,7 +38,7 @@ export default class Tokens {
   * Create new private key in database and save it locally
   */
   async createKey(): Promise<string> {
-    const keyId = await new KeyController().createKeys()
+    const keyId = await new KeyController().createKeys()[0]!
     this.privateKey = keyId
     return keyId
   }

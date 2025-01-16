@@ -37,7 +37,7 @@ describe('Get detailed', () => {
   describe('Should throw', () => {
     describe('No data passed', () => {
       it(`No data provided`, async () => {
-      const keyId = await new KeyController().createKeys()
+      const keyId = await new KeyController().createKeys()[0]!
       const tokenController = new TokensController(fakeUsers.data[0]!._id);
       const userToken = await tokenController.createAccessToken(userEntity)
       await State.redis.addUserTokens(userEntity._id as string, 'test', 'test')
@@ -74,7 +74,7 @@ describe('Get detailed', () => {
 
   describe('Should pass', () => {
       it(`Get data`, async () => {
-      const keyId = await new KeyController().createKeys()
+      const keyId = await new KeyController().createKeys()[0]!
       const tokenController = new TokensController(fakeUsers.data[0]!._id);
       const userToken = await tokenController.createAccessToken(userEntity)
       await State.redis.addUserTokens(userEntity._id as string, 'test', 'test')

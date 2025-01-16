@@ -13,9 +13,9 @@ import OidcClientModel from '../oidcClients/model.js';
 import OidcClientsRepository from '../oidcClients/repository/index.js';
 import type { ITokenEntity } from './entity.js';
 import type { IIntrospection, ISessionTokenData, ITokenData, IUserServerTokens } from '../../types/index.js';
+import type { IKeyEntity } from '../keys/entity.js';
 import type { IOidcClientEntity } from '../oidcClients/entity.js';
 import type { IUserEntity } from '../users/entity.js';
-import type { JWK } from 'jose';
 import { randomUUID } from 'crypto';
 
 export default class TokensController {
@@ -35,7 +35,7 @@ export default class TokensController {
     return this._repo;
   }
 
-  static async getKey(cookie: string): Promise<JWK> {
+  static async getKey(cookie: string): Promise<IKeyEntity> {
     const repo = new KeyRepository(KeyModel);
     const keys = await repo.getAll();
 
@@ -55,7 +55,7 @@ export default class TokensController {
     return key;
   }
 
-  private async getSigningKey(): Promise<JWK> {
+  private async getSigningKey(): Promise<IKeyEntity> {
     const repo = new KeyRepository(KeyModel);
     const keys = await repo.getAll();
 
@@ -64,7 +64,14 @@ export default class TokensController {
       throw new InternalError();
     }
 
-    return keys[0]!;
+    return keys.sort((a, b) => {
+      const startA = new Date(a.createdAt);
+      const startB = new Date(b.createdAt);
+
+      if (startA > startB) return -1;
+      if (startB > startA) return 1;
+      return 0;
+    })[0]!;
   }
 
   getTokens(): Promise<ITokenEntity | null> {
