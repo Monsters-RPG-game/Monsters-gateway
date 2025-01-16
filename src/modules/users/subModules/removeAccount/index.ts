@@ -7,15 +7,18 @@ import type RemoveAccountDto from './dto.js';
 import type ReqController from '../../../../connections/router/reqController.js';
 import type { IAbstractSubController } from '../../../../types/abstractions.js';
 import type { IResponse } from '../../../../types/requests.js';
+import type ClientsRepository from '../../../clients/repository/index.js';
 import type OidcClientsRepository from '../../../oidcClients/repository/index.js';
 import type express from 'express';
 
 export default class RemoveAccountController implements IAbstractSubController<void> {
-  constructor(OidcClientsRepository: OidcClientsRepository) {
-    this.clientsRepository = OidcClientsRepository;
+  constructor(clientsRepository: ClientsRepository, oidcClientsRepository: OidcClientsRepository) {
+    this.oidcClientsRepository = oidcClientsRepository;
+    this.clientsRepository = clientsRepository;
   }
 
-  private accessor clientsRepository: OidcClientsRepository;
+  private accessor oidcClientsRepository: OidcClientsRepository;
+  private accessor clientsRepository: ClientsRepository;
 
   async execute(data: RemoveAccountDto, req: express.Request, res: IResponse): Promise<void> {
     const client = await this.clientsRepository.getByName(data.client);
@@ -32,7 +35,7 @@ export default class RemoveAccountController implements IAbstractSubController<v
   }
 
   private async remove(tokenController: TokensController, userId: string, reqController: ReqController): Promise<void> {
-    const client = await this.clientsRepository.getByGrant(EClientGrants.AuthorizationCode);
+    const client = await this.oidcClientsRepository.getByGrant(EClientGrants.AuthorizationCode);
     if (!client) throw new InvalidRequest();
 
     const tokens = await tokenController.getTokens();
@@ -43,7 +46,7 @@ export default class RemoveAccountController implements IAbstractSubController<v
       token: tokens.refreshToken,
     });
 
-    const res = await fetch(`${getConfig().authorizationAddress}/interaction/account`, {
+    const res = await fetch(`${getConfig().authorizationInnerAddress}/interaction/account`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

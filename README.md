@@ -147,6 +147,7 @@ Each config includes few elements:
   "redisURL": "redis://:password@adress:port",
   "mongoURL": "mongodb://user:password@adress:port",
   "authorizationAddress": "http://localhost",
+  "authorizationInnerAddress": "http://localhost",
   "myAddress": "http://localhost",
   "corsOrigin": ["http://localhost"]
   "httpPort": 80,
@@ -176,6 +177,8 @@ CorsOrigin is list of website that will use this application. If you do not care
 mongoURL is address for mongoDB
 
 authorizationAddress is address for authorization server, which should be utilized
+
+authorizationInnerAddress is address for authorizations server located in k8s/docker network. This is meant for production env. For any other, simply copy value fom `authorizationAddress`
 
 redisURL is address for redis, which is used to cache data like user sessions and connection params
 

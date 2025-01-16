@@ -5,6 +5,7 @@
   "myAddress": "yourAddress",
   "myDomain": "domainUsedByYourApp",
   "authorizationAddress": "addressToAuthorizationsServer",
+  "authorizationInnerAddress": "addressToAuthorizationsServer",
   "httpPort": 8080,
   "socketPort": 8081,
   "redisURL": "redis://user:password@address:port",

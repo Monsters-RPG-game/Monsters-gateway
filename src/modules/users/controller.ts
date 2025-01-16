@@ -31,7 +31,7 @@ export default class UsersController extends AbstractController<enums.EControlle
     this.register(enums.EUserActions.FinishRegister, new FinishRegisterController(clientRepo));
     this.register(enums.EUserActions.Login, new LoginController(clientRepo, oidcClientRepo));
     this.register(enums.EUserActions.RefreshToken, new RefreshTokenController());
-    this.register(enums.EUserActions.RemoveAccount, new RemoveAccountController(oidcClientRepo));
+    this.register(enums.EUserActions.RemoveAccount, new RemoveAccountController(clientRepo, oidcClientRepo));
     this.register(enums.EUserActions.StartLogout, new StartLogoutController());
     this.register(enums.EUserActions.ValidateToken, new ValidateTokenController());
   }

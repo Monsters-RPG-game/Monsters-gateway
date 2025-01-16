@@ -10,7 +10,7 @@ export enum EUserSubTargets {
   GetName = 'getName',
   Register = 'register',
   DebugGetAll = 'debugGetAll',
-  RemoveAccount = 'removeAccount',
+  RemoveAccount = 'removeUser',
 }
 
 export enum EProfileSubTargets {

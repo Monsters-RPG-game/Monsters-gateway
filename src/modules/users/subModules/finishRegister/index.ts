@@ -39,7 +39,7 @@ export default class FinishRegisterController implements IAbstractSubController<
     });
 
     const res = await fetch(
-      `${getConfig().authorizationAddress}/interaction/register/verify/${nonce}?${params.toString()}`,
+      `${getConfig().authorizationInnerAddress}/interaction/register/verify/${nonce}?${params.toString()}`,
       {
         method: 'GET',
         headers: {

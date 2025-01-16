@@ -23,6 +23,7 @@ export default (): Router => {
         maxAge: ETTL.UserAccessToken * 1000,
         httpOnly: getConfig().session.secured ? true : false,
         secure: getConfig().session.secured ? true : false,
+        sameSite: getConfig().session.secured ? true : false,
       };
       const accessOptions: CookieOptions = {
         ...options,

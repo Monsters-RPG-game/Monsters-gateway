@@ -14,6 +14,7 @@ const preValidate = (config: types.IConfigInterface): void => {
     'myAddress',
     'myDomain',
     'authorizationAddress',
+    'authorizationInnerAddress',
     'httpPort',
     'socketPort',
     'redisURL',
