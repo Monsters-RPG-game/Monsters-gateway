@@ -5,7 +5,7 @@ import GetProfileDto from '../../../../src/modules/profile/subModules/get/dto';
 import { IGetProfileDto } from '../../../../src/modules/profile/subModules/get/types';
 import { IProfileEntity } from '../../../../src/modules/profile/entity';
 
-describe('Get profile', () => {
+describe('Profile - get', () => {
   const reqController = new ReqController()
   const req: IGetProfileDto = {
     id: fakeUsers.data[0]!._id,
