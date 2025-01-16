@@ -133,7 +133,7 @@ export default class LoginController
     });
 
     Log.debug('Login', 'Sending token req', body.toString());
-    const res = await fetch(`${getConfig().authorizationAddress}/token`, {
+    const res = await fetch(`${getConfig().authorizationInnerAddress}/token`, {
       method: 'POST',
       body,
       headers: {
@@ -175,7 +175,7 @@ export default class LoginController
   }
 
   private async fetchCerts(): Promise<JWK[]> {
-    const res = await fetch(`${getConfig().authorizationAddress}/certs`, {
+    const res = await fetch(`${getConfig().authorizationInnerAddress}/certs`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

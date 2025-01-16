@@ -23,6 +23,8 @@ export default class AppRouter {
   }
 
   initRoutes(): void {
+    this.initGenericRoutes();
+
     initUserRoutes(this.router);
     initHealthRoutes(this.router);
   }
@@ -43,6 +45,13 @@ export default class AppRouter {
       State.socket.server.handleUpgrade(req, req.socket, Buffer.from(''), (socket) => {
         State.socket.server.emit('connection', socket, req);
       });
+    });
+  }
+
+  initGenericRoutes(): void {
+    // Disable favico route
+    this.router.all('/favicon.ico', (_req, res) => {
+      res.sendStatus(404);
     });
   }
 
@@ -92,26 +101,18 @@ export default class AppRouter {
         ],
       },
       apis: [
-        './src/errors/index.ts',
-        './src/modules/*/router.ts',
         './src/modules/*/docs.ts',
-        './src/modules/*/*/router.ts',
-        './src/modules/*/*/docs.ts',
-        './src/modules/*/*/dto.ts',
-        './src/modules/*/*/*/router.ts',
-        './src/modules/*/*/*/docs.ts',
-        './src/modules/*/*/*/dto.ts',
-        './src/connections/websocket/docs/index.ts',
-        './src/errors/index.js',
-        './src/modules/*/router.js',
-        './src/modules/*/docs.js',
-        './src/modules/*/*/router.js',
-        './src/modules/*/*/docs.js',
-        './src/modules/*/*/dto.js',
-        './src/modules/*/*/*/router.js',
-        './src/modules/*/*/*/docs.js',
-        './src/modules/*/*/*/dto.js',
-        './src/connections/websocket/docs/index.js',
+        './src/modules/*/subModules/*/index.ts',
+        './src/modules/*/subModules/*/dto.ts',
+        './src/connections/router/modules/*/*/router.ts',
+        './src/connections/router/modules/*/*/index.ts',
+        './src/errors/index.ts',
+        './build/src/modules/*/docs.js',
+        './build/src/modules/*/subModules/*/index.js',
+        './build/src/modules/*/subModules/*/dto.js',
+        './build/src/connections/router/modules/*/*/router.js',
+        './build/src/connections/router/modules/*/*/index.js',
+        './build/src/errors/index.js',
       ],
     };
 

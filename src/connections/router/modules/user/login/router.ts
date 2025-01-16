@@ -24,9 +24,9 @@ export default (): Router => {
       }
 
       const options: CookieOptions = {
-        httpOnly: process.env.NODE_ENV === 'production' ? true : false,
-        secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: 'strict',
+        httpOnly: getConfig().session.secured ? true : false,
+        secure: getConfig().session.secured ? true : false,
+        sameSite: getConfig().session.secured ? true : false,
       };
       const accessOptions: CookieOptions = {
         ...options,

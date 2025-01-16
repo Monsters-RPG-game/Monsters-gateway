@@ -148,6 +148,7 @@ export default class Middleware {
           secure: getConfig().session.secured,
           httpOnly: true,
           maxAge: 60 * 15 * 1000,
+          sameSite: true,
         },
         name: 'authClient.sess',
       }),

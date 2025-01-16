@@ -118,7 +118,7 @@ export default class TokensController {
       token: refreshToken,
     });
 
-    const res = await fetch(`${getConfig().authorizationAddress}/token/introspection`, {
+    const res = await fetch(`${getConfig().authorizationInnerAddress}/token/introspection`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -281,9 +281,8 @@ export default class TokensController {
       client_secret: client.clientSecret,
     });
 
-    const apiUrl = getConfig().authorizationAddress;
     const homeUrl = getConfig().myAddress;
-    const res = await fetch(`${apiUrl}/token/revocation`, {
+    const res = await fetch(`${getConfig().authorizationInnerAddress}/token/revocation`, {
       method: 'POST',
       body,
       headers: {
