@@ -4,7 +4,7 @@ import { IDebugGetAllUsersDto } from '../../../../src/modules/users/subModules/d
 import ReqController from '../../../../src/connections/router/reqController.js';
 import DebugGetAllUsersDto from '../../../../src/modules/users/subModules/debug/dto';
 
-describe('Debug get all', () => {
+describe('User - debug get all', () => {
   const reqController = new ReqController()
   const req: IDebugGetAllUsersDto = {
     page: '1'

@@ -4,7 +4,7 @@ import ReqController from '../../../../src/connections/router/reqController.js';
 import { IUserDetailsDto } from '../../../../src/modules/users/subModules/details/types';
 import UserDetailsDto from '../../../../src/modules/users/subModules/details/dto';
 
-describe('Get detailed', () => {
+describe('User - get detailed', () => {
   const reqController = new ReqController()
   const req: IUserDetailsDto = {
     id: fakeUsers.data[0]!._id,
