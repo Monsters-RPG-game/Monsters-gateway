@@ -23,45 +23,45 @@ describe('Get profile - validate auth', () => {
   let userToken: string | null = null
 
   beforeAll(async () => {
-    await tokens.createKey()
-    userToken = await tokens.createAccessToken()
+    await tokens.createKey();
+    userToken = await tokens.createAccessToken();
   })
 
   beforeEach(async () => {
-    await tokens.initLoginParams(fakeBroker)
+    await tokens.initLoginParams(fakeBroker);
   })
 
   afterEach(() => {
-    fakeBroker.getStats()
+    fakeBroker.getStats();
   })
 
   afterAll(async () => {
-    await tokens.cleanUp()
+    await tokens.cleanUp();
   })
 
   describe('Should pass', () => {
     it(`User not authorized`, async () => {
-      const target = new UnauthorizedError()
+      const target = new UnauthorizedError();
 
       const res = await supertest(app).get(`/profile`).send();
       const {error} = res.body as { error: IFullError };
 
       expect(error.message).toEqual(target.message);
       expect(error.code).toEqual(target.code);
-      expect(error.code).toEqual(target.code)
-      expect(res.status).toEqual(target.status)
+      expect(error.code).toEqual(target.code);
+      expect(res.status).toEqual(target.status);
       });
 
     it(`No data`, async () => {
-      const target = new NoDataProvidedError()
+      const target = new NoDataProvidedError();
 
       const res = await supertest(app).get(`/profile`).set('Cookie', createCookie(ETokens.Access, userToken as string)).send();
       const {error} = res.body as { error: IFullError };
 
       expect(error.message).toEqual(target.message);
       expect(error.code).toEqual(target.code);
-      expect(error.code).toEqual(target.code)
-      expect(res.status).toEqual(target.status)
+      expect(error.code).toEqual(target.code);
+      expect(res.status).toEqual(target.status);
     });
   });
 });

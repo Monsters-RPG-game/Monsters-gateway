@@ -10,6 +10,7 @@ import { IUserEntity } from '../../src/modules/users/entity.js';
 import { EProfileSubTargets, EUserSubTargets } from '../../src/enums/target.js';
 import { IProfileEntity } from '../../src/modules/profile/entity.js';
 import { EMessageTypes } from '../../src/enums/connections.js';
+import Log from 'simpl-loggar'
 
 export default class Tokens {
   private _keyRepo: KeyRepository
@@ -38,9 +39,15 @@ export default class Tokens {
   * Create new private key in database and save it locally
   */
   async createKey(): Promise<string> {
-    const keyId = await new KeyController().createKeys()[0]!
-    this.privateKey = keyId
-    return keyId
+    return new Promise((resolve, reject) => {
+      new KeyController().createKeys().then((keys) => {
+      this.privateKey = keys[0]!
+      resolve(keys[0]!)
+    }).catch(err => {
+        Log.error('Tokens', 'Got error while creating key', (err as Error).message, (err as Error).stack)
+        reject(err as Error)
+      })
+    })
   }
 
   /**
