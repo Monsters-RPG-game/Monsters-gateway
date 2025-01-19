@@ -1,6 +1,8 @@
 import Log from 'simpl-loggar';
 import Mongo from '../connections/mongo/index.js';
 import KeysController from '../modules/keys/index.js';
+import KeyModel from '../modules/keys/model.js';
+import KeysRepository from '../modules/keys/repository/index.js';
 
 class RotateKeys {
   private readonly _mongo: Mongo;
@@ -44,7 +46,24 @@ class RotateKeys {
 
   private async rotateKeys(): Promise<void> {
     await this.mongo.init();
-    await this.keys.createKeys();
+    const repo = new KeysRepository(KeyModel);
+    const keys = await repo.getAll();
+
+    // #TODO This assumes that refresh token life is max 2 weeks. If longer, this will cause issues. Rewrite it to create amount of keys based on TTL enum
+    if (keys.length === 3) {
+      const oldest = keys.sort((a, b) => {
+        const startA = new Date(a.createdAt);
+        const startB = new Date(b.createdAt);
+
+        if (startA > startB) return 1;
+        if (startB > startA) return -1;
+        return 0;
+      })[0]!;
+      await repo.remove(oldest._id.toString());
+      await this.keys.createKeys();
+    } else {
+      await this.keys.createKeys(3 - keys.length);
+    }
   }
 
   private configLogger(): void {

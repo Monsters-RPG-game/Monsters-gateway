@@ -16,7 +16,7 @@ import { sleep } from '../../../src/utils/index.js';
 import { UnauthorizedError } from '../../../src/errors/index.js';
 import MocSocket from 'moc-socket';
 import { IClient } from 'moc-socket'
-import WsProvider from 'moc-socket/lib/modules/servers/ws.js';
+import type { WsProvider } from 'moc-socket';
 
 describe('Socket - chat', () => {
   const fakeBroker = State.broker as FakeBroker;

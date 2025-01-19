@@ -1,5 +1,5 @@
+import type { IKeyEntity } from '../entity.js';
 import type AddKey from './add.js';
-import type { JWK } from 'jose';
 
 export interface IAddKey {
   kty: string;
@@ -15,6 +15,6 @@ export interface IAddKey {
 
 export interface IKeyRepository {
   add(user: AddKey): Promise<string>;
-  get(id: string): Promise<JWK | null>;
-  getAll(): Promise<JWK[]>;
+  get(id: string): Promise<IKeyEntity | null>;
+  getAll(): Promise<IKeyEntity[]>;
 }

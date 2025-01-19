@@ -1,16 +1,16 @@
 import AbstractRepository from '../../../tools/abstractions/repository.js';
+import type { IKeyEntity } from '../entity.js';
 import type AddKey from './add.js';
 import type { IKeyRepository } from './types.js';
 import type * as enums from '../../../enums/index.js';
 import type Key from '../model.js';
 import type { IKey } from '../types.js';
-import type { JWK } from 'jose';
 
 export default class KeyRepository
   extends AbstractRepository<IKey, typeof Key, enums.EModules.Key>
   implements IKeyRepository
 {
-  async getAll(): Promise<JWK[]> {
+  async getAll(): Promise<IKeyEntity[]> {
     return this.model.find().select({ __v: false }).lean();
   }
 
