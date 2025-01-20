@@ -31,8 +31,9 @@ class RotateKeys {
         this.close();
       })
       .catch((err) => {
-        Log.error('Keys rotation', 'Could not rotate keys', err);
+        Log.error('Keys rotation', 'Could not rotate keys', (err as Error).message, (err as Error).stack);
         this.close();
+        process.exit(1);
       });
   }
 

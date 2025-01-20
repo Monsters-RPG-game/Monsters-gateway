@@ -1,3 +1,4 @@
+import Log from 'simpl-loggar';
 import type * as types from '../types/index.js';
 import fs from 'fs';
 
@@ -47,6 +48,7 @@ export default function getConfig(): types.IConfigInterface {
       config = JSON.parse(fs.readFileSync('./config/prodConfig.json').toString()) as types.IConfigInterface;
       break;
     default:
+      Log.error('Config loader', `Could not find configs for env ${process.env.NODE_ENV}`);
       throw new Error('No config files');
   }
 
