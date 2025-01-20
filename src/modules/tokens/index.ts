@@ -16,7 +16,7 @@ import type { IIntrospection, ISessionTokenData, ITokenData, IUserServerTokens }
 import type { IKeyEntity } from '../keys/entity.js';
 import type { IOidcClientEntity } from '../oidcClients/entity.js';
 import type { IUserEntity } from '../users/entity.js';
-import { randomUUID } from 'crypto';
+import { randomUUID, createHash } from 'crypto';
 
 export default class TokensController {
   private readonly _userId: string;
@@ -37,7 +37,12 @@ export default class TokensController {
 
   static async getKey(cookie: string): Promise<IKeyEntity> {
     const repo = new KeyRepository(KeyModel);
-    const keys = await repo.getAll();
+    const keys = (await repo.getAll()).map((k) => {
+      return {
+        ...k,
+        kid: createHash('sha256').update(JSON.stringify(k)).digest('base64url'),
+      };
+    });
 
     const parts = cookie.split('.');
     const header = JSON.parse(Buffer.from(parts[0]!, 'base64').toString('utf8')) as {
@@ -57,7 +62,12 @@ export default class TokensController {
 
   private async getSigningKey(): Promise<IKeyEntity> {
     const repo = new KeyRepository(KeyModel);
-    const keys = await repo.getAll();
+    const keys = (await repo.getAll()).map((k) => {
+      return {
+        ...k,
+        kid: createHash('sha256').update(JSON.stringify(k)).digest('base64url'),
+      };
+    });
 
     if (keys.length === 0) {
       Log.error('Tokens controller', 'Missing keys!');

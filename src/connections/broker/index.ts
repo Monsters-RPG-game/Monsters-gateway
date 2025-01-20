@@ -97,7 +97,10 @@ export default class Broker {
     payload?: types.IRabbitConnectionData[T],
   ): void {
     const queue = this._services[service as types.IAvailableServices];
-    if (queue.dead) throw new InternalError();
+    if (queue.dead) {
+      Log.error('Rabbit', `Throwing internal error, due to dead queue ${service}`);
+      throw new InternalError();
+    }
     return this.controller.sendLocally(target, subTarget, resolve, reject, userData, service, this.channel!, payload);
   }
 
